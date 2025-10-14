@@ -1,4 +1,4 @@
-// Add toast styles that work in both normal and fullscreen modes
+// Toast styling so the notification works in both windowed and fullscreen video
 const toastStyles = document.createElement('style');
 toastStyles.textContent = `
   #speed-toast {
@@ -21,209 +21,360 @@ toastStyles.textContent = `
 `;
 document.head.appendChild(toastStyles);
 
-// Create toast element
+// Toast node reused for every speed change
 const toast = document.createElement('div');
 toast.id = 'speed-toast';
 document.body.appendChild(toast);
 
-// Global variable to track current playback speed
+// Global speed the extension believes the current domain should be using
 let currentSpeed = 1;
+let toastTimeout = null;
 
-/**
- * Shows toast notification with current speed
- */
-let toastTimeout;
+// Per-video bookkeeping so we can distinguish our own updates from site-driven ones
+const videoStates = new WeakMap();
+const RATE_EPSILON = 0.0001;
+const INITIAL_SYNC_WINDOW = 2500; // ms to enforce saved speed when a new video appears
+const USER_INTERACTION_WINDOW = 600;
+
+let lastUserInteraction = 0;
+let lastExtensionSetAt = 0;
+
+function isFiniteNumber(value) {
+  return typeof value === 'number' && Number.isFinite(value);
+}
+
+function isValidSpeed(value) {
+  return isFiniteNumber(value) && value > 0;
+}
+
+function sanitizeSpeed(value, fallback = 1) {
+  return isValidSpeed(value) ? value : fallback;
+}
+
+function areRatesEqual(a, b) {
+  return Math.abs(a - b) < RATE_EPSILON;
+}
+
+function recordUserInteraction(event) {
+  if (event && event.isTrusted) {
+    lastUserInteraction = performance.now();
+  }
+}
+
+document.addEventListener('pointerdown', recordUserInteraction, { capture: true, passive: true });
+document.addEventListener('touchstart', recordUserInteraction, { capture: true, passive: true });
+document.addEventListener('keydown', recordUserInteraction, { capture: true });
+
+function getVideoState(video) {
+  if (!video) {
+    return null;
+  }
+
+  let state = videoStates.get(video);
+  if (!state) {
+    state = {
+      internalDepth: 0,
+      lastObserved: sanitizeSpeed(video.playbackRate, 1),
+      syncingUntil: 0,
+      listenersAttached: false
+    };
+    videoStates.set(video, state);
+  }
+  return state;
+}
+
+function runAsInternalUpdate(video, action) {
+  const state = getVideoState(video);
+  if (!state) {
+    return;
+  }
+
+  state.internalDepth += 1;
+  try {
+    action();
+  } finally {
+    state.internalDepth = Math.max(0, state.internalDepth - 1);
+  }
+}
+
+function isInternalEvent(video) {
+  const state = getVideoState(video);
+  return Boolean(state && state.internalDepth > 0);
+}
+
+function applyPlaybackRate(video, rate) {
+  if (!video) {
+    return;
+  }
+
+  const state = getVideoState(video);
+  const targetRate = sanitizeSpeed(rate, state ? state.lastObserved : 1);
+
+  runAsInternalUpdate(video, () => {
+    video.playbackRate = targetRate;
+  });
+
+  if (state) {
+    state.lastObserved = targetRate;
+  }
+}
+
+function beginInitialSync(video, desiredSpeed) {
+  const state = getVideoState(video);
+  if (!state) {
+    return;
+  }
+
+  state.syncingUntil = performance.now() + INITIAL_SYNC_WINDOW;
+  applyPlaybackRate(video, desiredSpeed);
+}
+
 function showToast(speed) {
   toast.textContent = `${speed}x`;
   toast.style.opacity = '1';
-  
-  clearTimeout(toastTimeout);
+
+  if (toastTimeout) {
+    clearTimeout(toastTimeout);
+  }
+
   toastTimeout = setTimeout(() => {
     toast.style.opacity = '0';
   }, 750);
 }
 
-/**
- * Gets current domain name without 'www.' prefix
- */
 function getDomain() {
   return window.location.hostname.replace('www.', '');
 }
 
-/**
- * Force update all video speeds
- */
-function forceUpdateVideoSpeeds(speed) {
-  const videos = document.querySelectorAll('video');
-  videos.forEach((video) => {
-    // Force reset the speed to trigger the change
-    if (video) {
-      video.playbackRate = 1;
-      video.playbackRate = speed;
+function getVideos() {
+  return Array.from(document.querySelectorAll('video'));
+}
+
+function syncAllVideos(speed, enforceWindow = 0) {
+  const now = performance.now();
+  const enforceUntil = enforceWindow > 0 ? now + enforceWindow : 0;
+
+  getVideos().forEach(video => {
+    const state = getVideoState(video);
+    if (state && enforceUntil) {
+      state.syncingUntil = Math.max(state.syncingUntil, enforceUntil);
     }
+    applyPlaybackRate(video, speed);
   });
 }
 
-/**
- * Sets playback speed for all video elements
- */
-async function setVideoSpeed(speed, skipStorage = false) {
-  try {
-    console.log(`Setting video speed to ${speed} (skipStorage: ${skipStorage})`);
-    currentSpeed = speed;
-    forceUpdateVideoSpeeds(speed);
+async function setVideoSpeed(speed, options = {}) {
+  const { skipStorage = false, source = 'extension' } = options;
 
-    // Save speed setting if not skipped
-    if (!skipStorage) {
+  const normalizedSpeed = sanitizeSpeed(speed, currentSpeed > 0 ? currentSpeed : 1);
+  const speedChanged = !areRatesEqual(normalizedSpeed, currentSpeed);
+
+  if (!isValidSpeed(speed)) {
+    console.warn('Ignoring invalid requested speed, defaulting to', normalizedSpeed, { speed });
+  }
+
+  currentSpeed = normalizedSpeed;
+  if (source !== 'external') {
+    lastExtensionSetAt = performance.now();
+  }
+
+  const enforceWindow = source === 'external' ? 0 : INITIAL_SYNC_WINDOW;
+  syncAllVideos(normalizedSpeed, enforceWindow);
+
+  if (!skipStorage && speedChanged) {
+    try {
       const domain = getDomain();
       const data = await chrome.storage.sync.get('domainSpeeds');
       const domainSpeeds = data.domainSpeeds || {};
-      domainSpeeds[domain] = speed;
+      domainSpeeds[domain] = normalizedSpeed;
       await chrome.storage.sync.set({ domainSpeeds });
-      console.log(`Saved speed ${speed} for domain ${domain}`);
+      console.log(`Stored playback speed ${normalizedSpeed}x for ${domain}`);
+    } catch (error) {
+      console.error('Failed to persist playback speed', error);
     }
-  } catch (error) {
-    console.error('Error setting video speed:', error);
   }
 }
 
-/**
- * Loads and applies saved speed setting
- */
 async function applySavedSpeed() {
   try {
     const domain = getDomain();
     const data = await chrome.storage.sync.get('domainSpeeds');
     const domainSpeeds = data.domainSpeeds || {};
-    const savedSpeed = domainSpeeds[domain] || 1;
-    console.log(`Loading saved speed for ${domain}: ${savedSpeed}`);
-    await setVideoSpeed(savedSpeed, true);
+    const savedSpeed = sanitizeSpeed(domainSpeeds[domain], 1);
+    console.log(`Applying saved speed for ${domain}: ${savedSpeed}`);
+    await setVideoSpeed(savedSpeed, { skipStorage: true, source: 'storage' });
   } catch (error) {
-    console.error('Error loading saved speed:', error);
+    console.error('Failed to load saved speed', error);
   }
 }
 
-/**
- * Monitors and maintains speed settings for video elements
- */
-function monitorVideoElements() {
-  const videos = document.querySelectorAll('video');
-  videos.forEach(video => {
-    // Remove existing listeners first
-    video.removeEventListener('ratechange', handleRateChange);
-    video.removeEventListener('play', handlePlay);
-    video.removeEventListener('loadedmetadata', handleLoadedMetadata);
-    
-    // Add fresh listeners
-    video.addEventListener('ratechange', handleRateChange);
-    video.addEventListener('play', handlePlay);
-    video.addEventListener('loadedmetadata', handleLoadedMetadata);
-    
-    // Set initial speed
-    video.playbackRate = currentSpeed;
-  });
-}
-
-// Event handlers for video elements
 function handleRateChange(event) {
-  if (event.target.playbackRate !== currentSpeed) {
-    event.target.playbackRate = currentSpeed;
+  const video = event.target;
+  const state = getVideoState(video);
+
+  if (isInternalEvent(video)) {
+    return;
   }
+
+  const observedSpeed = sanitizeSpeed(video.playbackRate, state ? state.lastObserved : currentSpeed);
+
+  if (!isValidSpeed(observedSpeed)) {
+    const fallback = sanitizeSpeed(state ? state.lastObserved : currentSpeed, currentSpeed);
+    console.warn('Restoring invalid playback rate', { reported: observedSpeed, fallback });
+    applyPlaybackRate(video, fallback);
+    return;
+  }
+
+  if (state) {
+    state.lastObserved = observedSpeed;
+  }
+
+  const now = performance.now();
+  if (state && state.syncingUntil > now) {
+    const recentInteraction = now - lastUserInteraction <= USER_INTERACTION_WINDOW;
+    const recentlySetByExtension = now - lastExtensionSetAt <= INITIAL_SYNC_WINDOW;
+    if (!recentInteraction || recentlySetByExtension) {
+      state.syncingUntil = now + INITIAL_SYNC_WINDOW;
+      if (!areRatesEqual(observedSpeed, currentSpeed)) {
+        state.lastObserved = currentSpeed;
+        applyPlaybackRate(video, currentSpeed);
+      }
+      return;
+    }
+    state.syncingUntil = 0;
+  }
+
+  if (areRatesEqual(observedSpeed, currentSpeed)) {
+    return;
+  }
+
+  setVideoSpeed(observedSpeed, { source: 'external' })
+    .then(() => {
+      showToast(observedSpeed);
+    })
+    .catch((error) => {
+      console.error('Failed to sync external speed change', error);
+    });
 }
 
 function handlePlay() {
-  this.playbackRate = currentSpeed;
+  applyPlaybackRate(this, currentSpeed);
 }
 
 function handleLoadedMetadata() {
-  this.playbackRate = currentSpeed;
+  beginInitialSync(this, currentSpeed);
 }
 
-// Watch for dynamically added videos
-const observer = new MutationObserver((mutations) => {
-  mutations.forEach(mutation => {
-    if (mutation.addedNodes.length) {
+function attachListeners(video) {
+  const state = getVideoState(video);
+  if (!state || state.listenersAttached) {
+    return;
+  }
+
+  video.addEventListener('ratechange', handleRateChange);
+  video.addEventListener('play', handlePlay);
+  video.addEventListener('loadedmetadata', handleLoadedMetadata);
+
+  state.listenersAttached = true;
+  beginInitialSync(video, currentSpeed);
+}
+
+function monitorVideoElements() {
+  getVideos().forEach(attachListeners);
+}
+
+const observer = new MutationObserver(mutations => {
+  for (const mutation of mutations) {
+    if (mutation.addedNodes.length > 0) {
       monitorVideoElements();
-    }
-  });
-});
-
-observer.observe(document.body, {
-  childList: true,
-  subtree: true
-});
-
-// Listen for storage changes
-chrome.storage.onChanged.addListener((changes, namespace) => {
-  if (namespace === 'sync' && changes.domainSpeeds) {
-    const domain = getDomain();
-    const domainSpeeds = changes.domainSpeeds.newValue || {};
-    const newSpeed = domainSpeeds[domain];
-    
-    console.log('Storage changed:', {
-      domain,
-      newSpeed,
-      currentSpeed,
-      allDomainSpeeds: domainSpeeds
-    });
-    
-    if (newSpeed && newSpeed !== currentSpeed) {
-      console.log(`Updating speed from storage change: ${newSpeed}`);
-      setVideoSpeed(newSpeed, true);
-      showToast(newSpeed);
+      break;
     }
   }
 });
 
-// Handle keyboard shortcuts
-document.addEventListener('keydown', (e) => {
-  if (e.metaKey && e.altKey) { // For Mac: Command + Option
-    let newSpeed;
-    switch (e.code) {
-      case 'Equal':
-      case 'NumpadAdd':
-      case 'Plus':
-        e.preventDefault();
-        e.stopPropagation();
-        newSpeed = Math.min(16, Math.round((currentSpeed + 0.05) * 100) / 100);
-        setVideoSpeed(newSpeed);
-        showToast(newSpeed);
-        break;
+observer.observe(document.body, { childList: true, subtree: true });
 
-      case 'Minus':
-      case 'NumpadSubtract':
-        e.preventDefault();
-        e.stopPropagation();
-        newSpeed = Math.max(0.1, Math.round((currentSpeed - 0.05) * 100) / 100);
-        setVideoSpeed(newSpeed);
-        showToast(newSpeed);
-        break;
+chrome.storage.onChanged.addListener((changes, area) => {
+  if (area !== 'sync' || !changes.domainSpeeds) {
+    return;
+  }
 
-      case 'Delete':
-      case 'Backspace':  
-        e.preventDefault();
-        e.stopPropagation();
-        setVideoSpeed(1);
-        showToast(1);
-        break;
-    }
+  const domain = getDomain();
+  const domainSpeeds = changes.domainSpeeds.newValue || {};
+  const newSpeed = sanitizeSpeed(domainSpeeds[domain], currentSpeed);
+
+  if (!areRatesEqual(newSpeed, currentSpeed)) {
+    setVideoSpeed(newSpeed, { skipStorage: true, source: 'storage' })
+      .then(() => {
+        showToast(newSpeed);
+      })
+      .catch((error) => {
+        console.error('Failed to apply speed from storage change', error);
+      });
   }
 });
 
-// Listen for speed change messages from popup
+document.addEventListener('keydown', (event) => {
+  if (!event.metaKey || !event.altKey) {
+    return;
+  }
+
+  let nextSpeed = null;
+  switch (event.code) {
+    case 'Equal':
+    case 'NumpadAdd':
+    case 'Plus':
+      event.preventDefault();
+      event.stopPropagation();
+      nextSpeed = Math.min(16, Math.round((currentSpeed + 0.05) * 100) / 100);
+      break;
+    case 'Minus':
+    case 'NumpadSubtract':
+      event.preventDefault();
+      event.stopPropagation();
+      nextSpeed = Math.max(0.1, Math.round((currentSpeed - 0.05) * 100) / 100);
+      break;
+    case 'Delete':
+    case 'Backspace':
+      event.preventDefault();
+      event.stopPropagation();
+      nextSpeed = 1;
+      break;
+    default:
+      break;
+  }
+
+  if (nextSpeed !== null) {
+    setVideoSpeed(nextSpeed)
+      .then(() => {
+        showToast(nextSpeed);
+      })
+      .catch((error) => {
+        console.error('Failed to set speed from shortcut', error);
+      });
+  }
+});
+
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.action === 'setSpeed') {
-    setVideoSpeed(request.speed);
-    sendResponse({ success: true });
+    setVideoSpeed(request.speed)
+      .then(() => {
+        showToast(currentSpeed);
+        sendResponse({ success: true });
+      })
+      .catch((error) => {
+        console.error('Failed to set speed from message', error);
+        sendResponse({ success: false, error: error?.message || 'Unknown error' });
+      });
+    return true;
   }
-  return true;
+  return false;
 });
 
-// Initialize
-applySavedSpeed();
-monitorVideoElements();
-
-// More aggressive periodic check
-setInterval(() => {
-  forceUpdateVideoSpeeds(currentSpeed);
-}, 1000);
+applySavedSpeed()
+  .catch((error) => {
+    console.error('Continuing without saved speed due to error', error);
+  })
+  .finally(() => {
+    monitorVideoElements();
+  });
