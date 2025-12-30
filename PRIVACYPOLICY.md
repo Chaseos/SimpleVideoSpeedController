@@ -2,7 +2,7 @@
 
 ## Simple Video Speed Controller
 
-**Last Updated:** January 29, 2025
+**Last Updated:** December 30, 2025
 
 ### Overview
 
@@ -14,7 +14,7 @@ The extension collects and stores:
 * Your preferred video playback speeds for different websites
 * The domain names of websites where you use the extension
 
-This information is stored locally on your device using Chrome's storage sync API, which may sync this data across your Chrome browsers when you're signed into Chrome.
+This information is stored locally on your device using the browser's storage sync API, which may sync this data across your browsers when you're signed into your browser account.
 
 ### How We Use Information
 
@@ -26,7 +26,7 @@ The stored information is used solely to:
 
 All data is stored:
 * Locally on your device
-* In your Chrome browser's sync storage (if you're signed into Chrome)
+* In your browser's sync storage (if you're signed into your browser account)
 * No data is transmitted to external servers
 * No data is shared with third parties
 
@@ -50,12 +50,12 @@ This extension:
 
 You can:
 * Clear all stored preferences by removing the extension
-* Disable Chrome sync to prevent speed preferences from syncing across devices
-* View stored data in Chrome's extension settings
+* Disable browser sync to prevent speed preferences from syncing across devices
+* View stored data in your browser's extension settings
 
 ### Changes to This Policy
 
-If we make significant changes to this privacy policy, we will update the "Last Updated" date and provide notice through the Chrome Web Store listing.
+If we make significant changes to this privacy policy, we will update the "Last Updated" date and provide notice through the extension store listing.
 
 ### Contact
 

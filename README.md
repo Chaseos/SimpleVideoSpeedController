@@ -1,7 +1,10 @@
 # Simple Video Speed Controller
 <img width="100" alt="Icon" src="https://github.com/user-attachments/assets/17514be3-7964-4000-982c-143bbcfaa1c0" />
 
-A lightweight and intuitive Chrome extension that lets you control video playback speed on any streaming service or website. Perfect for watching tutorials, lectures, or any online video content at your preferred pace.
+A lightweight and intuitive browser extension that lets you control video playback speed on any streaming service or website. Perfect for watching tutorials, lectures, or any online video content at your preferred pace.
+
+### Available On
+Available for [Chrome](https://chrome.google.com/webstore), [Firefox](https://addons.mozilla.org), and [Opera](https://addons.opera.com).
 
 <img width="250" alt="Interface" src="https://github.com/user-attachments/assets/217f4ea7-7bb2-4732-8d09-90621a36d622" />
 
@@ -23,17 +26,11 @@ A lightweight and intuitive Chrome extension that lets you control video playbac
   - Fine-tuning buttons for incremental adjustments
   - Visual feedback toast when changing speeds
 
-## Installation
-
-1. Visit the Chrome Web Store (add store link when published)
-2. Click "Add to Chrome"
-3. Click "Add Extension" in the popup dialog
-
 ## Usage
 
 ### Using the Popup Interface
 
-1. Click the extension icon in your Chrome toolbar
+1. Click the extension icon in your browser's toolbar
 2. Choose a preset speed (0.5x - 3x) or enter a custom speed
 3. Use the + and - buttons for fine-tuning
 4. Your chosen speed will be saved for that specific website
