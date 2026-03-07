@@ -160,6 +160,60 @@
       -webkit-appearance: none; 
       margin: 0; 
     }
+
+    /* Review Prompt */
+    #reviewPrompt {
+      margin-top: 16px;
+      padding: 12px;
+      background: #2a2a2a;
+      border-radius: 8px;
+      display: none; /* Hidden by default */
+      align-items: center;
+      justify-content: space-between;
+      border: 1px solid #444;
+      animation: fadeIn 0.3s ease-out;
+    }
+
+    .review-content {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .review-text {
+      margin: 0;
+      font-size: 13px;
+      color: #eee;
+    }
+
+    .review-link {
+      color: #4285f4;
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: bold;
+      transition: color 0.2s ease;
+    }
+
+    .review-link:hover {
+      color: #5295ff;
+    }
+
+    .close-review {
+      background: transparent;
+      border: none;
+      color: #aaa;
+      font-size: 20px;
+      cursor: pointer;
+      padding: 4px;
+      display: flex;
+      align-items: center;
+      transition: color 0.2s ease;
+      line-height: 1;
+    }
+
+    .close-review:hover {
+      color: #fff;
+    }
   </style>
 </head>
 <body>
@@ -187,6 +241,15 @@
     <div class="pin-icon">↻ & 📌</div>
     <p>Reload your tabs and pin this extension for easy access!</p>
     <button class="got-it-btn">Got it!</button>
+  </div>
+
+  <!-- Review prompt -->
+  <div id="reviewPrompt">
+    <div class="review-content">
+      <p class="review-text">Enjoying the extension?</p>
+      <a href="#" class="review-link" id="reviewLink" target="_blank">Leave a review ★</a>
+    </div>
+    <button id="closeReview" class="close-review" aria-label="Close">×</button>
   </div>
 
   <script src="popup.js"></script>
