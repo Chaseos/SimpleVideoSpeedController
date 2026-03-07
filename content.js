@@ -320,28 +320,50 @@ document.addEventListener('keydown', (event) => {
   }
 
   let nextSpeed = null;
-  switch (event.code) {
-    case 'Equal':
-    case 'NumpadAdd':
-    case 'Plus':
-      event.preventDefault();
-      event.stopPropagation();
-      nextSpeed = Math.min(16, Math.round((currentSpeed + 0.05) * 100) / 100);
-      break;
-    case 'Minus':
-    case 'NumpadSubtract':
-      event.preventDefault();
-      event.stopPropagation();
-      nextSpeed = Math.max(0.1, Math.round((currentSpeed - 0.05) * 100) / 100);
-      break;
-    case 'Delete':
-    case 'Backspace':
-      event.preventDefault();
-      event.stopPropagation();
-      nextSpeed = 1;
-      break;
-    default:
-      break;
+  const digitMatch = event.code.match(/^(?:Digit|Numpad)([0-9])$/);
+
+  if (digitMatch) {
+    event.preventDefault();
+    event.stopPropagation();
+    if (!event.repeat) {
+      const digit = parseInt(digitMatch[1], 10);
+      if (digit === 0) {
+        nextSpeed = areRatesEqual(currentSpeed, 16) ? 1 : 16;
+      } else {
+        const baseSpeed = digit;
+        if (areRatesEqual(currentSpeed, baseSpeed)) {
+          nextSpeed = baseSpeed + 0.5;
+        } else if (areRatesEqual(currentSpeed, baseSpeed + 0.5)) {
+          nextSpeed = baseSpeed;
+        } else {
+          nextSpeed = baseSpeed;
+        }
+      }
+    }
+  } else {
+    switch (event.code) {
+      case 'Equal':
+      case 'NumpadAdd':
+      case 'Plus':
+        event.preventDefault();
+        event.stopPropagation();
+        nextSpeed = Math.min(16, Math.round((currentSpeed + 0.05) * 100) / 100);
+        break;
+      case 'Minus':
+      case 'NumpadSubtract':
+        event.preventDefault();
+        event.stopPropagation();
+        nextSpeed = Math.max(0.1, Math.round((currentSpeed - 0.05) * 100) / 100);
+        break;
+      case 'Delete':
+      case 'Backspace':
+        event.preventDefault();
+        event.stopPropagation();
+        nextSpeed = 1;
+        break;
+      default:
+        break;
+    }
   }
 
   if (nextSpeed !== null) {

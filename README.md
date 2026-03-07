@@ -16,9 +16,13 @@ Available for [Chrome](https://chrome.google.com/webstore), [Firefox](https://ad
   - Mac: `Command + Option + Plus` to increase speed
   - Mac: `Command + Option + Minus` to decrease speed
   - Mac: `Command + Option + Delete` to reset to 1x speed
-  - Windows: `Ctrl + Alt + Plus` to increase speed
-  - Windows: `Ctrl + Alt + Minus` to decrease speed
-  - Windows: `Ctrl + Alt + Delete` to reset to 1x speed
+  - Mac: `Command + Option + [1-9]` to set specific speed. Press again to add 0.5x, and press again to revert.
+  - Mac: `Command + Option + 0` to set to 16x max speed. Press again to reset to 1x speed.
+  - Windows: `Windows Key + Alt + Plus` to increase speed
+  - Windows: `Windows Key + Alt + Minus` to decrease speed
+  - Windows: `Windows Key + Alt + Delete` to reset to 1x speed
+  - Windows: `Windows Key + Alt + [1-9]` to set specific speed. Press again to add 0.5x, and press again to revert.
+  - Windows: `Windows Key + Alt + 0` to set to 16x max speed. Press again to reset to 1x speed.
 
 - **Clean, Intuitive Interface**:
   - Quick preset buttons for common speeds (0.5x to 3x)
@@ -37,9 +41,11 @@ Available for [Chrome](https://chrome.google.com/webstore), [Firefox](https://ad
 
 ### Using Keyboard Shortcuts
 
-- Increase speed: `Command + Option + Plus` (Mac) or `Ctrl + Alt + Plus` (Windows)
-- Decrease speed: `Command + Option + Minus` (Mac) or `Ctrl + Alt + Minus` (Windows)
-- Reset to normal speed: `Command + Option + Delete` (Mac) or `Ctrl + Alt + Delete` (Windows)
+- Increase speed: `Command + Option + Plus` (Mac) or `Windows Key + Alt + Plus` (Windows)
+- Decrease speed: `Command + Option + Minus` (Mac) or `Windows Key + Alt + Minus` (Windows)
+- Reset to normal speed: `Command + Option + Delete` (Mac) or `Windows Key + Alt + Delete` (Windows)
+- Set specific speed (1-9): `Command + Option + [1-9]` (Mac) or `Windows Key + Alt + [1-9]` (Windows). Press again to add 0.5x, and press again to revert.
+- Set to max speed (16x): `Command + Option + 0` (Mac) or `Windows Key + Alt + 0` (Windows). Press again to reset to 1x speed.
 
 The extension will display a toast notification showing the current speed whenever you make adjustments.
 
