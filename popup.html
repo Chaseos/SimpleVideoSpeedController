@@ -5,7 +5,7 @@
   <style>
     body {
       width: 250px;
-      padding: 16px;
+      padding: 16px 16px 8px 16px;
       background: #1a1a1a;
       margin: 0;
     }
@@ -98,6 +98,110 @@
       transform: translateY(-1px);
     }
 
+    /* Shortcuts Section */
+    .shortcuts-container {
+      margin-top: 4px;
+    }
+
+    .shortcuts-toggle {
+      width: auto;
+      margin-left: auto;
+      background: none;
+      border: none;
+      color: #444;
+      font-size: 10px;
+      padding: 2px 0;
+      cursor: pointer;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 3px;
+      transition: color 0.2s ease;
+    }
+
+    .shortcuts-toggle:hover {
+      color: #ccc;
+    }
+
+    .shortcuts-toggle .chevron {
+      font-size: 9px;
+      transition: transform 0.2s ease;
+    }
+
+    .shortcuts-toggle.open .chevron {
+      transform: rotate(180deg);
+    }
+
+    .shortcuts-content {
+      display: none;
+      padding-top: 4px;
+    }
+
+    .shortcuts-content.open {
+      display: block;
+    }
+
+    .shortcut-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+      font-size: 12px;
+      color: #bbb;
+    }
+
+    .shortcut-row.nested {
+      padding-left: 18px;
+      position: relative;
+    }
+
+    .shortcut-row.nested::before {
+      content: '↳';
+      position: absolute;
+      left: 4px;
+      color: #777;
+    }
+
+    .shortcut-row.nested .up-arrow {
+      color: #777;
+      font-size: 14px;
+      margin-right: 4px;
+      display: inline-flex;
+      align-items: center;
+      transform: scaleX(-1);
+    }
+
+    .shortcut-row:last-child {
+      margin-bottom: 0;
+    }
+
+    .keys {
+      display: flex;
+      gap: 3px;
+      align-items: center;
+    }
+
+    kbd {
+      background-color: #2a2a2a;
+      border: 1px solid #444;
+      border-radius: 3px;
+      box-shadow: 0 1px 0 #111;
+      color: #ccc;
+      display: inline-block;
+      font-family: inherit;
+      font-size: 11px;
+      padding: 2px 5px;
+      line-height: 1.2;
+      text-align: center;
+    }
+
+    /* Force all action keys (the right-most keys) to perfectly align */
+    kbd.action-key {
+      min-width: 29px;
+      box-sizing: border-box;
+      display: inline-block;
+    }
+
     /* Pin suggestion overlay */
     .pin-suggestion {
       position: absolute;
@@ -179,6 +283,47 @@
     <div class="arrow-controls">
       <button class="arrow-button" id="speedUp">+</button>
       <button class="arrow-button" id="speedDown">-</button>
+    </div>
+  </div>
+
+  <!-- Shortcuts Section -->
+  <div class="shortcuts-container">
+    <button class="shortcuts-toggle" id="shortcutsToggle">
+      <span>Shortcuts</span>
+      <span class="chevron" id="shortcutsChevron">▼</span>
+    </button>
+    <div class="shortcuts-content" id="shortcutsContent">
+      <div class="shortcut-row">
+        <span>±0.05x Speed</span>
+        <div class="keys">
+          <kbd class="meta-key">Cmd</kbd> + <kbd class="alt-key">Opt</kbd> + <kbd class="action-key">+/-</kbd>
+        </div>
+      </div>
+      <div class="shortcut-row">
+        <span>Reset to 1x</span>
+        <div class="keys">
+          <kbd class="meta-key">Cmd</kbd> + <kbd class="alt-key">Opt</kbd> + <kbd class="action-key">⌫</kbd>
+        </div>
+      </div>
+      <div class="shortcut-row">
+        <span>Toggle Max Speed</span>
+        <div class="keys">
+          <kbd class="meta-key">Cmd</kbd> + <kbd class="alt-key">Opt</kbd> + <kbd class="action-key">0</kbd>
+        </div>
+      </div>
+      <div class="shortcut-row">
+        <span>Set <kbd>1-9</kbd>x Speed</span>
+        <div class="keys">
+          <kbd class="meta-key">Cmd</kbd> + <kbd class="alt-key">Opt</kbd> + <kbd class="action-key">1-9</kbd>
+        </div>
+      </div>
+      <div class="shortcut-row nested">
+        <span>Add +0.5x</span>
+        <div class="keys">
+          <span class="up-arrow">⤴</span>
+          <kbd class="action-key">(x2)</kbd>
+        </div>
+      </div>
     </div>
   </div>
 

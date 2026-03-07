@@ -50,6 +50,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // Initialize event listeners
   setupEventListeners();
+  setupShortcutKeys();
   
   // Load and apply saved speed for current domain
   try {
@@ -68,6 +69,33 @@ document.addEventListener('DOMContentLoaded', async () => {
     updateUI(1); // Fallback to default speed
   }
 });
+
+/**
+ * Setup OS specific shortcut keys and toggle logic
+ */
+function setupShortcutKeys() {
+  const isMac = navigator.userAgent.toLowerCase().includes('mac');
+  const metaKeyName = isMac ? '⌘' : 'Win';
+  const altKeyName = isMac ? '⌥' : 'Alt';
+  
+  document.querySelectorAll('.meta-key').forEach(el => {
+    el.textContent = metaKeyName;
+  });
+  
+  document.querySelectorAll('.alt-key').forEach(el => {
+    el.textContent = altKeyName;
+  });
+
+  const toggleBtn = document.getElementById('shortcutsToggle');
+  const content = document.getElementById('shortcutsContent');
+  
+  if (toggleBtn && content) {
+    toggleBtn.addEventListener('click', () => {
+      toggleBtn.classList.toggle('open');
+      content.classList.toggle('open');
+    });
+  }
+}
 
 /**
  * Set up all event listeners for the popup UI

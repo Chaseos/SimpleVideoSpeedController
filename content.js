@@ -28,6 +28,7 @@ document.body.appendChild(toast);
 
 // Global speed the extension believes the current domain should be using
 let currentSpeed = 1;
+let preMaxSpeed = null; // Stores the speed before toggling to max
 let toastTimeout = null;
 
 // Per-video bookkeeping so we can distinguish our own updates from site-driven ones
@@ -328,7 +329,13 @@ document.addEventListener('keydown', (event) => {
     if (!event.repeat) {
       const digit = parseInt(digitMatch[1], 10);
       if (digit === 0) {
-        nextSpeed = areRatesEqual(currentSpeed, 16) ? 1 : 16;
+        if (areRatesEqual(currentSpeed, 16)) {
+          nextSpeed = preMaxSpeed !== null ? preMaxSpeed : 1;
+          preMaxSpeed = null;
+        } else {
+          preMaxSpeed = currentSpeed;
+          nextSpeed = 16;
+        }
       } else {
         const baseSpeed = digit;
         if (areRatesEqual(currentSpeed, baseSpeed)) {
