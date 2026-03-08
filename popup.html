@@ -258,11 +258,51 @@
       }
     }
 
-    /* Remove number input spinners */
-    input[type=number]::-webkit-inner-spin-button, 
-    input[type=number]::-webkit-outer-spin-button { 
-      -webkit-appearance: none; 
-      margin: 0; 
+    /* Review Prompt */
+    #reviewPrompt {
+      margin-top: 4px;
+      padding: 10px;
+      background: transparent;
+      border-radius: 8px;
+      display: none; /* Hidden by default */
+      align-items: center;
+      justify-content: center;
+      border: 1px dashed #333;
+      cursor: pointer;
+      animation: fadeIn 0.3s ease-out;
+      transition: all 0.2s ease;
+    }
+
+    #reviewPrompt:hover {
+      border-color: #444;
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .review-text {
+      margin: 0;
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.3);
+      text-align: center;
+      transition: color 0.2s ease;
+    }
+
+    #reviewPrompt:hover .review-text {
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    .review-link {
+      font-weight: bold;
+    }
+
+    .star {
+      color: #ffd700;
+      opacity: 0.5;
+      transition: opacity 0.2s ease;
+      margin-left: 2px;
+    }
+
+    #reviewPrompt:hover .star {
+      opacity: 1;
     }
   </style>
 </head>
@@ -312,7 +352,7 @@
         </div>
       </div>
       <div class="shortcut-row">
-        <span>Set <kbd>1-9</kbd>x Speed</span>
+        <span>Set to <kbd>1-9</kbd>x Speed</span>
         <div class="keys">
           <kbd class="meta-key">Cmd</kbd> + <kbd class="alt-key">Opt</kbd> + <kbd class="action-key">1-9</kbd>
         </div>
@@ -332,6 +372,20 @@
     <div class="pin-icon">↻ & 📌</div>
     <p>Reload your tabs and pin this extension for easy access!</p>
     <button class="got-it-btn">Got it!</button>
+  </div>
+
+  <!-- Review prompt -->
+  <div id="reviewPrompt">
+    <p class="review-text">
+      <span class="star">★</span>
+      <span>Find it useful? Leave a review</span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 12px; height: 12px; opacity: 0.6; vertical-align: -2px; margin-left: 4px;">
+        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+        <polyline points="15 3 21 3 21 9"></polyline>
+        <line x1="10" y1="14" x2="21" y2="3"></line>
+      </svg>
+    </p>
+    <a href="#" id="reviewLink" style="display:none" target="_blank"></a>
   </div>
 
   <script src="popup.js"></script>

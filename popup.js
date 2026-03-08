@@ -25,11 +25,71 @@ async function checkFirstOpen() {
 }
 
 /**
+ * Check if the review prompt should be shown
+ */
+async function checkReviewPrompt() {
+  try {
+    const data = await chrome.storage.sync.get(['speedChangeCount', 'hasDismissedReview']);
+    const count = data.speedChangeCount || 0;
+    const dismissed = data.hasDismissedReview || false;
+
+    if (count >= 10 && !dismissed) {
+      const prompt = document.getElementById('reviewPrompt');
+      const reviewLink = document.getElementById('reviewLink');
+      const closeBtn = document.getElementById('closeReview');
+
+      if (prompt) {
+        prompt.style.display = 'flex';
+        
+        // Link dynamically based on browser
+        if (reviewLink) {
+          const ua = navigator.userAgent.toLowerCase();
+          const isFirefox = ua.includes('firefox');
+          const isOpera = ua.includes('opr') || ua.includes('opera');
+
+          if (isFirefox) {
+            reviewLink.href = 'https://addons.mozilla.org/en-US/firefox/addon/simple-video-speed-controller/reviews/';
+          } else if (isOpera) {
+            reviewLink.href = 'https://addons.opera.com/en/extensions/details/simple-video-speed-controller/';
+          } else {
+            reviewLink.href = 'https://chromewebstore.google.com/detail/simple-video-speed-contro/kcjfpmjkbkhgojilpihplkedadndnked/reviews?hl=en&authuser=0';
+          }
+        }
+
+        const dismissAndHide = async (e) => {
+          if (e) e.preventDefault();
+          
+          // 1. Mark as dismissed in storage immediately and await it
+          await chrome.storage.sync.set({ hasDismissedReview: true });
+
+          // 2. Open the review link in a new tab if available
+          if (reviewLink && reviewLink.href && reviewLink.href !== '#' && !reviewLink.href.startsWith('javascript:')) {
+            chrome.tabs.create({ url: reviewLink.href });
+          }
+
+          // 3. Hide the prompt from current view
+          prompt.style.display = 'none';
+        };
+
+        if (prompt) {
+          prompt.addEventListener('click', dismissAndHide);
+        }
+      }
+    }
+  } catch (error) {
+    console.error('Error checking review prompt:', error);
+  }
+}
+
+/**
  * Initialize the popup UI and load saved settings
  */
 document.addEventListener('DOMContentLoaded', async () => {
   // Check for first-time open
   await checkFirstOpen();
+
+  // Check if review prompt should be shown
+  await checkReviewPrompt();
 
   // Set default value in custom speed input
   const customSpeedInput = document.getElementById('customSpeed');
