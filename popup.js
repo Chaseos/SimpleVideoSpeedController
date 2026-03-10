@@ -82,9 +82,37 @@ async function checkReviewPrompt() {
 }
 
 /**
+ * Localize the HTML page using Chrome i18n
+ */
+function localizeHtmlPage() {
+  // Localize text content
+  document.querySelectorAll('[data-i18n]').forEach(element => {
+    const message = chrome.i18n.getMessage(element.getAttribute('data-i18n'));
+    if (message) {
+      if (element.tagName === 'SPAN' && message.includes('<kbd>')) {
+        element.innerHTML = message;
+      } else {
+        element.textContent = message;
+      }
+    }
+  });
+
+  // Localize placeholders
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(element => {
+    const message = chrome.i18n.getMessage(element.getAttribute('data-i18n-placeholder'));
+    if (message) {
+      element.placeholder = message;
+    }
+  });
+}
+
+/**
  * Initialize the popup UI and load saved settings
  */
 document.addEventListener('DOMContentLoaded', async () => {
+  // Localize UI first
+  localizeHtmlPage();
+
   // Check for first-time open
   await checkFirstOpen();
 

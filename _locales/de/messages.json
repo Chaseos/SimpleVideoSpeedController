@@ -1,0 +1,54 @@
+{
+  "appName": {
+    "message": "Einfacher Video-Geschwindigkeitsregler",
+    "description": "The name of the extension"
+  },
+  "appDescription": {
+    "message": "Automatische Anpassung der Videogeschwindigkeit auf jeder Website.",
+    "description": "The description of the extension"
+  },
+  "speedPlaceholder": {
+    "message": "Geschwindigkeit",
+    "description": "Placeholder text for the custom speed input"
+  },
+  "setButton": {
+    "message": "Setzen",
+    "description": "Top button to submit custom speed"
+  },
+  "shortcutsTitle": {
+    "message": "Tastenkombinationen",
+    "description": "Title for the shortcuts section"
+  },
+  "shortcutSpeedTune": {
+    "message": "±0,05x Geschwindigkeit",
+    "description": "Shortcut explanation to tune speed by 0.05"
+  },
+  "shortcutReset": {
+    "message": "Auf 1x zurücksetzen",
+    "description": "Shortcut explanation to reset speed to 1x"
+  },
+  "shortcutToggleMax": {
+    "message": "Max. Geschwindigkeit umschalten",
+    "description": "Shortcut explanation to toggle max speed"
+  },
+  "shortcutSetSpeed": {
+    "message": "Auf <kbd>1-9</kbd>x Geschwindigkeit setzen",
+    "description": "Shortcut explanation to set exact speed (1-9)"
+  },
+  "shortcutAddExtra": {
+    "message": "+0,5x hinzufügen",
+    "description": "Shortcut explanation to add 0.5x"
+  },
+  "pinSuggestionText": {
+    "message": "Laden Sie Ihre Tabs neu und heften Sie diese Erweiterung an, um leicht darauf zugreifen zu können!",
+    "description": "Text suggesting to pin the extension"
+  },
+  "gotItBtn": {
+    "message": "Verstanden!",
+    "description": "Button to dismiss the pin suggestion"
+  },
+  "reviewPromptText": {
+    "message": "Nützlich? Hinterlassen Sie eine Bewertung",
+    "description": "Text encouraging users to leave a review"
+  }
+}

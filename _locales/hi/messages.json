@@ -1,0 +1,54 @@
+{
+  "appName": {
+    "message": "सरल वीडियो गति नियंत्रक",
+    "description": "The name of the extension"
+  },
+  "appDescription": {
+    "message": "किसी भी वेबसाइट पर स्वचालित रूप से वीडियो की गति समायोजित करें।",
+    "description": "The description of the extension"
+  },
+  "speedPlaceholder": {
+    "message": "गति",
+    "description": "Placeholder text for the custom speed input"
+  },
+  "setButton": {
+    "message": "सेट करें",
+    "description": "Top button to submit custom speed"
+  },
+  "shortcutsTitle": {
+    "message": "शॉर्टकट्स",
+    "description": "Title for the shortcuts section"
+  },
+  "shortcutSpeedTune": {
+    "message": "±0.05x गति",
+    "description": "Shortcut explanation to tune speed by 0.05"
+  },
+  "shortcutReset": {
+    "message": "1x पर रीसेट करें",
+    "description": "Shortcut explanation to reset speed to 1x"
+  },
+  "shortcutToggleMax": {
+    "message": "अधिकतम गति टॉगल करें",
+    "description": "Shortcut explanation to toggle max speed"
+  },
+  "shortcutSetSpeed": {
+    "message": "<kbd>1-9</kbd>x गति पर सेट करें",
+    "description": "Shortcut explanation to set exact speed (1-9)"
+  },
+  "shortcutAddExtra": {
+    "message": "+0.5x जोड़ें",
+    "description": "Shortcut explanation to add 0.5x"
+  },
+  "pinSuggestionText": {
+    "message": "अपने टैब को फिर से लोड करें और आसान पहुँच के लिए इस एक्सटेंशन को पिन करें!",
+    "description": "Text suggesting to pin the extension"
+  },
+  "gotItBtn": {
+    "message": "समझ गया!",
+    "description": "Button to dismiss the pin suggestion"
+  },
+  "reviewPromptText": {
+    "message": "उपयोगी लगा? एक समीक्षा छोड़ें",
+    "description": "Text encouraging users to leave a review"
+  }
+}

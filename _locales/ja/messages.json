@@ -1,0 +1,54 @@
+{
+  "appName": {
+    "message": "シンプルな動画再生速度コントローラー",
+    "description": "The name of the extension"
+  },
+  "appDescription": {
+    "message": "あらゆるウェブサイトで動画の再生速度を自動的に調整します。",
+    "description": "The description of the extension"
+  },
+  "speedPlaceholder": {
+    "message": "速度",
+    "description": "Placeholder text for the custom speed input"
+  },
+  "setButton": {
+    "message": "設定",
+    "description": "Top button to submit custom speed"
+  },
+  "shortcutsTitle": {
+    "message": "ショートカット",
+    "description": "Title for the shortcuts section"
+  },
+  "shortcutSpeedTune": {
+    "message": "速度 ±0.05倍",
+    "description": "Shortcut explanation to tune speed by 0.05"
+  },
+  "shortcutReset": {
+    "message": "1倍にリセット",
+    "description": "Shortcut explanation to reset speed to 1x"
+  },
+  "shortcutToggleMax": {
+    "message": "最大速度を切り替え",
+    "description": "Shortcut explanation to toggle max speed"
+  },
+  "shortcutSetSpeed": {
+    "message": "速度を<kbd>1-9</kbd>倍に設定",
+    "description": "Shortcut explanation to set exact speed (1-9)"
+  },
+  "shortcutAddExtra": {
+    "message": "+0.5倍を追加",
+    "description": "Shortcut explanation to add 0.5x"
+  },
+  "pinSuggestionText": {
+    "message": "タブを再読み込みし、この拡張機能をピン留めして簡単にアクセスできるようにしてください！",
+    "description": "Text suggesting to pin the extension"
+  },
+  "gotItBtn": {
+    "message": "了解",
+    "description": "Button to dismiss the pin suggestion"
+  },
+  "reviewPromptText": {
+    "message": "役に立ちましたか？レビューを残す",
+    "description": "Text encouraging users to leave a review"
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "appName": {
+    "message": "简单的视频速度控制器",
+    "description": "The name of the extension"
+  },
+  "appDescription": {
+    "message": "自动调整任何网站上的视频速度。",
+    "description": "The description of the extension"
+  },
+  "speedPlaceholder": {
+    "message": "速度",
+    "description": "Placeholder text for the custom speed input"
+  },
+  "setButton": {
+    "message": "设置",
+    "description": "Top button to submit custom speed"
+  },
+  "shortcutsTitle": {
+    "message": "快捷键",
+    "description": "Title for the shortcuts section"
+  },
+  "shortcutSpeedTune": {
+    "message": "±0.05x 速度",
+    "description": "Shortcut explanation to tune speed by 0.05"
+  },
+  "shortcutReset": {
+    "message": "重置为 1x",
+    "description": "Shortcut explanation to reset speed to 1x"
+  },
+  "shortcutToggleMax": {
+    "message": "切换最大速度",
+    "description": "Shortcut explanation to toggle max speed"
+  },
+  "shortcutSetSpeed": {
+    "message": "设置速度为 <kbd>1-9</kbd>x",
+    "description": "Shortcut explanation to set exact speed (1-9)"
+  },
+  "shortcutAddExtra": {
+    "message": "增加 +0.5x",
+    "description": "Shortcut explanation to add 0.5x"
+  },
+  "pinSuggestionText": {
+    "message": "重新加载您的标签页并固定此扩展程序以便快速访问！",
+    "description": "Text suggesting to pin the extension"
+  },
+  "gotItBtn": {
+    "message": "知道了！",
+    "description": "Button to dismiss the pin suggestion"
+  },
+  "reviewPromptText": {
+    "message": "觉得有用吗？请留下评价",
+    "description": "Text encouraging users to leave a review"
+  }
+}

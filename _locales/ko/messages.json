@@ -1,0 +1,54 @@
+{
+  "appName": {
+    "message": "간단한 비디오 속도 컨트롤러",
+    "description": "The name of the extension"
+  },
+  "appDescription": {
+    "message": "모든 웹사이트에서 비디오 속도를 자동으로 조절하세요.",
+    "description": "The description of the extension"
+  },
+  "speedPlaceholder": {
+    "message": "속도",
+    "description": "Placeholder text for the custom speed input"
+  },
+  "setButton": {
+    "message": "설정",
+    "description": "Top button to submit custom speed"
+  },
+  "shortcutsTitle": {
+    "message": "단축키",
+    "description": "Title for the shortcuts section"
+  },
+  "shortcutSpeedTune": {
+    "message": "±0.05x 속도",
+    "description": "Shortcut explanation to tune speed by 0.05"
+  },
+  "shortcutReset": {
+    "message": "1x로 초기화",
+    "description": "Shortcut explanation to reset speed to 1x"
+  },
+  "shortcutToggleMax": {
+    "message": "최대 속도 전환",
+    "description": "Shortcut explanation to toggle max speed"
+  },
+  "shortcutSetSpeed": {
+    "message": "속도를 <kbd>1-9</kbd>x로 설정",
+    "description": "Shortcut explanation to set exact speed (1-9)"
+  },
+  "shortcutAddExtra": {
+    "message": "+0.5x 추가",
+    "description": "Shortcut explanation to add 0.5x"
+  },
+  "pinSuggestionText": {
+    "message": "탭을 새로고침하고 이 확장 프로그램을 고정하여 쉽게 접근하세요!",
+    "description": "Text suggesting to pin the extension"
+  },
+  "gotItBtn": {
+    "message": "확인!",
+    "description": "Button to dismiss the pin suggestion"
+  },
+  "reviewPromptText": {
+    "message": "유용하신가요? 리뷰를 남겨주세요",
+    "description": "Text encouraging users to leave a review"
+  }
+}

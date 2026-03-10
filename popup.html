@@ -318,8 +318,8 @@
     <button class="speed-button" data-speed="3">3x</button>
   </div>
   <div class="speed-row">
-    <input type="number" id="customSpeed" placeholder="Speed" step="0.1" min="0.1" max="16" value="1.00">
-    <button id="setCustomSpeed">Set</button>
+    <input type="number" id="customSpeed" data-i18n-placeholder="speedPlaceholder" placeholder="Speed" step="0.1" min="0.1" max="16" value="1.00">
+    <button id="setCustomSpeed" data-i18n="setButton">Set</button>
     <div class="arrow-controls">
       <button class="arrow-button" id="speedUp">+</button>
       <button class="arrow-button" id="speedDown">-</button>
@@ -329,36 +329,36 @@
   <!-- Shortcuts Section -->
   <div class="shortcuts-container">
     <button class="shortcuts-toggle" id="shortcutsToggle">
-      <span>Shortcuts</span>
+      <span data-i18n="shortcutsTitle">Shortcuts</span>
       <span class="chevron" id="shortcutsChevron">▼</span>
     </button>
     <div class="shortcuts-content" id="shortcutsContent">
       <div class="shortcut-row">
-        <span>±0.05x Speed</span>
+        <span data-i18n="shortcutSpeedTune">±0.05x Speed</span>
         <div class="keys">
           <kbd class="meta-key">Cmd</kbd> + <kbd class="alt-key">Opt</kbd> + <kbd class="action-key">+/-</kbd>
         </div>
       </div>
       <div class="shortcut-row">
-        <span>Reset to 1x</span>
+        <span data-i18n="shortcutReset">Reset to 1x</span>
         <div class="keys">
           <kbd class="meta-key">Cmd</kbd> + <kbd class="alt-key">Opt</kbd> + <kbd class="action-key">⌫</kbd>
         </div>
       </div>
       <div class="shortcut-row">
-        <span>Toggle Max Speed</span>
+        <span data-i18n="shortcutToggleMax">Toggle Max Speed</span>
         <div class="keys">
           <kbd class="meta-key">Cmd</kbd> + <kbd class="alt-key">Opt</kbd> + <kbd class="action-key">0</kbd>
         </div>
       </div>
       <div class="shortcut-row">
-        <span>Set to <kbd>1-9</kbd>x Speed</span>
+        <span data-i18n="shortcutSetSpeed">Set to <kbd>1-9</kbd>x Speed</span>
         <div class="keys">
           <kbd class="meta-key">Cmd</kbd> + <kbd class="alt-key">Opt</kbd> + <kbd class="action-key">1-9</kbd>
         </div>
       </div>
       <div class="shortcut-row nested">
-        <span>Add +0.5x</span>
+        <span data-i18n="shortcutAddExtra">Add +0.5x</span>
         <div class="keys">
           <span class="up-arrow">⤴</span>
           <kbd class="action-key">(x2)</kbd>
@@ -370,15 +370,15 @@
   <!-- Pin suggestion overlay -->
   <div class="pin-suggestion">
     <div class="pin-icon">↻ & 📌</div>
-    <p>Reload your tabs and pin this extension for easy access!</p>
-    <button class="got-it-btn">Got it!</button>
+    <p data-i18n="pinSuggestionText">Reload your tabs and pin this extension for easy access!</p>
+    <button class="got-it-btn" data-i18n="gotItBtn">Got it!</button>
   </div>
 
   <!-- Review prompt -->
   <div id="reviewPrompt">
     <p class="review-text">
       <span class="star">★</span>
-      <span>Find it useful? Leave a review</span>
+      <span data-i18n="reviewPromptText">Find it useful? Leave a review</span>
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 12px; height: 12px; opacity: 0.6; vertical-align: -2px; margin-left: 4px;">
         <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
         <polyline points="15 3 21 3 21 9"></polyline>

@@ -1,0 +1,54 @@
+{
+  "appName": {
+    "message": "Простий контролер швидкості відео",
+    "description": "The name of the extension"
+  },
+  "appDescription": {
+    "message": "Автоматично регулюйте швидкість відео на будь-якому вебсайті.",
+    "description": "The description of the extension"
+  },
+  "speedPlaceholder": {
+    "message": "Швидкість",
+    "description": "Placeholder text for the custom speed input"
+  },
+  "setButton": {
+    "message": "Встановити",
+    "description": "Top button to submit custom speed"
+  },
+  "shortcutsTitle": {
+    "message": "Гарячі клавіші",
+    "description": "Title for the shortcuts section"
+  },
+  "shortcutSpeedTune": {
+    "message": "Швидкість ±0.05x",
+    "description": "Shortcut explanation to tune speed by 0.05"
+  },
+  "shortcutReset": {
+    "message": "Скинути до 1x",
+    "description": "Shortcut explanation to reset speed to 1x"
+  },
+  "shortcutToggleMax": {
+    "message": "Перемкнути макс. швидкість",
+    "description": "Shortcut explanation to toggle max speed"
+  },
+  "shortcutSetSpeed": {
+    "message": "Встановити швидкість <kbd>1-9</kbd>x",
+    "description": "Shortcut explanation to set exact speed (1-9)"
+  },
+  "shortcutAddExtra": {
+    "message": "Додати +0.5x",
+    "description": "Shortcut explanation to add 0.5x"
+  },
+  "pinSuggestionText": {
+    "message": "Перезавантажте вкладки та закріпіть це розширення для легкого доступу!",
+    "description": "Text suggesting to pin the extension"
+  },
+  "gotItBtn": {
+    "message": "Зрозуміло!",
+    "description": "Button to dismiss the pin suggestion"
+  },
+  "reviewPromptText": {
+    "message": "Корисно? Залиште відгук",
+    "description": "Text encouraging users to leave a review"
+  }
+}

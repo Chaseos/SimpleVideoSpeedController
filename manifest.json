@@ -1,14 +1,15 @@
 {
   "manifest_version": 3,
-  "name": "Simple Video Speed Controller",
+  "name": "__MSG_appName__",
   "version": "1.6",
+  "default_locale": "en",
   "permissions": [
     "storage",
     "scripting",
     "activeTab",
     "tabs"
   ],
-  "description": "Automatically adjust video speed on any website.",
+  "description": "__MSG_appDescription__",
   "icons": {
     "16": "icon.png",
     "48": "icon.png",

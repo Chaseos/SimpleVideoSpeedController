@@ -1,0 +1,54 @@
+{
+  "appName": {
+    "message": "Simple Video Speed Controller",
+    "description": "The name of the extension"
+  },
+  "appDescription": {
+    "message": "Automatically adjust video speed on any website.",
+    "description": "The description of the extension"
+  },
+  "speedPlaceholder": {
+    "message": "Speed",
+    "description": "Placeholder text for the custom speed input"
+  },
+  "setButton": {
+    "message": "Set",
+    "description": "Top button to submit custom speed"
+  },
+  "shortcutsTitle": {
+    "message": "Shortcuts",
+    "description": "Title for the shortcuts section"
+  },
+  "shortcutSpeedTune": {
+    "message": "±0.05x Speed",
+    "description": "Shortcut explanation to tune speed by 0.05"
+  },
+  "shortcutReset": {
+    "message": "Reset to 1x",
+    "description": "Shortcut explanation to reset speed to 1x"
+  },
+  "shortcutToggleMax": {
+    "message": "Toggle Max Speed",
+    "description": "Shortcut explanation to toggle max speed"
+  },
+  "shortcutSetSpeed": {
+    "message": "Set to <kbd>1-9</kbd>x Speed",
+    "description": "Shortcut explanation to set exact speed (1-9)"
+  },
+  "shortcutAddExtra": {
+    "message": "Add +0.5x",
+    "description": "Shortcut explanation to add 0.5x"
+  },
+  "pinSuggestionText": {
+    "message": "Reload your tabs and pin this extension for easy access!",
+    "description": "Text suggesting to pin the extension"
+  },
+  "gotItBtn": {
+    "message": "Got it!",
+    "description": "Button to dismiss the pin suggestion"
+  },
+  "reviewPromptText": {
+    "message": "Find it useful? Leave a review",
+    "description": "Text encouraging users to leave a review"
+  }
+}
