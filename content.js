@@ -30,6 +30,8 @@ document.body.appendChild(toast);
 let currentSpeed = 1;
 let preMaxSpeed = null; // Stores the speed before toggling to max
 let toastTimeout;
+let storageDebounceTimer;
+const monitoredVideos = new WeakSet();
 
 // Utility for rate comparison
 const RATE_EPSILON = 0.0001;
@@ -63,9 +65,7 @@ function getDomain() {
 function forceUpdateVideoSpeeds(speed) {
   const videos = document.querySelectorAll('video');
   videos.forEach((video) => {
-    // Force reset the speed to trigger the change
-    if (video) {
-      video.playbackRate = 1;
+    if (video && video.playbackRate !== speed) {
       video.playbackRate = speed;
     }
   });
@@ -82,12 +82,19 @@ async function setVideoSpeed(speed, skipStorage = false) {
 
     // Save speed setting if not skipped
     if (!skipStorage) {
-      const domain = getDomain();
-      const data = await chrome.storage.sync.get('domainSpeeds');
-      const domainSpeeds = data.domainSpeeds || {};
-      domainSpeeds[domain] = speed;
-      await chrome.storage.sync.set({ domainSpeeds });
-      console.log(`Saved speed ${speed} for domain ${domain}`);
+      clearTimeout(storageDebounceTimer);
+      storageDebounceTimer = setTimeout(async () => {
+        try {
+          const domain = getDomain();
+          const data = await chrome.storage.sync.get('domainSpeeds');
+          const domainSpeeds = data.domainSpeeds || {};
+          domainSpeeds[domain] = speed;
+          await chrome.storage.sync.set({ domainSpeeds });
+          console.log(`Saved speed ${speed} for domain ${domain}`);
+        } catch (err) {
+          console.error('Error saving speed:', err);
+        }
+      }, 500);
     }
   } catch (error) {
     console.error('Error setting video speed:', error);
@@ -116,18 +123,17 @@ async function applySavedSpeed() {
 function monitorVideoElements() {
   const videos = document.querySelectorAll('video');
   videos.forEach(video => {
-    // Remove existing listeners first
-    video.removeEventListener('ratechange', handleRateChange);
-    video.removeEventListener('play', handlePlay);
-    video.removeEventListener('loadedmetadata', handleLoadedMetadata);
-    
-    // Add fresh listeners
-    video.addEventListener('ratechange', handleRateChange);
-    video.addEventListener('play', handlePlay);
-    video.addEventListener('loadedmetadata', handleLoadedMetadata);
+    if (!monitoredVideos.has(video)) {
+      monitoredVideos.add(video);
+      video.addEventListener('ratechange', handleRateChange);
+      video.addEventListener('play', handlePlay);
+      video.addEventListener('loadedmetadata', handleLoadedMetadata);
+    }
     
     // Set initial speed
-    video.playbackRate = currentSpeed;
+    if (video.playbackRate !== currentSpeed) {
+      video.playbackRate = currentSpeed;
+    }
   });
 }
 
@@ -147,12 +153,15 @@ function handleLoadedMetadata() {
 }
 
 // Watch for dynamically added videos
+let observerTimeout = null;
 const observer = new MutationObserver((mutations) => {
-  mutations.forEach(mutation => {
-    if (mutation.addedNodes.length) {
+  const hasAddedNodes = mutations.some(mutation => mutation.addedNodes.length > 0);
+  if (hasAddedNodes) {
+    if (observerTimeout) clearTimeout(observerTimeout);
+    observerTimeout = setTimeout(() => {
       monitorVideoElements();
-    }
-  });
+    }, 100);
+  }
 });
 
 observer.observe(document.body, {
@@ -250,7 +259,9 @@ document.addEventListener('keydown', (event) => {
 // Listen for speed change messages from popup
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.action === 'setSpeed') {
-    setVideoSpeed(request.speed);
+    // Only the top frame should handle the storage save during broadcast to prevent race conditions
+    const skipStorage = window !== window.top;
+    setVideoSpeed(request.speed, skipStorage);
     showToast(request.speed);
     sendResponse({ success: true });
   }
@@ -261,7 +272,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 applySavedSpeed();
 monitorVideoElements();
 
-// More aggressive periodic check
+// Periodic check as fallback
 setInterval(() => {
   forceUpdateVideoSpeeds(currentSpeed);
-}, 1000);
+}, 2000);

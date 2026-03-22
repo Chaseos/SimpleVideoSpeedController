@@ -1,6 +1,7 @@
 // Global state to track current speed and domain
 let currentSpeed = 1;
 let currentDomain = '';
+let storageDebounceTimer;
 
 /**
  * Check if this is the first time opening the popup
@@ -260,19 +261,34 @@ async function handleSpeedChange(speed) {
   currentSpeed = speed;
   updateUI(speed);
   
-  // Save speed for current domain and update video speed
+  let contentScriptHandled = false;
+
+  // Update video speed immediately
   try {
-    const data = await chrome.storage.sync.get('domainSpeeds');
-    const domainSpeeds = data.domainSpeeds || {};
-    domainSpeeds[currentDomain] = speed;
-    
-    // Perform background operations in parallel
-    await Promise.all([
-      chrome.storage.sync.set({ domainSpeeds }),
-      sendSpeedToContentScript(speed)
-    ]);
+    const response = await sendSpeedToContentScript(speed);
+    if (response && response.success) {
+      contentScriptHandled = true;
+    }
   } catch (error) {
-    console.error('Error in background operations:', error);
+    console.error('Error sending speed to content script:', error);
+  }
+  
+  // If content script handled it, it will also handle the debounced storage save.
+  // Otherwise, fallback to saving it here in the popup.
+  if (!contentScriptHandled) {
+    // Debounce storage save to prevent quota issues on rapid changes
+    clearTimeout(storageDebounceTimer);
+    storageDebounceTimer = setTimeout(async () => {
+      try {
+        const data = await chrome.storage.sync.get('domainSpeeds');
+        const domainSpeeds = data.domainSpeeds || {};
+        domainSpeeds[currentDomain] = speed;
+        
+        await chrome.storage.sync.set({ domainSpeeds });
+      } catch (error) {
+        console.error('Error saving speed to storage:', error);
+      }
+    }, 500);
   }
 }
 
