@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "__MSG_appName__",
-  "version": "1.6.1",
+  "version": "1.7",
   "default_locale": "en",
   "permissions": [
     "storage",
@@ -31,10 +31,7 @@
     }
   ],
   "background": {
-    "service_worker": "background.js",
-    "scripts": [
-      "background.js"
-    ]
+    "service_worker": "background.js"
   },
   "browser_specific_settings": {
     "gecko": {

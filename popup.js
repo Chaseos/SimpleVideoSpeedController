@@ -18,6 +18,14 @@ async function checkFirstOpen() {
         document.querySelector('.pin-suggestion').classList.remove('show');
         // Mark as seen
         await chrome.storage.sync.set({ hasSeenPinSuggestion: true });
+
+        // Automatically expand the shortcuts section
+        const toggleBtn = document.getElementById('shortcutsToggle');
+        const content = document.getElementById('shortcutsContent');
+        if (toggleBtn && content && !toggleBtn.classList.contains('open')) {
+          toggleBtn.classList.add('open');
+          content.classList.add('open');
+        }
       });
     }
   } catch (error) {

@@ -60,10 +60,24 @@ function getDomain() {
 }
 
 /**
+ * Recursively find all video elements, including those inside shadow DOMs
+ */
+function getAllVideos(root = document) {
+  let videos = Array.from(root.querySelectorAll('video'));
+  const allElements = root.querySelectorAll('*');
+  for (const el of allElements) {
+    if (el.shadowRoot) {
+      videos = videos.concat(getAllVideos(el.shadowRoot));
+    }
+  }
+  return videos;
+}
+
+/**
  * Force update all video speeds
  */
 function forceUpdateVideoSpeeds(speed) {
-  const videos = document.querySelectorAll('video');
+  const videos = getAllVideos();
   videos.forEach((video) => {
     if (video && video.playbackRate !== speed) {
       video.playbackRate = speed;
@@ -121,7 +135,7 @@ async function applySavedSpeed() {
  * Monitors and maintains speed settings for video elements
  */
 function monitorVideoElements() {
-  const videos = document.querySelectorAll('video');
+  const videos = getAllVideos();
   videos.forEach(video => {
     if (!monitoredVideos.has(video)) {
       monitoredVideos.add(video);
