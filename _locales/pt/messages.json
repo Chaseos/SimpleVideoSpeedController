@@ -50,5 +50,9 @@
   "reviewPromptText": {
     "message": "Achou útil? Deixe uma avaliação",
     "description": "Text encouraging users to leave a review"
+  },
+  "liveStreamSynced": {
+    "message": "Transmissão ao vivo sincronizada — 1x",
+    "description": "Toast message shown when a fast-forwarded live stream catches up to the live edge"
   }
 }

@@ -50,5 +50,9 @@
   "reviewPromptText": {
     "message": "役に立ちましたか？レビューを残す",
     "description": "Text encouraging users to leave a review"
+  },
+  "liveStreamSynced": {
+    "message": "ライブストリーム同期 — 1x",
+    "description": "Toast message shown when a fast-forwarded live stream catches up to the live edge"
   }
 }

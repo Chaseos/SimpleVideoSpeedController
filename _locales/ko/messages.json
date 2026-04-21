@@ -50,5 +50,9 @@
   "reviewPromptText": {
     "message": "유용하신가요? 리뷰를 남겨주세요",
     "description": "Text encouraging users to leave a review"
+  },
+  "liveStreamSynced": {
+    "message": "라이브 스트림 동기화됨 — 1x",
+    "description": "Toast message shown when a fast-forwarded live stream catches up to the live edge"
   }
 }

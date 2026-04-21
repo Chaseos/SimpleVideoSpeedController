@@ -31,19 +31,6 @@
     }
   ],
   "background": {
-    "service_worker": "background.js",
-    "scripts": [
-      "background.js"
-    ]
-  },
-  "browser_specific_settings": {
-    "gecko": {
-      "id": "chaseosapps@gmail.com"
-    },
-    "data_collection_permissions": {
-      "required": [
-        "none"
-      ]
-    }
+    "service_worker": "background.js"
   }
 }

@@ -42,14 +42,15 @@ function areRatesEqual(a, b) {
 /**
  * Shows toast notification with current speed
  */
-function showToast(speed) {
-  toast.textContent = `${speed}x`;
+function showToast(message) {
+  const isNumber = typeof message === 'number';
+  toast.textContent = isNumber ? `${message}x` : message;
   toast.style.opacity = '1';
   
   clearTimeout(toastTimeout);
   toastTimeout = setTimeout(() => {
     toast.style.opacity = '0';
-  }, 750);
+  }, isNumber ? 750 : 2000);
 }
 
 /**
@@ -73,14 +74,46 @@ function getAllVideos(root = document) {
   return videos;
 }
 
+let isAtLiveEdge = false;
+
+/**
+ * Determines the effective speed to apply to the video.
+ * If we are watching a YouTube live stream and at the live edge, we force 1x speed
+ * to prevent the buffering/catch-up loop. Otherwise, we use the user's selected speed.
+ */
+function getEffectiveSpeed(targetSpeed) {
+  let currentlyAtLiveEdge = false;
+  if (window.location.hostname.includes('youtube.com')) {
+    const liveBadge = document.querySelector('.ytp-live-badge');
+    if (liveBadge && !liveBadge.hasAttribute('hidden') && liveBadge.style.display !== 'none') {
+      if (liveBadge.classList.contains('ytp-live-badge-is-livehead')) {
+        currentlyAtLiveEdge = true;
+      }
+    }
+  }
+
+  if (currentlyAtLiveEdge) {
+    if (!isAtLiveEdge && targetSpeed !== 1) {
+      isAtLiveEdge = true;
+      const message = chrome.i18n.getMessage('liveStreamSynced') || 'Live stream synced — 1x';
+      showToast(message);
+    }
+    return 1;
+  } else {
+    isAtLiveEdge = false;
+    return targetSpeed;
+  }
+}
+
 /**
  * Force update all video speeds
  */
 function forceUpdateVideoSpeeds(speed) {
   const videos = getAllVideos();
+  const effectiveSpeed = getEffectiveSpeed(speed);
   videos.forEach((video) => {
-    if (video && video.playbackRate !== speed) {
-      video.playbackRate = speed;
+    if (video && video.playbackRate !== effectiveSpeed) {
+      video.playbackRate = effectiveSpeed;
     }
   });
 }
@@ -142,28 +175,38 @@ function monitorVideoElements() {
       video.addEventListener('ratechange', handleRateChange);
       video.addEventListener('play', handlePlay);
       video.addEventListener('loadedmetadata', handleLoadedMetadata);
+      video.addEventListener('timeupdate', handleTimeUpdate);
     }
     
     // Set initial speed
-    if (video.playbackRate !== currentSpeed) {
-      video.playbackRate = currentSpeed;
+    const effectiveSpeed = getEffectiveSpeed(currentSpeed);
+    if (video.playbackRate !== effectiveSpeed) {
+      video.playbackRate = effectiveSpeed;
     }
   });
 }
 
 // Event handlers for video elements
 function handleRateChange(event) {
-  if (event.target.playbackRate !== currentSpeed) {
-    event.target.playbackRate = currentSpeed;
+  const effectiveSpeed = getEffectiveSpeed(currentSpeed);
+  if (event.target.playbackRate !== effectiveSpeed) {
+    event.target.playbackRate = effectiveSpeed;
   }
 }
 
 function handlePlay() {
-  this.playbackRate = currentSpeed;
+  this.playbackRate = getEffectiveSpeed(currentSpeed);
 }
 
 function handleLoadedMetadata() {
-  this.playbackRate = currentSpeed;
+  this.playbackRate = getEffectiveSpeed(currentSpeed);
+}
+
+function handleTimeUpdate(event) {
+  const effectiveSpeed = getEffectiveSpeed(currentSpeed);
+  if (event.target.playbackRate !== effectiveSpeed) {
+    event.target.playbackRate = effectiveSpeed;
+  }
 }
 
 // Watch for dynamically added videos

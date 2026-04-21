@@ -50,5 +50,9 @@
   "reviewPromptText": {
     "message": "Корисно? Залиште відгук",
     "description": "Text encouraging users to leave a review"
+  },
+  "liveStreamSynced": {
+    "message": "Пряму трансляцію синхронізовано — 1x",
+    "description": "Toast message shown when a fast-forwarded live stream catches up to the live edge"
   }
 }
