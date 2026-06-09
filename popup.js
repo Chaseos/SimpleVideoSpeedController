@@ -55,11 +55,18 @@ async function checkReviewPrompt() {
           const ua = navigator.userAgent.toLowerCase();
           const isFirefox = ua.includes('firefox');
           const isOpera = ua.includes('opr') || ua.includes('opera');
+          const isEdge = ua.includes('edg') || ua.includes('edge') || (
+            typeof navigator.userAgentData !== 'undefined' && 
+            navigator.userAgentData.brands && 
+            navigator.userAgentData.brands.some(b => b.brand.includes('Edge'))
+          );
 
           if (isFirefox) {
             reviewLink.href = 'https://addons.mozilla.org/en-US/firefox/addon/simple-video-speed-controller/reviews/';
           } else if (isOpera) {
             reviewLink.href = 'https://addons.opera.com/en/extensions/details/simple-video-speed-controller/';
+          } else if (isEdge) {
+            reviewLink.href = 'https://microsoftedge.microsoft.com/addons/detail/simple-video-speed-contro/mnmagmdfgdjhbfkdnonnhkfnbnjpehja';
           } else {
             reviewLink.href = 'https://chromewebstore.google.com/detail/simple-video-speed-contro/kcjfpmjkbkhgojilpihplkedadndnked/reviews?hl=en&authuser=0';
           }
