@@ -54,5 +54,13 @@
   "liveStreamSynced": {
     "message": "Live stream synced — 1x",
     "description": "Toast message shown when a fast-forwarded live stream catches up to the live edge"
+  },
+  "supportMyWork": {
+    "message": "Support my work",
+    "description": "Ko-fi support link title and accessible label"
+  },
+  "supportMyWorkCta": {
+    "message": "Support my work",
+    "description": "Compact visible Ko-fi support label"
   }
 }

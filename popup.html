@@ -8,6 +8,7 @@
       padding: 16px 16px 8px 16px;
       background: #1a1a1a;
       margin: 0;
+      position: relative;
     }
     
     .speed-row {
@@ -98,9 +99,91 @@
       transform: translateY(-1px);
     }
 
+    .kofi-link {
+      box-sizing: border-box;
+      width: 23px;
+      height: 23px;
+      border: 1px solid transparent;
+      border-radius: 7px;
+      background: transparent;
+      color: white;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      justify-content: flex-start;
+      opacity: 0.34;
+      overflow: hidden;
+      padding: 2px 3px;
+      text-decoration: none;
+      transition: width 0.22s ease, opacity 0.18s ease, background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .kofi-link:hover,
+    .kofi-link:focus-visible {
+      width: 116px;
+      opacity: 1;
+      background: rgba(255, 90, 22, 0.14);
+      border-color: rgba(255, 90, 22, 0.92);
+      box-shadow: 0 0 10px rgba(255, 90, 22, 0.2);
+      outline: none;
+      transform: translateY(-1px) rotate(-2deg);
+    }
+
+    .kofi-link:hover .kofi-icon,
+    .kofi-link:focus-visible .kofi-icon {
+      animation: kofi-pop 0.45s ease;
+    }
+
+    .kofi-icon {
+      display: block;
+      flex: 0 0 auto;
+      height: 17px;
+      width: 17px;
+    }
+
+    .kofi-message {
+      color: white;
+      flex: 0 0 auto;
+      font-size: 10px;
+      font-weight: 600;
+      line-height: 1;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateX(-4px);
+      transition: opacity 0.18s ease, transform 0.18s ease;
+    }
+
+    .kofi-link:hover .kofi-message,
+    .kofi-link:focus-visible .kofi-message {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    @keyframes kofi-pop {
+      0% {
+        transform: scale(1) rotate(0deg);
+      }
+      45% {
+        transform: scale(1.16) rotate(8deg);
+      }
+      100% {
+        transform: scale(1) rotate(0deg);
+      }
+    }
+
     /* Shortcuts Section */
     .shortcuts-container {
       margin-top: 4px;
+    }
+
+    .shortcuts-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      min-height: 24px;
     }
 
     .shortcuts-toggle {
@@ -328,10 +411,17 @@
 
   <!-- Shortcuts Section -->
   <div class="shortcuts-container">
-    <button class="shortcuts-toggle" id="shortcutsToggle">
-      <span data-i18n="shortcutsTitle">Shortcuts</span>
-      <span class="chevron" id="shortcutsChevron">▼</span>
-    </button>
+    <div class="shortcuts-header">
+      <a id="kofi-link" href="https://ko-fi.com/chaseos" target="_blank" rel="noopener noreferrer" class="kofi-link"
+        data-i18n-title="supportMyWork" data-i18n-aria-label="supportMyWork" title="Support my work" aria-label="Support my work">
+        <img src="kofi_symbol.svg" alt="" class="kofi-icon">
+        <span class="kofi-message" data-i18n="supportMyWorkCta">Support my work</span>
+      </a>
+      <button class="shortcuts-toggle" id="shortcutsToggle">
+        <span data-i18n="shortcutsTitle">Shortcuts</span>
+        <span class="chevron" id="shortcutsChevron">▼</span>
+      </button>
+    </div>
     <div class="shortcuts-content" id="shortcutsContent">
       <div class="shortcut-row">
         <span data-i18n="shortcutSpeedTune">±0.05x Speed</span>

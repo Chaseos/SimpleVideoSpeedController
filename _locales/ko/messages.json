@@ -54,5 +54,13 @@
   "liveStreamSynced": {
     "message": "라이브 스트림 동기화됨 — 1x",
     "description": "Toast message shown when a fast-forwarded live stream catches up to the live edge"
+  },
+  "supportMyWork": {
+    "message": "제 작업 후원하기",
+    "description": "Ko-fi support link title and accessible label"
+  },
+  "supportMyWorkCta": {
+    "message": "후원하기",
+    "description": "Compact visible Ko-fi support label"
   }
 }

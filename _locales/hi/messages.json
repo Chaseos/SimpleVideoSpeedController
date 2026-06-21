@@ -54,5 +54,13 @@
   "liveStreamSynced": {
     "message": "लाइव स्ट्रीम सिंक हो गई — 1x",
     "description": "Toast message shown when a fast-forwarded live stream catches up to the live edge"
+  },
+  "supportMyWork": {
+    "message": "मेरे काम का समर्थन करें",
+    "description": "Ko-fi support link title and accessible label"
+  },
+  "supportMyWorkCta": {
+    "message": "समर्थन करें",
+    "description": "Compact visible Ko-fi support label"
   }
 }

@@ -1,4 +1,5 @@
 // Global state to track current speed and domain
+const KOFI_URL = 'https://ko-fi.com/chaseos';
 let currentSpeed = 1;
 let currentDomain = '';
 let storageDebounceTimer;
@@ -100,10 +101,18 @@ async function checkReviewPrompt() {
 /**
  * Localize the HTML page using Chrome i18n
  */
+function getI18nMessage(messageName) {
+  if (typeof chrome === 'undefined' || !chrome.i18n?.getMessage) {
+    return '';
+  }
+
+  return chrome.i18n.getMessage(messageName);
+}
+
 function localizeHtmlPage() {
   // Localize text content
   document.querySelectorAll('[data-i18n]').forEach(element => {
-    const message = chrome.i18n.getMessage(element.getAttribute('data-i18n'));
+    const message = getI18nMessage(element.getAttribute('data-i18n'));
     if (message) {
       if (element.tagName === 'SPAN' && message.includes('<kbd>')) {
         element.innerHTML = message;
@@ -115,9 +124,24 @@ function localizeHtmlPage() {
 
   // Localize placeholders
   document.querySelectorAll('[data-i18n-placeholder]').forEach(element => {
-    const message = chrome.i18n.getMessage(element.getAttribute('data-i18n-placeholder'));
+    const message = getI18nMessage(element.getAttribute('data-i18n-placeholder'));
     if (message) {
       element.placeholder = message;
+    }
+  });
+
+  // Localize tooltip and accessibility labels
+  document.querySelectorAll('[data-i18n-title]').forEach(element => {
+    const message = getI18nMessage(element.getAttribute('data-i18n-title'));
+    if (message) {
+      element.title = message;
+    }
+  });
+
+  document.querySelectorAll('[data-i18n-aria-label]').forEach(element => {
+    const message = getI18nMessage(element.getAttribute('data-i18n-aria-label'));
+    if (message) {
+      element.setAttribute('aria-label', message);
     }
   });
 }
@@ -128,6 +152,11 @@ function localizeHtmlPage() {
 document.addEventListener('DOMContentLoaded', async () => {
   // Localize UI first
   localizeHtmlPage();
+
+  const kofiLink = document.getElementById('kofi-link');
+  if (kofiLink) {
+    kofiLink.href = KOFI_URL;
+  }
 
   // Check for first-time open
   await checkFirstOpen();
