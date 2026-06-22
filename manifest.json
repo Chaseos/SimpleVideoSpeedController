@@ -1,13 +1,11 @@
 {
   "manifest_version": 3,
   "name": "__MSG_appName__",
-  "version": "1.10",
+  "version": "1.11",
   "default_locale": "en",
   "permissions": [
     "storage",
-    "scripting",
-    "activeTab",
-    "tabs"
+    "activeTab"
   ],
   "description": "__MSG_appDescription__",
   "icons": {
