@@ -39,12 +39,7 @@ let storageDebounceTimer;
 const monitoredVideos = new WeakSet();
 const clearedBoostSessionIds = new Set();
 const pressedBoostKeys = new Set();
-
-// Utility for rate comparison
-const RATE_EPSILON = 0.0001;
-function areRatesEqual(a, b) {
-  return Math.abs(a - b) < RATE_EPSILON;
-}
+const shortcutConfig = VideoSpeedShortcuts.getShortcutConfig(navigator);
 
 function normalizeBoostSpeed(value) {
   const speed = Number(value);
@@ -292,15 +287,20 @@ chrome.storage.onChanged.addListener((changes, namespace) => {
 });
 
 function isBoostChordKey(code) {
-  return code === `Key${boostKeyPreference}` ||
-    code.startsWith('Meta') ||
-    code.startsWith('Alt');
+  return VideoSpeedShortcuts.isTrackedBoostCode(
+    code,
+    `Key${boostKeyPreference}`,
+    shortcutConfig
+  );
 }
 
-function isBoostChordPressed() {
-  const hasMeta = [...pressedBoostKeys].some(code => code.startsWith('Meta'));
-  const hasAlt = [...pressedBoostKeys].some(code => code.startsWith('Alt'));
-  return hasMeta && hasAlt && pressedBoostKeys.has(`Key${boostKeyPreference}`);
+function isBoostChordPressed(event) {
+  return VideoSpeedShortcuts.isBoostChordPressed(
+    pressedBoostKeys,
+    `Key${boostKeyPreference}`,
+    shortcutConfig,
+    event ? VideoSpeedShortcuts.hasAltGraph(event) : false
+  );
 }
 
 function requestBoostStart() {
@@ -367,80 +367,39 @@ document.addEventListener('keydown', (event) => {
     pressedBoostKeys.add(event.code);
   }
 
-  if (isChordKey && isBoostChordPressed()) {
+  if (isChordKey && isBoostChordPressed(event)) {
     event.preventDefault();
     event.stopPropagation();
     if (!initiatedBoostSessionId) requestBoostStart();
     return;
   }
 
-  if (!event.metaKey || !event.altKey) {
-    return;
+  if (initiatedBoostSessionId && isChordKey) {
+    requestBoostEnd();
   }
 
-  let nextSpeed = null;
-  const digitMatch = event.code.match(/^(?:Digit|Numpad)([0-9])$/);
+  const result = VideoSpeedShortcuts.resolveOneShot(
+    event,
+    currentSpeed,
+    preMaxSpeed,
+    shortcutConfig
+  );
+  if (!result) return;
 
-  if (digitMatch) {
-    event.preventDefault();
-    event.stopPropagation();
-    if (!event.repeat) {
-      const digit = parseInt(digitMatch[1], 10);
-      if (digit === 0) {
-        if (areRatesEqual(currentSpeed, 16)) {
-          nextSpeed = preMaxSpeed !== null ? preMaxSpeed : 1;
-          preMaxSpeed = null;
-        } else {
-          preMaxSpeed = currentSpeed;
-          nextSpeed = 16;
-        }
-      } else {
-        const baseSpeed = digit;
-        if (areRatesEqual(currentSpeed, baseSpeed)) {
-          nextSpeed = baseSpeed + 0.5;
-        } else if (areRatesEqual(currentSpeed, baseSpeed + 0.5)) {
-          nextSpeed = baseSpeed;
-        } else {
-          nextSpeed = baseSpeed;
-        }
-      }
-    }
-  } else {
-    switch (event.code) {
-      case 'Equal':
-      case 'NumpadAdd':
-      case 'Plus':
-        event.preventDefault();
-        event.stopPropagation();
-        nextSpeed = Math.min(16, Math.round((currentSpeed + 0.05) * 100) / 100);
-        break;
-      case 'Minus':
-      case 'NumpadSubtract':
-        event.preventDefault();
-        event.stopPropagation();
-        nextSpeed = Math.max(0.1, Math.round((currentSpeed - 0.05) * 100) / 100);
-        break;
-      case 'Delete':
-      case 'Backspace':
-        event.preventDefault();
-        event.stopPropagation();
-        nextSpeed = 1;
-        break;
-      default:
-        break;
-    }
-  }
+  event.preventDefault();
+  event.stopPropagation();
+  preMaxSpeed = result.preMaxSpeed;
 
-  if (nextSpeed !== null) {
-    setVideoSpeed(nextSpeed);
-    showToast(nextSpeed);
+  if (result.nextSpeed !== null) {
+    setVideoSpeed(result.nextSpeed);
+    showToast(result.nextSpeed);
   }
 });
 
 document.addEventListener('keyup', (event) => {
   const releasedChordKey = isBoostChordKey(event.code);
   pressedBoostKeys.delete(event.code);
-  if (!initiatedBoostSessionId || !releasedChordKey || isBoostChordPressed()) return;
+  if (!initiatedBoostSessionId || !releasedChordKey || isBoostChordPressed(event)) return;
 
   event.preventDefault();
   event.stopPropagation();

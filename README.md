@@ -18,11 +18,11 @@ Available for [Chrome](https://chrome.google.com/webstore), [Firefox](https://ad
   - Mac: `Command + Option + Delete` to reset to 1x speed
   - Mac: `Command + Option + [1-9]` to set specific speed. Press again to add 0.5x, and press again to revert.
   - Mac: `Command + Option + 0` to set to 16x max speed. Press again to reset to 1x speed.
-  - Windows: `Windows Key + Alt + Plus` to increase speed
-  - Windows: `Windows Key + Alt + Minus` to decrease speed
-  - Windows: `Windows Key + Alt + Delete` to reset to 1x speed
-  - Windows: `Windows Key + Alt + [1-9]` to set specific speed. Press again to add 0.5x, and press again to revert.
-  - Windows: `Windows Key + Alt + 0` to set to 16x max speed. Press again to reset to 1x speed.
+  - Windows/Linux: `Ctrl + Shift + Plus` to increase speed
+  - Windows/Linux: `Ctrl + Shift + Minus` to decrease speed
+  - Windows/Linux: `Ctrl + Shift + Backspace` to reset to 1x speed
+  - Windows/Linux: `Ctrl + Shift + [1-9]` to set specific speed. Press again to add 0.5x, and press again to revert.
+  - Windows/Linux: `Ctrl + Shift + 0` to set to 16x max speed. Press again to reset to 1x speed.
 
 - **Clean, Intuitive Interface**:
   - Quick preset buttons for common speeds (0.5x to 3x)
@@ -41,11 +41,13 @@ Available for [Chrome](https://chrome.google.com/webstore), [Firefox](https://ad
 
 ### Using Keyboard Shortcuts
 
-- Increase speed: `Command + Option + Plus` (Mac) or `Windows Key + Alt + Plus` (Windows)
-- Decrease speed: `Command + Option + Minus` (Mac) or `Windows Key + Alt + Minus` (Windows)
-- Reset to normal speed: `Command + Option + Delete` (Mac) or `Windows Key + Alt + Delete` (Windows)
-- Set specific speed (1-9): `Command + Option + [1-9]` (Mac) or `Windows Key + Alt + [1-9]` (Windows). Press again to add 0.5x, and press again to revert.
-- Set to max speed (16x): `Command + Option + 0` (Mac) or `Windows Key + Alt + 0` (Windows). Press again to reset to 1x speed.
+- Increase speed: `Command + Option + Plus` (Mac) or `Ctrl + Shift + Plus` (Windows/Linux)
+- Decrease speed: `Command + Option + Minus` (Mac) or `Ctrl + Shift + Minus` (Windows/Linux)
+- Reset to normal speed: `Command + Option + Delete` (Mac) or `Ctrl + Shift + Backspace` (Windows/Linux)
+- Set specific speed (1-9): `Command + Option + [1-9]` (Mac) or `Ctrl + Shift + [1-9]` (Windows/Linux). Press again to add 0.5x, and press again to revert.
+- Set to max speed (16x): `Command + Option + 0` (Mac) or `Ctrl + Shift + 0` (Windows/Linux). Press again to reset to 1x speed.
+
+`Ctrl + Alt` is intentionally not used on Windows because many international keyboard layouts expose AltGr as that modifier combination. `Ctrl + Shift + Backspace` is used for reset because browsers reserve `Ctrl + Shift + Delete` for clearing browsing data.
 
 The extension will display a toast notification showing the current speed whenever you make adjustments.
 

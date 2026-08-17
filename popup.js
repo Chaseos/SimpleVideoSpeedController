@@ -194,7 +194,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   // Set default value in custom speed input
   const customSpeedInput = document.getElementById('customSpeed');
   if (customSpeedInput) {
-    customSpeedInput.value = "1.00";
+    customSpeedInput.value = '1';
   }
 
   await loadTemporaryBoostPreferences();
@@ -236,16 +236,14 @@ document.addEventListener('DOMContentLoaded', async () => {
  * Setup OS specific shortcut keys and toggle logic
  */
 function setupShortcutKeys() {
-  const isMac = navigator.userAgent.toLowerCase().includes('mac');
-  const metaKeyName = isMac ? '⌘' : 'Win';
-  const altKeyName = isMac ? '⌥' : 'Alt';
+  const shortcutConfig = VideoSpeedShortcuts.getShortcutConfig(navigator);
   
-  document.querySelectorAll('.meta-key').forEach(el => {
-    el.textContent = metaKeyName;
+  document.querySelectorAll('.primary-modifier-key').forEach(el => {
+    el.textContent = shortcutConfig.primaryLabel;
   });
   
-  document.querySelectorAll('.alt-key').forEach(el => {
-    el.textContent = altKeyName;
+  document.querySelectorAll('.secondary-modifier-key').forEach(el => {
+    el.textContent = shortcutConfig.secondaryLabel;
   });
 
   const toggleBtn = document.getElementById('shortcutsToggle');
@@ -280,7 +278,7 @@ function updateTemporaryBoostUI() {
   const summaryKey = document.getElementById('boostSummaryKey');
 
   if (speedInput && document.activeElement !== speedInput) {
-    speedInput.value = boostSpeed.toFixed(2);
+    speedInput.value = formatSpeed(boostSpeed);
   }
   if (keyInput) keyInput.value = boostKey;
   if (summarySpeed) summarySpeed.textContent = `${formatSpeed(boostSpeed)}x`;
@@ -326,6 +324,8 @@ function setupTemporaryBoostControls() {
   const editor = document.getElementById('boostEditor');
   const speedInput = document.getElementById('boostSpeed');
   const keyInput = document.getElementById('boostKey');
+  const speedUpButton = document.getElementById('boostSpeedUp');
+  const speedDownButton = document.getElementById('boostSpeedDown');
 
   summary?.addEventListener('click', () => {
     const isOpen = editor.classList.toggle('open');
@@ -342,7 +342,23 @@ function setupTemporaryBoostControls() {
       saveBoostSpeed(boostSpeed, true);
     }
     updateTemporaryBoostUI();
+    speedInput.value = formatSpeed(boostSpeed);
   });
+
+  speedInput?.addEventListener('blur', () => {
+    speedInput.value = formatSpeed(boostSpeed);
+  });
+
+  const adjustBoostSpeed = delta => {
+    const nextSpeed = Math.min(
+      16,
+      Math.max(0.1, Math.round((boostSpeed + delta) * 100) / 100)
+    );
+    saveBoostSpeed(nextSpeed, true);
+  };
+
+  speedUpButton?.addEventListener('click', () => adjustBoostSpeed(0.05));
+  speedDownButton?.addEventListener('click', () => adjustBoostSpeed(-0.05));
 
   keyInput?.addEventListener('keydown', event => {
     event.preventDefault();
@@ -428,7 +444,7 @@ function updateUI(speed) {
   // Update custom speed input
   const customSpeedInput = document.getElementById('customSpeed');
   if (customSpeedInput) {
-    customSpeedInput.value = speed.toFixed(2);
+    customSpeedInput.value = formatSpeed(speed);
   }
 }
 
