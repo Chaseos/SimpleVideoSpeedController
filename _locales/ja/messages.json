@@ -4,7 +4,7 @@
     "description": "The name of the extension"
   },
   "appDescription": {
-    "message": "あらゆるウェブサイトで動画の再生速度を自動的に調整します。",
+    "message": "あらゆるウェブサイトで動画の再生速度を調整します。",
     "description": "The description of the extension"
   },
   "speedPlaceholder": {

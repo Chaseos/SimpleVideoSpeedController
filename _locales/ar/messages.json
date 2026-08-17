@@ -1,66 +1,66 @@
 {
   "appName": {
-    "message": "Simple Video Speed Controller",
+    "message": "أداة بسيطة للتحكم في سرعة الفيديو",
     "description": "The name of the extension"
   },
   "appDescription": {
-    "message": "Adjust the video speed on any website.",
+    "message": "اضبط سرعة الفيديو على أي موقع ويب.",
     "description": "The description of the extension"
   },
   "speedPlaceholder": {
-    "message": "Speed",
+    "message": "السرعة",
     "description": "Placeholder text for the custom speed input"
   },
   "setButton": {
-    "message": "Set",
+    "message": "تعيين",
     "description": "Top button to submit custom speed"
   },
   "shortcutsTitle": {
-    "message": "Shortcuts",
+    "message": "اختصارات لوحة المفاتيح",
     "description": "Title for the shortcuts section"
   },
   "shortcutSpeedTune": {
-    "message": "±0.05x Speed",
+    "message": "السرعة ±0.05x",
     "description": "Shortcut explanation to tune speed by 0.05"
   },
   "shortcutReset": {
-    "message": "Reset to 1x",
+    "message": "إعادة الضبط إلى 1x",
     "description": "Shortcut explanation to reset speed to 1x"
   },
   "shortcutToggleMax": {
-    "message": "Toggle Max Speed",
+    "message": "تبديل السرعة القصوى",
     "description": "Shortcut explanation to toggle max speed"
   },
   "shortcutSetSpeed": {
-    "message": "Set to <kbd>1-9</kbd>x Speed",
+    "message": "تعيين السرعة إلى <kbd>1-9</kbd>x",
     "description": "Shortcut explanation to set exact speed (1-9)"
   },
   "shortcutAddExtra": {
-    "message": "Add +0.5x",
+    "message": "إضافة +0.5x",
     "description": "Shortcut explanation to add 0.5x"
   },
   "pinSuggestionText": {
-    "message": "Reload your tabs and pin this extension for easy access!",
+    "message": "أعِد تحميل علامات التبويب وثبّت هذه الإضافة لسهولة الوصول إليها!",
     "description": "Text suggesting to pin the extension"
   },
   "gotItBtn": {
-    "message": "Got it!",
+    "message": "فهمت!",
     "description": "Button to dismiss the pin suggestion"
   },
   "reviewPromptText": {
-    "message": "Find it useful? Leave a review",
+    "message": "هل وجدتها مفيدة؟ اترك مراجعة",
     "description": "Text encouraging users to leave a review"
   },
   "liveStreamSynced": {
-    "message": "Live stream synced — 1x",
+    "message": "تمت المزامنة مع البث المباشر — 1x",
     "description": "Toast message shown when a fast-forwarded live stream catches up to the live edge"
   },
   "supportMyWork": {
-    "message": "Support my work",
+    "message": "ادعم عملي",
     "description": "Ko-fi support link title and accessible label"
   },
   "supportMyWorkCta": {
-    "message": "Support my work",
+    "message": "ادعم عملي",
     "description": "Compact visible Ko-fi support label"
   }
 }

@@ -1,66 +1,66 @@
 {
   "appName": {
-    "message": "Simple Video Speed Controller",
+    "message": "ตัวควบคุมความเร็ววิดีโออย่างง่าย",
     "description": "The name of the extension"
   },
   "appDescription": {
-    "message": "Adjust the video speed on any website.",
+    "message": "ปรับความเร็ววิดีโอบนเว็บไซต์ใดก็ได้",
     "description": "The description of the extension"
   },
   "speedPlaceholder": {
-    "message": "Speed",
+    "message": "ความเร็ว",
     "description": "Placeholder text for the custom speed input"
   },
   "setButton": {
-    "message": "Set",
+    "message": "ตั้งค่า",
     "description": "Top button to submit custom speed"
   },
   "shortcutsTitle": {
-    "message": "Shortcuts",
+    "message": "แป้นพิมพ์ลัด",
     "description": "Title for the shortcuts section"
   },
   "shortcutSpeedTune": {
-    "message": "±0.05x Speed",
+    "message": "ปรับความเร็ว ±0.05x",
     "description": "Shortcut explanation to tune speed by 0.05"
   },
   "shortcutReset": {
-    "message": "Reset to 1x",
+    "message": "รีเซ็ตเป็น 1x",
     "description": "Shortcut explanation to reset speed to 1x"
   },
   "shortcutToggleMax": {
-    "message": "Toggle Max Speed",
+    "message": "สลับความเร็วสูงสุด",
     "description": "Shortcut explanation to toggle max speed"
   },
   "shortcutSetSpeed": {
-    "message": "Set to <kbd>1-9</kbd>x Speed",
+    "message": "ตั้งความเร็วเป็น <kbd>1-9</kbd>x",
     "description": "Shortcut explanation to set exact speed (1-9)"
   },
   "shortcutAddExtra": {
-    "message": "Add +0.5x",
+    "message": "เพิ่ม +0.5x",
     "description": "Shortcut explanation to add 0.5x"
   },
   "pinSuggestionText": {
-    "message": "Reload your tabs and pin this extension for easy access!",
+    "message": "โหลดแท็บของคุณใหม่และปักหมุดส่วนขยายนี้เพื่อให้เข้าถึงได้ง่าย!",
     "description": "Text suggesting to pin the extension"
   },
   "gotItBtn": {
-    "message": "Got it!",
+    "message": "เข้าใจแล้ว!",
     "description": "Button to dismiss the pin suggestion"
   },
   "reviewPromptText": {
-    "message": "Find it useful? Leave a review",
+    "message": "คิดว่ามีประโยชน์ไหม? เขียนรีวิว",
     "description": "Text encouraging users to leave a review"
   },
   "liveStreamSynced": {
-    "message": "Live stream synced — 1x",
+    "message": "ซิงค์กับสตรีมสดแล้ว — 1x",
     "description": "Toast message shown when a fast-forwarded live stream catches up to the live edge"
   },
   "supportMyWork": {
-    "message": "Support my work",
+    "message": "สนับสนุนผลงานของฉัน",
     "description": "Ko-fi support link title and accessible label"
   },
   "supportMyWorkCta": {
-    "message": "Support my work",
+    "message": "สนับสนุนผลงานของฉัน",
     "description": "Compact visible Ko-fi support label"
   }
 }

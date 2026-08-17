@@ -4,7 +4,7 @@
     "description": "The name of the extension"
   },
   "appDescription": {
-    "message": "모든 웹사이트에서 비디오 속도를 자동으로 조절하세요.",
+    "message": "모든 웹사이트에서 동영상 재생 속도를 조절하세요.",
     "description": "The description of the extension"
   },
   "speedPlaceholder": {

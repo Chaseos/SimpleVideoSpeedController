@@ -49,6 +49,15 @@ Available for [Chrome](https://chrome.google.com/webstore), [Firefox](https://ad
 
 The extension will display a toast notification showing the current speed whenever you make adjustments.
 
+## Building
+
+Run `npm run build` to create browser-specific extension packages:
+
+- `dist/chromium` and `dist/simple-video-speed-controller-chromium.zip`
+- `dist/firefox` and `dist/simple-video-speed-controller-firefox.zip`
+
+The Chromium manifest uses a background service worker, while the Firefox manifest uses a background script.
+
 ## Privacy
 
 This extension only:

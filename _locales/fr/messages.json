@@ -4,7 +4,7 @@
     "description": "The name of the extension"
   },
   "appDescription": {
-    "message": "Ajustez automatiquement la vitesse de la vidéo sur n'importe quel site web.",
+    "message": "Ajustez la vitesse des vidéos sur n’importe quel site Web.",
     "description": "The description of the extension"
   },
   "speedPlaceholder": {

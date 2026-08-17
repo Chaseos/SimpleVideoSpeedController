@@ -4,7 +4,7 @@
     "description": "The name of the extension"
   },
   "appDescription": {
-    "message": "किसी भी वेबसाइट पर स्वचालित रूप से वीडियो की गति समायोजित करें।",
+    "message": "किसी भी वेबसाइट पर वीडियो की गति समायोजित करें।",
     "description": "The description of the extension"
   },
   "speedPlaceholder": {

@@ -110,6 +110,16 @@ function getI18nMessage(messageName) {
 }
 
 function localizeHtmlPage() {
+  const uiLocale = getI18nMessage('@@ui_locale');
+  const textDirection = getI18nMessage('@@bidi_dir');
+
+  if (uiLocale) {
+    document.documentElement.lang = uiLocale.replace('_', '-');
+  }
+  if (textDirection === 'ltr' || textDirection === 'rtl') {
+    document.documentElement.dir = textDirection;
+  }
+
   // Localize text content
   document.querySelectorAll('[data-i18n]').forEach(element => {
     const message = getI18nMessage(element.getAttribute('data-i18n'));

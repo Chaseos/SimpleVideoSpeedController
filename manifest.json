@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "__MSG_appName__",
-  "version": "1.11",
+  "version": "1.12",
   "default_locale": "en",
   "permissions": [
     "storage",
@@ -36,12 +36,12 @@
   },
   "browser_specific_settings": {
     "gecko": {
-      "id": "chaseosapps@gmail.com"
-    },
-    "data_collection_permissions": {
-      "required": [
-        "none"
-      ]
+      "id": "chaseosapps@gmail.com",
+      "data_collection_permissions": {
+        "required": [
+          "none"
+        ]
+      }
     }
   }
 }
