@@ -28,8 +28,8 @@
     "description": "Shortcut explanation to reset speed to 1x"
   },
   "shortcutToggleMax": {
-    "message": "최대 속도 전환",
-    "description": "Shortcut explanation to toggle max speed"
+    "message": "16x 속도 전환",
+    "description": "Shortcut explanation to toggle 16x speed"
   },
   "shortcutSetSpeed": {
     "message": "속도를 <kbd>1-9</kbd>x로 설정",
@@ -62,5 +62,21 @@
   "supportMyWorkCta": {
     "message": "후원하기",
     "description": "Compact visible Ko-fi support label"
+  },
+  "temporaryBoostTitle": {
+    "message": "임시 부스트",
+    "description": "Title for the temporary playback speed shortcut"
+  },
+  "temporaryBoostSpeed": {
+    "message": "부스트 속도",
+    "description": "Label for the temporary boost speed input"
+  },
+  "temporaryBoostKey": {
+    "message": "부스트 키 (A–Z)",
+    "description": "Label for the temporary boost action key input"
+  },
+  "temporaryBoostToast": {
+    "message": "임시",
+    "description": "Toast label shown while temporary boost is active"
   }
 }

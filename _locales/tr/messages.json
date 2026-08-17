@@ -28,8 +28,8 @@
     "description": "Shortcut explanation to reset speed to 1x"
   },
   "shortcutToggleMax": {
-    "message": "Maksimum hızı aç/kapat",
-    "description": "Shortcut explanation to toggle max speed"
+    "message": "16x hızı aç/kapat",
+    "description": "Shortcut explanation to toggle 16x speed"
   },
   "shortcutSetSpeed": {
     "message": "Hızı <kbd>1-9</kbd>x olarak ayarla",
@@ -62,5 +62,21 @@
   "supportMyWorkCta": {
     "message": "Çalışmalarıma destek olun",
     "description": "Compact visible Ko-fi support label"
+  },
+  "temporaryBoostTitle": {
+    "message": "Geçici Hızlandırma",
+    "description": "Title for the temporary playback speed shortcut"
+  },
+  "temporaryBoostSpeed": {
+    "message": "Hızlandırma hızı",
+    "description": "Label for the temporary boost speed input"
+  },
+  "temporaryBoostKey": {
+    "message": "Hızlandırma tuşu (A–Z)",
+    "description": "Label for the temporary boost action key input"
+  },
+  "temporaryBoostToast": {
+    "message": "Geçici",
+    "description": "Toast label shown while temporary boost is active"
   }
 }

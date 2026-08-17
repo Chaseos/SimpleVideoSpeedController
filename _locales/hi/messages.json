@@ -28,8 +28,8 @@
     "description": "Shortcut explanation to reset speed to 1x"
   },
   "shortcutToggleMax": {
-    "message": "अधिकतम गति टॉगल करें",
-    "description": "Shortcut explanation to toggle max speed"
+    "message": "16x गति टॉगल करें",
+    "description": "Shortcut explanation to toggle 16x speed"
   },
   "shortcutSetSpeed": {
     "message": "<kbd>1-9</kbd>x गति पर सेट करें",
@@ -62,5 +62,21 @@
   "supportMyWorkCta": {
     "message": "समर्थन करें",
     "description": "Compact visible Ko-fi support label"
+  },
+  "temporaryBoostTitle": {
+    "message": "अस्थायी बूस्ट",
+    "description": "Title for the temporary playback speed shortcut"
+  },
+  "temporaryBoostSpeed": {
+    "message": "बूस्ट गति",
+    "description": "Label for the temporary boost speed input"
+  },
+  "temporaryBoostKey": {
+    "message": "बूस्ट कुंजी (A–Z)",
+    "description": "Label for the temporary boost action key input"
+  },
+  "temporaryBoostToast": {
+    "message": "अस्थायी",
+    "description": "Toast label shown while temporary boost is active"
   }
 }

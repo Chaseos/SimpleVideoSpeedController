@@ -28,8 +28,8 @@
     "description": "Shortcut explanation to reset speed to 1x"
   },
   "shortcutToggleMax": {
-    "message": "切換最高速度",
-    "description": "Shortcut explanation to toggle max speed"
+    "message": "切換16x速度",
+    "description": "Shortcut explanation to toggle 16x speed"
   },
   "shortcutSetSpeed": {
     "message": "將速度設為 <kbd>1-9</kbd>x",
@@ -62,5 +62,21 @@
   "supportMyWorkCta": {
     "message": "支持我的工作",
     "description": "Compact visible Ko-fi support label"
+  },
+  "temporaryBoostTitle": {
+    "message": "暫時加速",
+    "description": "Title for the temporary playback speed shortcut"
+  },
+  "temporaryBoostSpeed": {
+    "message": "加速速度",
+    "description": "Label for the temporary boost speed input"
+  },
+  "temporaryBoostKey": {
+    "message": "加速鍵 (A–Z)",
+    "description": "Label for the temporary boost action key input"
+  },
+  "temporaryBoostToast": {
+    "message": "暫時",
+    "description": "Toast label shown while temporary boost is active"
   }
 }

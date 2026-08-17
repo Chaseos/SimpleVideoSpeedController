@@ -28,8 +28,8 @@
     "description": "Shortcut explanation to reset speed to 1x"
   },
   "shortcutToggleMax": {
-    "message": "Toggle Max Speed",
-    "description": "Shortcut explanation to toggle max speed"
+    "message": "Toggle 16x Speed",
+    "description": "Shortcut explanation to toggle 16x speed"
   },
   "shortcutSetSpeed": {
     "message": "Set to <kbd>1-9</kbd>x Speed",
@@ -62,5 +62,21 @@
   "supportMyWorkCta": {
     "message": "Support my work",
     "description": "Compact visible Ko-fi support label"
+  },
+  "temporaryBoostTitle": {
+    "message": "Temporary Boost",
+    "description": "Title for the temporary playback speed shortcut"
+  },
+  "temporaryBoostSpeed": {
+    "message": "Boost speed",
+    "description": "Label for the temporary boost speed input"
+  },
+  "temporaryBoostKey": {
+    "message": "Boost key (A–Z)",
+    "description": "Label for the temporary boost action key input"
+  },
+  "temporaryBoostToast": {
+    "message": "Temporary",
+    "description": "Toast label shown while temporary boost is active"
   }
 }

@@ -285,6 +285,98 @@
       display: inline-block;
     }
 
+    .boost-control {
+      border-top: 1px solid #2e2e2e;
+      margin-top: 8px;
+      padding-top: 7px;
+    }
+
+    .boost-summary {
+      align-items: center;
+      background: none;
+      border: 0;
+      color: #bbb;
+      cursor: pointer;
+      display: flex;
+      font: inherit;
+      justify-content: space-between;
+      padding: 0;
+      text-align: start;
+      width: 100%;
+    }
+
+    .boost-summary:hover,
+    .boost-summary:focus-visible {
+      color: #fff;
+      outline: none;
+    }
+
+    .boost-summary-label {
+      font-size: 12px;
+      font-weight: 600;
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .boost-summary-value {
+      align-items: center;
+      display: flex;
+      flex: 0 0 auto;
+      font-size: 11px;
+      gap: 3px;
+      margin-inline-start: 6px;
+    }
+
+    .boost-summary-value kbd {
+      color: inherit;
+      padding: 1px 4px;
+    }
+
+    .boost-editor {
+      display: none;
+      gap: 6px;
+      grid-template-columns: 1fr 1fr;
+      padding-top: 8px;
+    }
+
+    .boost-editor.open {
+      display: grid;
+    }
+
+    .boost-field {
+      color: #888;
+      display: grid;
+      font-size: 10px;
+      gap: 4px;
+    }
+
+    .boost-input {
+      background: #2a2a2a;
+      border: 1px solid #444;
+      border-radius: 5px;
+      box-sizing: border-box;
+      color: #ddd;
+      font: inherit;
+      height: 28px;
+      min-width: 0;
+      padding: 4px 7px;
+      width: 100%;
+    }
+
+    .boost-input:focus {
+      border-color: #4285f4;
+      outline: none;
+    }
+
+    #boostKey {
+      cursor: pointer;
+      font-weight: 600;
+      text-align: center;
+      text-transform: uppercase;
+    }
+
     /* Pin suggestion overlay */
     .pin-suggestion {
       position: absolute;
@@ -436,7 +528,7 @@
         </div>
       </div>
       <div class="shortcut-row">
-        <span data-i18n="shortcutToggleMax">Toggle Max Speed</span>
+        <span data-i18n="shortcutToggleMax">Toggle 16x Speed</span>
         <div class="keys">
           <kbd class="meta-key">Cmd</kbd> + <kbd class="alt-key">Opt</kbd> + <kbd class="action-key">0</kbd>
         </div>
@@ -452,6 +544,29 @@
         <div class="keys">
           <span class="up-arrow">⤴</span>
           <kbd class="action-key">(x2)</kbd>
+        </div>
+      </div>
+      <div class="boost-control">
+        <button class="boost-summary" id="boostSummary" type="button" aria-expanded="false" aria-controls="boostEditor">
+          <span class="boost-summary-label" data-i18n="temporaryBoostTitle">Temporary Boost</span>
+          <span class="boost-summary-value">
+            <span id="boostSummarySpeed">3x</span> ·
+            <kbd class="meta-key">Cmd</kbd>
+            <kbd class="alt-key">Opt</kbd>
+            <kbd id="boostSummaryKey">X</kbd>
+            <span aria-hidden="true">›</span>
+          </span>
+        </button>
+        <div class="boost-editor" id="boostEditor">
+          <label class="boost-field" for="boostSpeed">
+            <span data-i18n="temporaryBoostSpeed">Boost speed</span>
+            <input class="boost-input" id="boostSpeed" type="number" min="0.1" max="16" step="0.05" value="3.00">
+          </label>
+          <label class="boost-field" for="boostKey">
+            <span data-i18n="temporaryBoostKey">Boost key (A–Z)</span>
+            <input class="boost-input" id="boostKey" type="text" value="X" maxlength="1" readonly
+              data-i18n-aria-label="temporaryBoostKey">
+          </label>
         </div>
       </div>
     </div>

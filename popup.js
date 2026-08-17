@@ -3,6 +3,23 @@ const KOFI_URL = 'https://ko-fi.com/chaseos';
 let currentSpeed = 1;
 let currentDomain = '';
 let storageDebounceTimer;
+let boostStorageDebounceTimer;
+let boostSpeed = 3;
+let boostKey = 'X';
+
+function normalizeBoostSpeed(value) {
+  const speed = Number(value);
+  return Number.isFinite(speed) ? Math.min(16, Math.max(0.1, speed)) : 3;
+}
+
+function normalizeBoostKey(value) {
+  const key = typeof value === 'string' ? value.trim().toUpperCase() : '';
+  return /^[A-Z]$/.test(key) ? key : 'X';
+}
+
+function formatSpeed(speed) {
+  return speed.toFixed(2).replace(/\.00$/, '').replace(/(\.\d)0$/, '$1');
+}
 
 /**
  * Check if this is the first time opening the popup
@@ -180,6 +197,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     customSpeedInput.value = "1.00";
   }
 
+  await loadTemporaryBoostPreferences();
+
   // Get current tab's domain
   try {
     const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
@@ -240,10 +259,104 @@ function setupShortcutKeys() {
   }
 }
 
+async function loadTemporaryBoostPreferences() {
+  try {
+    const data = await chrome.storage.sync.get([
+      'temporaryBoostSpeed',
+      'temporaryBoostKey'
+    ]);
+    boostSpeed = normalizeBoostSpeed(data.temporaryBoostSpeed);
+    boostKey = normalizeBoostKey(data.temporaryBoostKey);
+  } catch (error) {
+    console.error('Error loading temporary boost preferences:', error);
+  }
+  updateTemporaryBoostUI();
+}
+
+function updateTemporaryBoostUI() {
+  const speedInput = document.getElementById('boostSpeed');
+  const keyInput = document.getElementById('boostKey');
+  const summarySpeed = document.getElementById('boostSummarySpeed');
+  const summaryKey = document.getElementById('boostSummaryKey');
+
+  if (speedInput && document.activeElement !== speedInput) {
+    speedInput.value = boostSpeed.toFixed(2);
+  }
+  if (keyInput) keyInput.value = boostKey;
+  if (summarySpeed) summarySpeed.textContent = `${formatSpeed(boostSpeed)}x`;
+  if (summaryKey) summaryKey.textContent = boostKey;
+}
+
+async function saveBoostKey(key) {
+  boostKey = normalizeBoostKey(key);
+  updateTemporaryBoostUI();
+  try {
+    await chrome.storage.sync.set({ temporaryBoostKey: boostKey });
+  } catch (error) {
+    console.error('Error saving temporary boost key:', error);
+  }
+}
+
+function saveBoostSpeed(value, immediate = false) {
+  const parsedSpeed = Number(value);
+  if (!Number.isFinite(parsedSpeed) || parsedSpeed < 0.1 || parsedSpeed > 16) return false;
+
+  boostSpeed = Math.round(parsedSpeed * 100) / 100;
+  updateTemporaryBoostUI();
+  clearTimeout(boostStorageDebounceTimer);
+
+  const persist = async () => {
+    try {
+      await chrome.storage.sync.set({ temporaryBoostSpeed: boostSpeed });
+    } catch (error) {
+      console.error('Error saving temporary boost speed:', error);
+    }
+  };
+
+  if (immediate) {
+    persist();
+  } else {
+    boostStorageDebounceTimer = setTimeout(persist, 300);
+  }
+  return true;
+}
+
+function setupTemporaryBoostControls() {
+  const summary = document.getElementById('boostSummary');
+  const editor = document.getElementById('boostEditor');
+  const speedInput = document.getElementById('boostSpeed');
+  const keyInput = document.getElementById('boostKey');
+
+  summary?.addEventListener('click', () => {
+    const isOpen = editor.classList.toggle('open');
+    summary.setAttribute('aria-expanded', String(isOpen));
+    if (isOpen) speedInput?.focus();
+  });
+
+  speedInput?.addEventListener('input', () => {
+    saveBoostSpeed(speedInput.value);
+  });
+  speedInput?.addEventListener('change', () => {
+    if (!saveBoostSpeed(speedInput.value, true)) {
+      boostSpeed = normalizeBoostSpeed(speedInput.value);
+      saveBoostSpeed(boostSpeed, true);
+    }
+    updateTemporaryBoostUI();
+  });
+
+  keyInput?.addEventListener('keydown', event => {
+    event.preventDefault();
+    event.stopPropagation();
+    if (/^[a-z]$/i.test(event.key)) saveBoostKey(event.key);
+  });
+}
+
 /**
  * Set up all event listeners for the popup UI
  */
 function setupEventListeners() {
+  setupTemporaryBoostControls();
+
   // Speed preset button listeners
   document.querySelectorAll('.speed-button').forEach(button => {
     button.addEventListener('click', () => {
@@ -287,6 +400,19 @@ function setupEventListeners() {
     });
   }
 }
+
+chrome.storage.onChanged.addListener((changes, area) => {
+  if (area !== 'sync') return;
+  if (changes.temporaryBoostSpeed) {
+    boostSpeed = normalizeBoostSpeed(changes.temporaryBoostSpeed.newValue);
+  }
+  if (changes.temporaryBoostKey) {
+    boostKey = normalizeBoostKey(changes.temporaryBoostKey.newValue);
+  }
+  if (changes.temporaryBoostSpeed || changes.temporaryBoostKey) {
+    updateTemporaryBoostUI();
+  }
+});
 
 /**
  * Update the UI to reflect the current speed

@@ -28,8 +28,8 @@
     "description": "Shortcut explanation to reset speed to 1x"
   },
   "shortcutToggleMax": {
-    "message": "Alihkan kecepatan maksimum",
-    "description": "Shortcut explanation to toggle max speed"
+    "message": "Alihkan kecepatan 16x",
+    "description": "Shortcut explanation to toggle 16x speed"
   },
   "shortcutSetSpeed": {
     "message": "Atur kecepatan ke <kbd>1-9</kbd>x",
@@ -62,5 +62,21 @@
   "supportMyWorkCta": {
     "message": "Dukung karya saya",
     "description": "Compact visible Ko-fi support label"
+  },
+  "temporaryBoostTitle": {
+    "message": "Boost Sementara",
+    "description": "Title for the temporary playback speed shortcut"
+  },
+  "temporaryBoostSpeed": {
+    "message": "Kecepatan boost",
+    "description": "Label for the temporary boost speed input"
+  },
+  "temporaryBoostKey": {
+    "message": "Tombol boost (A–Z)",
+    "description": "Label for the temporary boost action key input"
+  },
+  "temporaryBoostToast": {
+    "message": "Sementara",
+    "description": "Toast label shown while temporary boost is active"
   }
 }
