@@ -34,8 +34,8 @@ input {
 }
 
 .speed-row {
-  gap: 7px;
-  margin-bottom: 7px;
+  gap: 6px;
+  margin-bottom: 6px;
 }
 
 .speed-button,
@@ -182,13 +182,13 @@ input {
 }
 
 .shortcuts-container {
-  border-top: 1px solid rgba(255, 255, 255, 0.065);
-  margin-top: 10px;
-  padding-top: 6px;
+  border-top: 0;
+  margin-top: 6px;
+  padding-top: 0;
 }
 
 .shortcuts-header {
-  min-height: 24px;
+  min-height: 20px;
 }
 
 .shortcuts-toggle {
@@ -215,13 +215,13 @@ input {
 }
 
 .shortcuts-content {
-  padding-top: 8px;
+  padding-top: 6px;
 }
 
 .shortcut-row {
   color: var(--text-muted);
   font-size: 11px;
-  margin-bottom: 7px;
+  margin-bottom: 5px;
 }
 
 .shortcut-row.nested::before,
@@ -247,8 +247,8 @@ kbd {
 
 .boost-control {
   border-top-color: rgba(255, 255, 255, 0.07);
-  margin-top: 9px;
-  padding-top: 9px;
+  margin-top: 7px;
+  padding-top: 7px;
 }
 
 .boost-summary {
@@ -275,8 +275,8 @@ kbd {
 }
 
 .boost-editor {
-  gap: 7px;
-  padding-top: 9px;
+  gap: 6px;
+  padding-top: 7px;
 }
 
 .boost-input {
