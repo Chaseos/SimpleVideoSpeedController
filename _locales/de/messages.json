@@ -74,9 +74,5 @@
   "temporaryBoostKey": {
     "message": "Boost-Taste (A–Z)",
     "description": "Label for the temporary boost action key input"
-  },
-  "temporaryBoostToast": {
-    "message": "Temporär",
-    "description": "Toast label shown while temporary boost is active"
   }
 }

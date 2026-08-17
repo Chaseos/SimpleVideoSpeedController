@@ -74,9 +74,5 @@
   "temporaryBoostKey": {
     "message": "Tecla do aumento (A–Z)",
     "description": "Label for the temporary boost action key input"
-  },
-  "temporaryBoostToast": {
-    "message": "Temporário",
-    "description": "Toast label shown while temporary boost is active"
   }
 }

@@ -74,9 +74,5 @@
   "temporaryBoostKey": {
     "message": "加速键 (A–Z)",
     "description": "Label for the temporary boost action key input"
-  },
-  "temporaryBoostToast": {
-    "message": "临时",
-    "description": "Toast label shown while temporary boost is active"
   }
 }

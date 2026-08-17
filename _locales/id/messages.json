@@ -74,9 +74,5 @@
   "temporaryBoostKey": {
     "message": "Tombol boost (A–Z)",
     "description": "Label for the temporary boost action key input"
-  },
-  "temporaryBoostToast": {
-    "message": "Sementara",
-    "description": "Toast label shown while temporary boost is active"
   }
 }

@@ -74,9 +74,5 @@
   "temporaryBoostKey": {
     "message": "부스트 키 (A–Z)",
     "description": "Label for the temporary boost action key input"
-  },
-  "temporaryBoostToast": {
-    "message": "임시",
-    "description": "Toast label shown while temporary boost is active"
   }
 }

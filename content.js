@@ -340,8 +340,7 @@ function applyTemporaryBoost(sessionId, speed) {
   temporaryBoostSpeed = normalizeBoostSpeed(speed);
   forceUpdateVideoSpeeds();
   if (isNewSession) {
-    const temporaryLabel = chrome.i18n.getMessage('temporaryBoostToast') || 'Temporary';
-    showToast(`${temporaryBoostSpeed}x · ${temporaryLabel}`);
+    showToast(temporaryBoostSpeed);
   }
 }
 

@@ -74,9 +74,5 @@
   "temporaryBoostKey": {
     "message": "बूस्ट कुंजी (A–Z)",
     "description": "Label for the temporary boost action key input"
-  },
-  "temporaryBoostToast": {
-    "message": "अस्थायी",
-    "description": "Toast label shown while temporary boost is active"
   }
 }

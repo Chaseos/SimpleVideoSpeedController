@@ -74,9 +74,5 @@
   "temporaryBoostKey": {
     "message": "Клавіша прискорення (A–Z)",
     "description": "Label for the temporary boost action key input"
-  },
-  "temporaryBoostToast": {
-    "message": "Тимчасово",
-    "description": "Toast label shown while temporary boost is active"
   }
 }
