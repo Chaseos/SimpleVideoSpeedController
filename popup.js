@@ -4,6 +4,7 @@ let currentSpeed = 1;
 let currentDomain = '';
 let storageDebounceTimer;
 let boostStorageDebounceTimer;
+let boostKeyToastTimer;
 let boostSpeed = 3;
 let boostKey = 'X';
 
@@ -326,6 +327,22 @@ function setupTemporaryBoostControls() {
   const keyInput = document.getElementById('boostKey');
   const speedUpButton = document.getElementById('boostSpeedUp');
   const speedDownButton = document.getElementById('boostSpeedDown');
+  const keyToast = document.getElementById('boostKeyToast');
+
+  const hideKeyToast = () => {
+    clearTimeout(boostKeyToastTimer);
+    keyToast?.classList.remove('visible');
+  };
+
+  const showKeyToast = () => {
+    if (!keyToast || !keyInput) return;
+
+    const keyRect = keyInput.getBoundingClientRect();
+    keyToast.style.bottom = `${Math.max(16, window.innerHeight - keyRect.top + 8)}px`;
+    keyToast.classList.add('visible');
+    clearTimeout(boostKeyToastTimer);
+    boostKeyToastTimer = setTimeout(hideKeyToast, 3200);
+  };
 
   summary?.addEventListener('click', () => {
     const isOpen = editor.classList.toggle('open');
@@ -360,10 +377,20 @@ function setupTemporaryBoostControls() {
   speedUpButton?.addEventListener('click', () => adjustBoostSpeed(0.05));
   speedDownButton?.addEventListener('click', () => adjustBoostSpeed(-0.05));
 
+  keyInput?.addEventListener('focus', showKeyToast);
+  keyInput?.addEventListener('click', showKeyToast);
+  keyInput?.addEventListener('blur', hideKeyToast);
+
   keyInput?.addEventListener('keydown', event => {
     event.preventDefault();
     event.stopPropagation();
-    if (/^[a-z]$/i.test(event.key)) saveBoostKey(event.key);
+    if (/^[a-z]$/i.test(event.key)) {
+      saveBoostKey(event.key);
+      hideKeyToast();
+    } else if (event.key === 'Escape') {
+      hideKeyToast();
+      keyInput.blur();
+    }
   });
 }
 

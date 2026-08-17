@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Speed Controller — Visual Comparison</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      background:
+        radial-gradient(circle at 50% -160px, rgba(84, 123, 191, 0.16), transparent 520px),
+        #0b0f15;
+      color: #f2f5f9;
+      margin: 0;
+      min-height: 100vh;
+      padding: 44px 28px 56px;
+    }
+
+    header {
+      margin: 0 auto 28px;
+      max-width: 980px;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: clamp(25px, 3vw, 34px);
+      letter-spacing: -0.035em;
+      margin: 0 0 9px;
+    }
+
+    header p {
+      color: #929dac;
+      font-size: 14px;
+      line-height: 1.5;
+      margin: 0 auto;
+      max-width: 620px;
+    }
+
+    main {
+      display: grid;
+      gap: 20px;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      margin: 0 auto;
+      max-width: 1040px;
+    }
+
+    article {
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.025));
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      border-radius: 18px;
+      box-shadow: 0 18px 46px rgba(0, 0, 0, 0.22);
+      min-width: 0;
+      overflow: hidden;
+    }
+
+    .card-heading {
+      align-items: flex-start;
+      display: flex;
+      gap: 12px;
+      justify-content: space-between;
+      min-height: 91px;
+      padding: 18px 18px 15px;
+    }
+
+    h2 {
+      font-size: 15px;
+      letter-spacing: -0.015em;
+      margin: 0 0 5px;
+    }
+
+    .description {
+      color: #8e99a8;
+      font-size: 11px;
+      line-height: 1.4;
+      margin: 0;
+    }
+
+    .badge {
+      border: 1px solid rgba(255, 255, 255, 0.11);
+      border-radius: 999px;
+      color: #aab4c2;
+      flex: 0 0 auto;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      padding: 5px 7px;
+      text-transform: uppercase;
+    }
+
+    article:nth-child(2) .badge {
+      background: rgba(237, 141, 34, 0.12);
+      border-color: rgba(237, 141, 34, 0.28);
+      color: #ffc678;
+    }
+
+    article:nth-child(3) .badge {
+      background: rgba(79, 140, 255, 0.12);
+      border-color: rgba(79, 140, 255, 0.26);
+      color: #a9c7ff;
+    }
+
+    .preview-shell {
+      align-items: flex-start;
+      background: rgba(0, 0, 0, 0.17);
+      border-top: 1px solid rgba(255, 255, 255, 0.065);
+      display: flex;
+      justify-content: center;
+      min-height: 472px;
+      padding: 20px 12px;
+    }
+
+    iframe {
+      background: transparent;
+      border: 0;
+      height: 440px;
+      width: 282px;
+    }
+
+    @media (max-width: 930px) {
+      main {
+        grid-template-columns: 1fr;
+        max-width: 360px;
+      }
+
+      .card-heading {
+        min-height: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Visual direction comparison</h1>
+    <p>All three popups use the same layout and interactions. Open Shortcuts or Temporary Boost in any version to compare the full experience.</p>
+  </header>
+
+  <main>
+    <article>
+      <div class="card-heading">
+        <div>
+          <h2>Original</h2>
+          <p class="description">Bright, functional, multi-color utility</p>
+        </div>
+        <span class="badge">Baseline</span>
+      </div>
+      <div class="preview-shell">
+        <iframe title="Original popup" src="../popup.html" data-theme="original"></iframe>
+      </div>
+    </article>
+
+    <article>
+      <div class="card-heading">
+        <div>
+          <h2>Balanced</h2>
+          <p class="description">Original color language, refined execution</p>
+        </div>
+        <span class="badge">Alternative</span>
+      </div>
+      <div class="preview-shell">
+        <iframe title="Balanced popup" src="../popup.html" data-theme="balanced"></iframe>
+      </div>
+    </article>
+
+    <article>
+      <div class="card-heading">
+        <div>
+          <h2>Refined</h2>
+          <p class="description">Calm, focused, professional utility</p>
+        </div>
+        <span class="badge">Preserved</span>
+      </div>
+      <div class="preview-shell">
+        <iframe title="Refined popup" src="../popup.html" data-theme="refined"></iframe>
+      </div>
+    </article>
+  </main>
+
+  <script>
+    document.querySelectorAll('iframe').forEach(frame => {
+      frame.addEventListener('load', () => {
+        const popupDocument = frame.contentDocument;
+        const theme = frame.dataset.theme;
+
+        if (theme === 'original') {
+          const polishStylesheet = popupDocument.querySelector('link[href="popup-polish.css"]');
+          if (polishStylesheet) polishStylesheet.disabled = true;
+        }
+
+        if (theme === 'refined') {
+          const refinedStylesheet = popupDocument.createElement('link');
+          refinedStylesheet.rel = 'stylesheet';
+          refinedStylesheet.href = '/previews/refined.css';
+          popupDocument.head.appendChild(refinedStylesheet);
+        }
+      });
+    });
+  </script>
+</body>
+</html>

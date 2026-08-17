@@ -1,0 +1,116 @@
+:root {
+  --surface-base: #11151c;
+  --surface-raised: #1d2430;
+  --surface-hover: #252e3c;
+  --surface-input: #171d27;
+  --border: rgba(255, 255, 255, 0.1);
+  --border-strong: rgba(255, 255, 255, 0.16);
+  --text: #f4f7fb;
+  --text-muted: #aab4c2;
+  --text-subtle: #748093;
+  --accent: #4f8cff;
+  --accent-strong: #3274ee;
+  --focus-ring: rgba(111, 160, 255, 0.88);
+}
+
+body {
+  background:
+    radial-gradient(circle at 50% -32px, rgba(79, 140, 255, 0.14), transparent 132px),
+    var(--surface-base);
+}
+
+.speed-button {
+  background: linear-gradient(180deg, #222a36 0%, var(--surface-raised) 100%);
+  border-color: var(--border);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.04) inset,
+    0 3px 8px rgba(0, 0, 0, 0.18);
+  color: #d7dee8;
+}
+
+.speed-button:hover {
+  background: linear-gradient(180deg, #2a3442 0%, var(--surface-hover) 100%);
+  border-color: var(--border-strong);
+  color: #fff;
+}
+
+.speed-button.selected {
+  background: linear-gradient(180deg, #5995ff 0%, var(--accent-strong) 100%);
+  border-color: rgba(151, 188, 255, 0.62);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.25) inset,
+    0 5px 14px rgba(43, 108, 234, 0.3);
+}
+
+#customSpeed,
+.boost-input {
+  background: var(--surface-input);
+  border-color: var(--border-strong);
+}
+
+#customSpeed:hover,
+.boost-input:hover,
+#customSpeed:focus,
+.boost-input:focus {
+  background: #1b222d;
+}
+
+#customSpeed:focus,
+.boost-input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(79, 140, 255, 0.16);
+}
+
+#customSpeed::selection,
+.boost-input::selection {
+  background: rgba(79, 140, 255, 0.42);
+}
+
+#setCustomSpeed,
+.got-it-btn {
+  background: linear-gradient(180deg, #5a95ff 0%, var(--accent-strong) 100%);
+  border-color: rgba(151, 188, 255, 0.52);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.22) inset,
+    0 4px 10px rgba(43, 108, 234, 0.24);
+}
+
+#setCustomSpeed:hover,
+.got-it-btn:hover {
+  background: linear-gradient(180deg, #6aa1ff 0%, #3b7df1 100%);
+}
+
+.arrow-button {
+  background: rgba(79, 140, 255, 0.1);
+  border-color: rgba(104, 155, 255, 0.18);
+  color: #a9c7ff;
+}
+
+.arrow-button:hover {
+  background: rgba(79, 140, 255, 0.18);
+  border-color: rgba(104, 155, 255, 0.35);
+  color: #d9e6ff;
+}
+
+kbd {
+  background: linear-gradient(180deg, #262e3a 0%, #1d2430 100%);
+  border-color: rgba(255, 255, 255, 0.13);
+  color: #c7d0dc;
+}
+
+.boost-summary-value {
+  color: #8e9aaa;
+}
+
+#boostKey {
+  color: #c7d9ff;
+}
+
+.pin-suggestion {
+  background: rgba(12, 16, 22, 0.93);
+}
+
+.pin-icon {
+  color: #bdd2ff;
+  filter: drop-shadow(0 4px 12px rgba(79, 140, 255, 0.25));
+}

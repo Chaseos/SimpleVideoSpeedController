@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Speed Controller — Platform Comparison</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      background:
+        radial-gradient(circle at 50% -160px, rgba(63, 111, 196, 0.18), transparent 520px),
+        #0b0f15;
+      color: #f2f5f9;
+      margin: 0;
+      min-height: 100vh;
+      padding: 44px 28px 56px;
+    }
+
+    header {
+      margin: 0 auto 28px;
+      max-width: 760px;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: clamp(25px, 3vw, 34px);
+      letter-spacing: -0.035em;
+      margin: 0 0 9px;
+    }
+
+    header p {
+      color: #929dac;
+      font-size: 14px;
+      line-height: 1.5;
+      margin: 0 auto;
+      max-width: 610px;
+    }
+
+    main {
+      display: grid;
+      gap: 22px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      margin: 0 auto;
+      max-width: 720px;
+    }
+
+    article {
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.025));
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      border-radius: 18px;
+      box-shadow: 0 18px 46px rgba(0, 0, 0, 0.22);
+      min-width: 0;
+      overflow: hidden;
+    }
+
+    .card-heading {
+      align-items: flex-start;
+      display: flex;
+      gap: 12px;
+      justify-content: space-between;
+      min-height: 91px;
+      padding: 18px 18px 15px;
+    }
+
+    h2 {
+      font-size: 15px;
+      letter-spacing: -0.015em;
+      margin: 0 0 5px;
+    }
+
+    .description {
+      color: #8e99a8;
+      font-size: 11px;
+      line-height: 1.4;
+      margin: 0;
+    }
+
+    .badge {
+      background: rgba(63, 111, 196, 0.13);
+      border: 1px solid rgba(112, 160, 244, 0.27);
+      border-radius: 999px;
+      color: #b7cdf5;
+      flex: 0 0 auto;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.055em;
+      padding: 5px 7px;
+      text-transform: uppercase;
+    }
+
+    .preview-shell {
+      align-items: flex-start;
+      background: rgba(0, 0, 0, 0.17);
+      border-top: 1px solid rgba(255, 255, 255, 0.065);
+      display: flex;
+      justify-content: center;
+      min-height: 492px;
+      padding: 20px 12px;
+    }
+
+    iframe {
+      background: transparent;
+      border: 0;
+      height: 452px;
+      width: 282px;
+    }
+
+    @media (max-width: 720px) {
+      main {
+        grid-template-columns: 1fr;
+        max-width: 360px;
+      }
+
+      .card-heading {
+        min-height: 0;
+      }
+
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Platform shortcut comparison</h1>
+    <p>The final Balanced UI is identical on both platforms. Only the native modifier-key language changes.</p>
+  </header>
+
+  <main>
+    <article>
+      <div class="card-heading">
+        <div>
+          <h2>macOS</h2>
+          <p class="description">Command + Option shortcut chord</p>
+        </div>
+        <span class="badge">⌘ + ⌥</span>
+      </div>
+      <div class="preview-shell">
+        <iframe title="macOS popup" src="../popup.html?platform=mac" data-platform="mac"></iframe>
+      </div>
+    </article>
+
+    <article>
+      <div class="card-heading">
+        <div>
+          <h2>Windows / Linux</h2>
+          <p class="description">Control + Shift shortcut chord</p>
+        </div>
+        <span class="badge">Ctrl + Shift</span>
+      </div>
+      <div class="preview-shell">
+        <iframe title="Windows and Linux popup" src="../popup.html?platform=windows" data-platform="windows"></iframe>
+      </div>
+    </article>
+  </main>
+
+  <script>
+    const platformLabels = {
+      mac: { primary: '⌘', secondary: '⌥' },
+      windows: { primary: 'Ctrl', secondary: 'Shift' }
+    };
+
+    function configurePopup(frame) {
+      const popupDocument = frame.contentDocument;
+      const labels = platformLabels[frame.dataset.platform];
+      if (!popupDocument || !labels) return;
+
+      popupDocument.querySelectorAll('.primary-modifier-key').forEach(key => {
+        key.textContent = labels.primary;
+      });
+      popupDocument.querySelectorAll('.secondary-modifier-key').forEach(key => {
+        key.textContent = labels.secondary;
+      });
+
+      popupDocument.getElementById('shortcutsToggle')?.classList.add('open');
+      popupDocument.getElementById('shortcutsContent')?.classList.add('open');
+      popupDocument.getElementById('boostEditor')?.classList.add('open');
+      popupDocument.getElementById('boostSummary')?.setAttribute('aria-expanded', 'true');
+    }
+
+    document.querySelectorAll('iframe').forEach(frame => {
+      frame.addEventListener('load', () => {
+        configurePopup(frame);
+        window.setTimeout(() => configurePopup(frame), 120);
+      });
+    });
+  </script>
+</body>
+</html>

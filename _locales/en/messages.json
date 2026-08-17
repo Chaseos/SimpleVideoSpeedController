@@ -74,5 +74,9 @@
   "temporaryBoostKey": {
     "message": "Boost key (A–Z)",
     "description": "Label for the temporary boost action key input"
+  },
+  "temporaryBoostKeyPrompt": {
+    "message": "Press any letter A–Z to set the boost key",
+    "description": "Toast shown after selecting the temporary boost key field"
   }
 }

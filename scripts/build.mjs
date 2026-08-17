@@ -11,6 +11,7 @@ const excludedDirectories = new Set([
   '.github',
   'dist',
   'node_modules',
+  'previews',
   'scripts',
   'tests'
 ]);
