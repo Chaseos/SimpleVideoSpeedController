@@ -1,5 +1,12 @@
 // Global state to track current speed and domain
 const KOFI_URL = 'https://ko-fi.com/chaseos';
+const REVIEW_URLS = {
+  chrome: 'https://chromewebstore.google.com/detail/simple-video-speed-contro/kcjfpmjkbkhgojilpihplkedadndnked/reviews?hl=en',
+  edge: 'https://microsoftedge.microsoft.com/addons/detail/simple-video-speed-contro/mnmagmdfgdjhbfkdnonnhkfnbnjpehja',
+  firefox: 'https://addons.mozilla.org/en-US/firefox/addon/simple-video-speed-controller/reviews/',
+  opera: 'https://addons.opera.com/en/extensions/details/simple-video-speed-controller/',
+  whale: 'https://store.whale.naver.com/detail/fkcbnblnjclbfnkkhnmoaelklgfiigbc'
+};
 let currentSpeed = 1;
 let currentDomain = '';
 let storageDebounceTimer;
@@ -74,6 +81,7 @@ async function checkReviewPrompt() {
           const ua = navigator.userAgent.toLowerCase();
           const isFirefox = ua.includes('firefox');
           const isOpera = ua.includes('opr') || ua.includes('opera');
+          const isWhale = ua.includes('whale');
           const isEdge = ua.includes('edg') || ua.includes('edge') || (
             typeof navigator.userAgentData !== 'undefined' && 
             navigator.userAgentData.brands && 
@@ -81,13 +89,15 @@ async function checkReviewPrompt() {
           );
 
           if (isFirefox) {
-            reviewLink.href = 'https://addons.mozilla.org/en-US/firefox/addon/simple-video-speed-controller/reviews/';
+            reviewLink.href = REVIEW_URLS.firefox;
           } else if (isOpera) {
-            reviewLink.href = 'https://addons.opera.com/en/extensions/details/simple-video-speed-controller/';
+            reviewLink.href = REVIEW_URLS.opera;
+          } else if (isWhale) {
+            reviewLink.href = REVIEW_URLS.whale;
           } else if (isEdge) {
-            reviewLink.href = 'https://microsoftedge.microsoft.com/addons/detail/simple-video-speed-contro/mnmagmdfgdjhbfkdnonnhkfnbnjpehja';
+            reviewLink.href = REVIEW_URLS.edge;
           } else {
-            reviewLink.href = 'https://chromewebstore.google.com/detail/simple-video-speed-contro/kcjfpmjkbkhgojilpihplkedadndnked/reviews?hl=en&authuser=0';
+            reviewLink.href = REVIEW_URLS.chrome;
           }
         }
 

@@ -4,7 +4,7 @@
 A lightweight and intuitive browser extension that lets you control video playback speed on any streaming service or website. Perfect for watching tutorials, lectures, or any online video content at your preferred pace.
 
 ### Available On
-Available for [Chrome](https://chrome.google.com/webstore), [Firefox](https://addons.mozilla.org), and [Opera](https://addons.opera.com).
+Available for [Chrome](https://chromewebstore.google.com/detail/simple-video-speed-contro/kcjfpmjkbkhgojilpihplkedadndnked), [Firefox](https://addons.mozilla.org/en-US/firefox/addon/simple-video-speed-controller/), [Edge](https://microsoftedge.microsoft.com/addons/detail/simple-video-speed-contro/mnmagmdfgdjhbfkdnonnhkfnbnjpehja), [Opera](https://addons.opera.com/en/extensions/details/simple-video-speed-controller/), and [Whale](https://store.whale.naver.com/detail/fkcbnblnjclbfnkkhnmoaelklgfiigbc).
 
 <img width="250" alt="Interface" src="https://github.com/user-attachments/assets/217f4ea7-7bb2-4732-8d09-90621a36d622" />
 
