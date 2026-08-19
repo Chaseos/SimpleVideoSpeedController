@@ -202,6 +202,7 @@ function createContentHarness(platform = 'Win32') {
   const documentListeners = new Map();
   const windowListeners = new Map();
   const storageListeners = [];
+  let toastElement;
   const video = {
     playbackRate: 1,
     addEventListener() {}
@@ -215,7 +216,11 @@ function createContentHarness(platform = 'Win32') {
   const document = {
     hidden: false,
     head: { appendChild() {} },
-    body: { appendChild() {} },
+    body: {
+      appendChild(element) {
+        if (element.id === 'speed-toast') toastElement = element;
+      }
+    },
     createElement: makeElement,
     querySelector: () => null,
     querySelectorAll: selector => selector === 'video' ? [video] : [],
@@ -268,6 +273,7 @@ function createContentHarness(platform = 'Win32') {
 
   return {
     video,
+    toast: toastElement,
     storageListeners,
     keydown: event => documentListeners.get('keydown')(event),
     keyup: event => documentListeners.get('keyup')(event),
@@ -294,8 +300,10 @@ test('Temporary Boost restores speed after release and focus loss and follows pr
 
   harness.keydown(dispatchedEvent('KeyX', { ctrlKey: true, shiftKey: true }));
   assert.equal(harness.video.playbackRate, 3);
+  assert.equal(harness.toast.textContent, '3x');
   harness.keyup(dispatchedEvent('KeyX', { ctrlKey: true, shiftKey: true }));
   assert.equal(harness.video.playbackRate, 2);
+  assert.equal(harness.toast.textContent, '2x');
 
   harness.keydown(dispatchedEvent('KeyX', { ctrlKey: true, shiftKey: true }));
   harness.storageListeners[0]({ temporaryBoostSpeed: { newValue: 4 } }, 'sync');

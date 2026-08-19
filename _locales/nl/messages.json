@@ -1,0 +1,82 @@
+{
+  "appName": {
+    "message": "Eenvoudige videosnelheidsregelaar",
+    "description": "The name of the extension"
+  },
+  "appDescription": {
+    "message": "Pas de videosnelheid aan op elke website.",
+    "description": "The description of the extension"
+  },
+  "speedPlaceholder": {
+    "message": "Snelheid",
+    "description": "Placeholder text for the custom speed input"
+  },
+  "setButton": {
+    "message": "Instellen",
+    "description": "Top button to submit custom speed"
+  },
+  "shortcutsTitle": {
+    "message": "Sneltoetsen",
+    "description": "Title for the shortcuts section"
+  },
+  "shortcutSpeedTune": {
+    "message": "Snelheid ±0,05x",
+    "description": "Shortcut explanation to tune speed by 0.05"
+  },
+  "shortcutReset": {
+    "message": "Terugzetten naar 1x",
+    "description": "Shortcut explanation to reset speed to 1x"
+  },
+  "shortcutToggleMax": {
+    "message": "16x-snelheid in-/uitschakelen",
+    "description": "Shortcut explanation to toggle 16x speed"
+  },
+  "shortcutSetSpeed": {
+    "message": "Snelheid instellen op <kbd>1-9</kbd>x",
+    "description": "Shortcut explanation to set exact speed (1-9)"
+  },
+  "shortcutAddExtra": {
+    "message": "+0,5x toevoegen",
+    "description": "Shortcut explanation to add 0.5x"
+  },
+  "pinSuggestionText": {
+    "message": "Laad uw tabbladen opnieuw en zet deze extensie vast voor eenvoudige toegang!",
+    "description": "Text suggesting to pin the extension"
+  },
+  "gotItBtn": {
+    "message": "Begrepen!",
+    "description": "Button to dismiss the pin suggestion"
+  },
+  "reviewPromptText": {
+    "message": "Nuttig? Laat een beoordeling achter",
+    "description": "Text encouraging users to leave a review"
+  },
+  "liveStreamSynced": {
+    "message": "Livestream gesynchroniseerd — 1x",
+    "description": "Toast message shown when a fast-forwarded live stream catches up to the live edge"
+  },
+  "supportMyWork": {
+    "message": "Steun mijn werk",
+    "description": "Ko-fi support link title and accessible label"
+  },
+  "supportMyWorkCta": {
+    "message": "Steun mij",
+    "description": "Compact visible Ko-fi support label"
+  },
+  "temporaryBoostTitle": {
+    "message": "Tijdelijke boost",
+    "description": "Title for the temporary playback speed shortcut"
+  },
+  "temporaryBoostSpeed": {
+    "message": "Boostsnelheid",
+    "description": "Label for the temporary boost speed input"
+  },
+  "temporaryBoostKey": {
+    "message": "Boosttoets (A–Z)",
+    "description": "Label for the temporary boost action key input"
+  },
+  "temporaryBoostKeyPrompt": {
+    "message": "Druk op een letter A–Z om de boosttoets in te stellen",
+    "description": "Toast shown after selecting the temporary boost key field"
+  }
+}

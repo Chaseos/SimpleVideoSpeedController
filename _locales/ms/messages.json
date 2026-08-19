@@ -1,0 +1,82 @@
+{
+  "appName": {
+    "message": "Pengawal Kelajuan Video Ringkas",
+    "description": "The name of the extension"
+  },
+  "appDescription": {
+    "message": "Laraskan kelajuan video di mana-mana laman web.",
+    "description": "The description of the extension"
+  },
+  "speedPlaceholder": {
+    "message": "Kelajuan",
+    "description": "Placeholder text for the custom speed input"
+  },
+  "setButton": {
+    "message": "Tetapkan",
+    "description": "Top button to submit custom speed"
+  },
+  "shortcutsTitle": {
+    "message": "Pintasan",
+    "description": "Title for the shortcuts section"
+  },
+  "shortcutSpeedTune": {
+    "message": "Kelajuan ±0.05x",
+    "description": "Shortcut explanation to tune speed by 0.05"
+  },
+  "shortcutReset": {
+    "message": "Tetapkan semula kepada 1x",
+    "description": "Shortcut explanation to reset speed to 1x"
+  },
+  "shortcutToggleMax": {
+    "message": "Togol kelajuan 16x",
+    "description": "Shortcut explanation to toggle 16x speed"
+  },
+  "shortcutSetSpeed": {
+    "message": "Tetapkan kelajuan kepada <kbd>1-9</kbd>x",
+    "description": "Shortcut explanation to set exact speed (1-9)"
+  },
+  "shortcutAddExtra": {
+    "message": "Tambah +0.5x",
+    "description": "Shortcut explanation to add 0.5x"
+  },
+  "pinSuggestionText": {
+    "message": "Muat semula tab anda dan sematkan sambungan ini untuk akses mudah!",
+    "description": "Text suggesting to pin the extension"
+  },
+  "gotItBtn": {
+    "message": "Faham!",
+    "description": "Button to dismiss the pin suggestion"
+  },
+  "reviewPromptText": {
+    "message": "Berguna? Tinggalkan ulasan",
+    "description": "Text encouraging users to leave a review"
+  },
+  "liveStreamSynced": {
+    "message": "Strim langsung disegerakkan — 1x",
+    "description": "Toast message shown when a fast-forwarded live stream catches up to the live edge"
+  },
+  "supportMyWork": {
+    "message": "Sokong hasil kerja saya",
+    "description": "Ko-fi support link title and accessible label"
+  },
+  "supportMyWorkCta": {
+    "message": "Sokong saya",
+    "description": "Compact visible Ko-fi support label"
+  },
+  "temporaryBoostTitle": {
+    "message": "Pecutan sementara",
+    "description": "Title for the temporary playback speed shortcut"
+  },
+  "temporaryBoostSpeed": {
+    "message": "Kelajuan pecutan",
+    "description": "Label for the temporary boost speed input"
+  },
+  "temporaryBoostKey": {
+    "message": "Kekunci pecutan (A–Z)",
+    "description": "Label for the temporary boost action key input"
+  },
+  "temporaryBoostKeyPrompt": {
+    "message": "Tekan mana-mana huruf A–Z untuk menetapkan kekunci pecutan",
+    "description": "Toast shown after selecting the temporary boost key field"
+  }
+}

@@ -1,76 +1,101 @@
 # Simple Video Speed Controller
-<img width="100" alt="Icon" src="https://github.com/user-attachments/assets/17514be3-7964-4000-982c-143bbcfaa1c0" />
 
-A lightweight and intuitive browser extension that lets you control video playback speed on any streaming service or website. Perfect for watching tutorials, lectures, or any online video content at your preferred pace.
+<img width="100" alt="Simple Video Speed Controller icon" src="https://github.com/user-attachments/assets/17514be3-7964-4000-982c-143bbcfaa1c0">
 
-### Available On
-Available for [Chrome](https://chromewebstore.google.com/detail/simple-video-speed-contro/kcjfpmjkbkhgojilpihplkedadndnked), [Firefox](https://addons.mozilla.org/en-US/firefox/addon/simple-video-speed-controller/), [Edge](https://microsoftedge.microsoft.com/addons/detail/simple-video-speed-contro/mnmagmdfgdjhbfkdnonnhkfnbnjpehja), [Opera](https://addons.opera.com/en/extensions/details/simple-video-speed-controller/), and [Whale](https://store.whale.naver.com/detail/fkcbnblnjclbfnkkhnmoaelklgfiigbc).
+A lightweight, open-source browser extension for controlling HTML5 video playback from **0.1x to 16x**. Set a speed from the popup, use keyboard shortcuts without leaving the video, or hold a customizable shortcut for a temporary speed boost. Your preferred speed is remembered separately for each website.
 
-<img width="250" alt="Interface" src="https://github.com/user-attachments/assets/217f4ea7-7bb2-4732-8d09-90621a36d622" />
+## Install
+
+| Browser | Store |
+| --- | --- |
+| Google Chrome | [Chrome Web Store](https://chromewebstore.google.com/detail/simple-video-speed-contro/kcjfpmjkbkhgojilpihplkedadndnked) |
+| Mozilla Firefox | [Firefox Browser Add-ons](https://addons.mozilla.org/en-US/firefox/addon/simple-video-speed-controller/) |
+| Microsoft Edge | [Microsoft Edge Add-ons](https://microsoftedge.microsoft.com/addons/detail/simple-video-speed-contro/mnmagmdfgdjhbfkdnonnhkfnbnjpehja) |
+| Opera | [Opera Add-ons](https://addons.opera.com/en/extensions/details/simple-video-speed-controller/) |
+| NAVER Whale | [Whale Store](https://store.whale.naver.com/detail/fkcbnblnjclbfnkkhnmoaelklgfiigbc) |
+
+After installing or updating the extension, reload any already-open video tabs. Pin the extension for quick access to the popup.
+
+<img width="250" alt="Simple Video Speed Controller popup" src="https://github.com/user-attachments/assets/217f4ea7-7bb2-4732-8d09-90621a36d622">
 
 ## Features
 
-- **Universal Compatibility**: Works with any website that plays HTML5 videos
-- **Domain-Specific Speed Memory**: Automatically remembers your preferred playback speed for each website
-- **Keyboard Shortcuts**:
-  - Mac: `Command + Option + Plus` to increase speed
-  - Mac: `Command + Option + Minus` to decrease speed
-  - Mac: `Command + Option + Delete` to reset to 1x speed
-  - Mac: `Command + Option + [1-9]` to set specific speed. Press again to add 0.5x, and press again to revert.
-  - Mac: `Command + Option + 0` to set to 16x max speed. Press again to reset to 1x speed.
-  - Windows/Linux: `Ctrl + Shift + Plus` to increase speed
-  - Windows/Linux: `Ctrl + Shift + Minus` to decrease speed
-  - Windows/Linux: `Ctrl + Shift + Backspace` to reset to 1x speed
-  - Windows/Linux: `Ctrl + Shift + [1-9]` to set specific speed. Press again to add 0.5x, and press again to revert.
-  - Windows/Linux: `Ctrl + Shift + 0` to set to 16x max speed. Press again to reset to 1x speed.
-
-- **Clean, Intuitive Interface**:
-  - Quick preset buttons for common speeds (0.5x to 3x)
-  - Custom speed input for precise control
-  - Fine-tuning buttons for incremental adjustments
-  - Visual feedback toast when changing speeds
+- **Broad HTML5 video support:** Works across streaming sites, course platforms, social media, and other websites that use HTML5 video.
+- **Embedded and dynamic video support:** Controls videos in embedded frames, videos added after a page loads, and videos inside open shadow DOMs.
+- **Per-site speed memory:** Saves and reapplies a separate playback speed for each domain using browser sync storage.
+- **Precise speed control:** Choose a 0.5x–3x preset, enter a custom speed from 0.1x–16x, or fine-tune in 0.05x steps.
+- **Temporary Boost:** Choose a boost speed and letter key, then hold the platform shortcut to use that speed temporarily. Releasing the shortcut restores the previous speed, including for videos across frames in the active tab.
+- **Speed lock:** Reapplies the selected speed when a player starts, loads new media, or tries to change its own playback rate.
+- **YouTube live-edge handling:** Returns playback to 1x at the live edge to avoid repeated buffering and catch-up loops.
+- **On-video feedback:** Shows the current speed in a short toast, including in fullscreen mode.
+- **Localized interface:** Available in 21 languages.
+- **Privacy focused:** No analytics, accounts, or developer-operated servers.
 
 ## Usage
 
-### Using the Popup Interface
+### Popup controls
 
-1. Click the extension icon in your browser's toolbar
-2. Choose a preset speed (0.5x - 3x) or enter a custom speed
-3. Use the + and - buttons for fine-tuning
-4. Your chosen speed will be saved for that specific website
+1. Click the extension icon in the browser toolbar.
+2. Choose a preset, enter a custom speed, or use the `+` and `−` buttons to adjust by 0.05x.
+3. Expand **Shortcuts** to view the keys or configure **Temporary Boost**.
 
-### Using Keyboard Shortcuts
+Changes apply to every video in the active tab and the regular playback speed is saved for that website.
 
-- Increase speed: `Command + Option + Plus` (Mac) or `Ctrl + Shift + Plus` (Windows/Linux)
-- Decrease speed: `Command + Option + Minus` (Mac) or `Ctrl + Shift + Minus` (Windows/Linux)
-- Reset to normal speed: `Command + Option + Delete` (Mac) or `Ctrl + Shift + Backspace` (Windows/Linux)
-- Set specific speed (1-9): `Command + Option + [1-9]` (Mac) or `Ctrl + Shift + [1-9]` (Windows/Linux). Press again to add 0.5x, and press again to revert.
-- Set to max speed (16x): `Command + Option + 0` (Mac) or `Ctrl + Shift + 0` (Windows/Linux). Press again to reset to 1x speed.
+### Keyboard shortcuts
 
-`Ctrl + Alt` is intentionally not used on Windows because many international keyboard layouts expose AltGr as that modifier combination. `Ctrl + Shift + Backspace` is used for reset because browsers reserve `Ctrl + Shift + Delete` for clearing browsing data.
+| Action | macOS | Windows / Linux |
+| --- | --- | --- |
+| Increase by 0.05x | `Command + Option + Plus` | `Ctrl + Shift + Plus` |
+| Decrease by 0.05x | `Command + Option + Minus` | `Ctrl + Shift + Minus` |
+| Reset to 1x | `Command + Option + Backspace/Delete` | `Ctrl + Shift + Backspace` |
+| Set 1x–9x | `Command + Option + 1–9` | `Ctrl + Shift + 1–9` |
+| Toggle 16x | `Command + Option + 0` | `Ctrl + Shift + 0` |
+| Temporary Boost | `Command + Option + chosen letter` | `Ctrl + Shift + chosen letter` |
 
-The extension will display a toast notification showing the current speed whenever you make adjustments.
+Pressing the currently selected `1`–`9` shortcut again toggles an extra `0.5x` (for example, `2x` → `2.5x` → `2x`). The `0` shortcut toggles between `16x` and the speed you were using before it.
 
-## Building
+Windows and Linux use `Ctrl + Shift` because `Ctrl + Alt` is exposed as AltGr on many international keyboard layouts. Reset uses `Backspace` because browsers reserve `Ctrl + Shift + Delete` for clearing browsing data.
 
-Run `npm run build` to create browser-specific extension packages:
+## Languages
 
-- `dist/chromium` and `dist/simple-video-speed-controller-chromium.zip`
-- `dist/firefox` and `dist/simple-video-speed-controller-firefox.zip`
+The extension interface is available in these 21 locales:
 
-The Chromium manifest uses a background service worker, while the Firefox manifest uses a background script.
+| Language | Locale | Language | Locale | Language | Locale |
+| --- | --- | --- | --- | --- | --- |
+| Arabic | `ar` | Indonesian | `id` | Portuguese (Brazil) | `pt_BR` |
+| Chinese (Simplified) | `zh_CN` | Italian | `it` | Portuguese (Portugal) | `pt_PT` |
+| Chinese (Traditional) | `zh_TW` | Japanese | `ja` | Spanish | `es` |
+| Dutch | `nl` | Korean | `ko` | Thai | `th` |
+| English | `en` | Malay | `ms` | Turkish | `tr` |
+| French | `fr` | Polish | `pl` | Ukrainian | `uk` |
+| German | `de` | Hindi | `hi` | Vietnamese | `vi` |
+
+## Build and test
+
+Requirements: a current Node.js release and the `zip` command-line utility.
+
+```sh
+npm test
+npm run build
+```
+
+The build produces browser-specific unpacked extensions and ZIP archives:
+
+- `dist/chromium` and `dist/simple-video-speed-controller-chromium.zip` for Chrome, Edge, Opera, and Whale
+- `dist/firefox` and `dist/simple-video-speed-controller-firefox.zip` for Firefox
+
+The Chromium package uses a Manifest V3 background service worker; the Firefox package uses a background script.
 
 ## Privacy
 
-This extension only:
-- Accesses video elements on the pages you visit
-- Stores your preferred playback speeds for different websites
-- No data is collected or transmitted to external servers
+Simple Video Speed Controller stores domain-keyed playback preferences and extension settings in your browser's sync storage. Depending on your browser settings, that storage may sync through your browser account. The extension does not send this information to the developer, include analytics, or transmit video content or metadata to external servers.
+
+See the [privacy policy](PRIVACYPOLICY.md) for details.
 
 ## Support
 
-If you encounter any issues or have suggestions, please open an issue in this repository.
+Found a bug or have a feature request? [Open a GitHub issue](../../issues). If the extension is useful to you, you can also [support development on Ko-fi](https://ko-fi.com/chaseos).
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+Licensed under the [MIT License](LICENSE).
