@@ -16,7 +16,8 @@ A lightweight, open-source browser extension for controlling HTML5 video playbac
 
 After installing or updating the extension, reload any already-open video tabs. Pin the extension for quick access to the popup.
 
-<img width="250" alt="Simple Video Speed Controller popup" src="https://github.com/user-attachments/assets/217f4ea7-7bb2-4732-8d09-90621a36d622">
+<img width="280" height="397" alt="Simple Video Speed Controller PC/Linux" src="https://github.com/user-attachments/assets/556c255d-6716-472e-b242-ebb3ab501e5f" />
+<img width="277" height="396" alt="Simple Video Speed Controller Mac" src="https://github.com/user-attachments/assets/c218afaf-2d78-4b28-a608-252e8c9782a5" />
 
 ## Features
 
