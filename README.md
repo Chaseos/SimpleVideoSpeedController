@@ -95,7 +95,17 @@ See the [privacy policy](PRIVACYPOLICY.md) for details.
 
 ## Support
 
-Found a bug or have a feature request? [Open a GitHub issue](../../issues). If the extension is useful to you, you can also [support development on Ko-fi](https://ko-fi.com/chaseos).
+Found a bug or have a feature request? [Open a GitHub issue](../../issues).
+
+<p align="center">
+<a href="https://chaseos.app">🌐 Explore my work</a>
+</p>
+
+<p align="center">
+<a href="https://ko-fi.com/chaseos" target="_blank">
+<img src="https://ko-fi.com/img/githubbutton_sm.svg" alt="Support me on Ko-fi" />
+</a>
+</p>
 
 ## License
 
