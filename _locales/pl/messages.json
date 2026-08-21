@@ -28,7 +28,7 @@
     "description": "Shortcut explanation to reset speed to 1x"
   },
   "shortcutToggleMax": {
-    "message": "Przełącz prędkość 16x",
+    "message": "Włącz/wyłącz prędkość 16x",
     "description": "Shortcut explanation to toggle 16x speed"
   },
   "shortcutSetSpeed": {
@@ -48,7 +48,7 @@
     "description": "Button to dismiss the pin suggestion"
   },
   "reviewPromptText": {
-    "message": "Przydatne? Dodaj recenzję",
+    "message": "Przydatne? Wystaw opinię",
     "description": "Text encouraging users to leave a review"
   },
   "liveStreamSynced": {
@@ -64,19 +64,19 @@
     "description": "Compact visible Ko-fi support label"
   },
   "temporaryBoostTitle": {
-    "message": "Tymczasowe przyspieszenie",
+    "message": "Prędkość tymczasowa",
     "description": "Title for the temporary playback speed shortcut"
   },
   "temporaryBoostSpeed": {
-    "message": "Prędkość przyspieszenia",
+    "message": "Prędkość tymczasowa",
     "description": "Label for the temporary boost speed input"
   },
   "temporaryBoostKey": {
-    "message": "Klawisz przyspieszenia (A–Z)",
+    "message": "Klawisz prędkości tymczasowej (A–Z)",
     "description": "Label for the temporary boost action key input"
   },
   "temporaryBoostKeyPrompt": {
-    "message": "Naciśnij dowolną literę A–Z, aby ustawić klawisz przyspieszenia",
+    "message": "Naciśnij dowolną literę A–Z, aby ustawić klawisz prędkości tymczasowej",
     "description": "Toast shown after selecting the temporary boost key field"
   }
 }

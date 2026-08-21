@@ -9,6 +9,7 @@ const distDirectory = path.join(projectRoot, 'dist');
 const excludedDirectories = new Set([
   '.git',
   '.github',
+  '.localization-backups',
   'dist',
   'node_modules',
   'previews',

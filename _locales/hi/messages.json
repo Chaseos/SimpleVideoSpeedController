@@ -1,14 +1,14 @@
 {
   "appName": {
-    "message": "सरल वीडियो गति नियंत्रक",
+    "message": "आसान वीडियो स्पीड कंट्रोलर",
     "description": "The name of the extension"
   },
   "appDescription": {
-    "message": "किसी भी वेबसाइट पर वीडियो की गति समायोजित करें।",
+    "message": "किसी भी वेबसाइट पर वीडियो की स्पीड बदलें।",
     "description": "The description of the extension"
   },
   "speedPlaceholder": {
-    "message": "गति",
+    "message": "स्पीड",
     "description": "Placeholder text for the custom speed input"
   },
   "setButton": {
@@ -16,23 +16,23 @@
     "description": "Top button to submit custom speed"
   },
   "shortcutsTitle": {
-    "message": "शॉर्टकट्स",
+    "message": "शॉर्टकट",
     "description": "Title for the shortcuts section"
   },
   "shortcutSpeedTune": {
-    "message": "±0.05x गति",
+    "message": "स्पीड ±0.05x बदलें",
     "description": "Shortcut explanation to tune speed by 0.05"
   },
   "shortcutReset": {
-    "message": "1x पर रीसेट करें",
+    "message": "स्पीड 1x पर रीसेट करें",
     "description": "Shortcut explanation to reset speed to 1x"
   },
   "shortcutToggleMax": {
-    "message": "16x गति टॉगल करें",
+    "message": "16x स्पीड चालू/बंद करें",
     "description": "Shortcut explanation to toggle 16x speed"
   },
   "shortcutSetSpeed": {
-    "message": "<kbd>1-9</kbd>x गति पर सेट करें",
+    "message": "स्पीड <kbd>1-9</kbd>x पर सेट करें",
     "description": "Shortcut explanation to set exact speed (1-9)"
   },
   "shortcutAddExtra": {
@@ -40,39 +40,43 @@
     "description": "Shortcut explanation to add 0.5x"
   },
   "pinSuggestionText": {
-    "message": "अपने टैब को फिर से लोड करें और आसान पहुँच के लिए इस एक्सटेंशन को पिन करें!",
+    "message": "अपने टैब फिर से लोड करें और आसानी से खोलने के लिए इस एक्सटेंशन को टूलबार पर पिन करें!",
     "description": "Text suggesting to pin the extension"
   },
   "gotItBtn": {
-    "message": "समझ गया!",
+    "message": "ठीक है!",
     "description": "Button to dismiss the pin suggestion"
   },
   "reviewPromptText": {
-    "message": "उपयोगी लगा? एक समीक्षा छोड़ें",
+    "message": "उपयोगी लगा? समीक्षा लिखें",
     "description": "Text encouraging users to leave a review"
   },
   "liveStreamSynced": {
-    "message": "लाइव स्ट्रीम सिंक हो गई — 1x",
+    "message": "अब लाइव स्ट्रीम के साथ सिंक है — 1x",
     "description": "Toast message shown when a fast-forwarded live stream catches up to the live edge"
   },
   "supportMyWork": {
-    "message": "मेरे काम का समर्थन करें",
+    "message": "मेरे काम में सहयोग करें",
     "description": "Ko-fi support link title and accessible label"
   },
   "supportMyWorkCta": {
-    "message": "समर्थन करें",
+    "message": "सहयोग करें",
     "description": "Compact visible Ko-fi support label"
   },
   "temporaryBoostTitle": {
-    "message": "अस्थायी बूस्ट",
+    "message": "अस्थायी स्पीड",
     "description": "Title for the temporary playback speed shortcut"
   },
   "temporaryBoostSpeed": {
-    "message": "बूस्ट गति",
+    "message": "अस्थायी स्पीड",
     "description": "Label for the temporary boost speed input"
   },
   "temporaryBoostKey": {
-    "message": "बूस्ट कुंजी (A–Z)",
+    "message": "अस्थायी स्पीड की (A–Z)",
     "description": "Label for the temporary boost action key input"
+  },
+  "temporaryBoostKeyPrompt": {
+    "message": "अस्थायी स्पीड की सेट करने के लिए A–Z में से कोई अक्षर दबाएँ",
+    "description": "Toast shown after selecting the temporary boost key field"
   }
 }

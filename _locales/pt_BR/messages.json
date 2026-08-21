@@ -1,6 +1,6 @@
 {
   "appName": {
-    "message": "Controlador Simples de Velocidade de Vídeo",
+    "message": "Controlador simples de velocidade de vídeo",
     "description": "The name of the extension"
   },
   "appDescription": {
@@ -28,7 +28,7 @@
     "description": "Shortcut explanation to reset speed to 1x"
   },
   "shortcutToggleMax": {
-    "message": "Alternar velocidade 16x",
+    "message": "Ativar/desativar a velocidade de 16x",
     "description": "Shortcut explanation to toggle 16x speed"
   },
   "shortcutSetSpeed": {
@@ -64,15 +64,19 @@
     "description": "Compact visible Ko-fi support label"
   },
   "temporaryBoostTitle": {
-    "message": "Aumento temporário",
+    "message": "Velocidade temporária",
     "description": "Title for the temporary playback speed shortcut"
   },
   "temporaryBoostSpeed": {
-    "message": "Velocidade do aumento",
+    "message": "Velocidade temporária",
     "description": "Label for the temporary boost speed input"
   },
   "temporaryBoostKey": {
-    "message": "Tecla do aumento (A–Z)",
+    "message": "Tecla de velocidade temporária (A–Z)",
     "description": "Label for the temporary boost action key input"
+  },
+  "temporaryBoostKeyPrompt": {
+    "message": "Pressione qualquer letra de A a Z para definir a tecla de velocidade temporária",
+    "description": "Toast shown after selecting the temporary boost key field"
   }
 }

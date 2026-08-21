@@ -28,7 +28,7 @@
     "description": "Shortcut explanation to reset speed to 1x"
   },
   "shortcutToggleMax": {
-    "message": "Alihkan kecepatan 16x",
+    "message": "Aktifkan/nonaktifkan kecepatan 16x",
     "description": "Shortcut explanation to toggle 16x speed"
   },
   "shortcutSetSpeed": {
@@ -52,7 +52,7 @@
     "description": "Text encouraging users to leave a review"
   },
   "liveStreamSynced": {
-    "message": "Sudah sinkron dengan streaming langsung — 1x",
+    "message": "Pemutaran sudah sinkron dengan siaran langsung — 1x",
     "description": "Toast message shown when a fast-forwarded live stream catches up to the live edge"
   },
   "supportMyWork": {
@@ -64,15 +64,19 @@
     "description": "Compact visible Ko-fi support label"
   },
   "temporaryBoostTitle": {
-    "message": "Boost Sementara",
+    "message": "Kecepatan sementara",
     "description": "Title for the temporary playback speed shortcut"
   },
   "temporaryBoostSpeed": {
-    "message": "Kecepatan boost",
+    "message": "Kecepatan sementara",
     "description": "Label for the temporary boost speed input"
   },
   "temporaryBoostKey": {
-    "message": "Tombol boost (A–Z)",
+    "message": "Tombol kecepatan sementara (A–Z)",
     "description": "Label for the temporary boost action key input"
+  },
+  "temporaryBoostKeyPrompt": {
+    "message": "Tekan huruf apa pun dari A–Z untuk menetapkan tombol kecepatan sementara",
+    "description": "Toast shown after selecting the temporary boost key field"
   }
 }

@@ -68,6 +68,13 @@ input {
   font-size: 15px;
 }
 
+.speed-button,
+#customSpeed,
+.boost-input {
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+
 .speed-button:hover {
   background: linear-gradient(180deg, #4374c8 0%, #3863b3 100%);
   border-color: rgba(169, 196, 241, 0.48);

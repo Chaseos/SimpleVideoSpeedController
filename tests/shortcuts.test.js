@@ -198,7 +198,7 @@ test('macOS Temporary Boost remains compatible with Option modifier reporting', 
   ), true);
 });
 
-function createContentHarness(platform = 'Win32') {
+function createContentHarness(platform = 'Win32', uiLocale = '') {
   const documentListeners = new Map();
   const windowListeners = new Map();
   const storageListeners = [];
@@ -215,6 +215,7 @@ function createContentHarness(platform = 'Win32') {
   });
   const document = {
     hidden: false,
+    documentElement: { lang: '' },
     head: { appendChild() {} },
     body: {
       appendChild(element) {
@@ -238,7 +239,9 @@ function createContentHarness(platform = 'Win32') {
 
   const context = vm.createContext({
     chrome: {
-      i18n: { getMessage: () => '' },
+      i18n: {
+        getMessage: name => name === '@@ui_locale' ? uiLocale : ''
+      },
       runtime: {
         onMessage: { addListener() {} },
         sendMessage: () => Promise.resolve({ success: true })
@@ -268,6 +271,7 @@ function createContentHarness(platform = 'Win32') {
   });
 
   const projectRoot = path.resolve(__dirname, '..');
+  vm.runInContext(fs.readFileSync(path.join(projectRoot, 'localization.js'), 'utf8'), context);
   vm.runInContext(fs.readFileSync(path.join(projectRoot, 'shortcuts.js'), 'utf8'), context);
   vm.runInContext(fs.readFileSync(path.join(projectRoot, 'content.js'), 'utf8'), context);
 
@@ -317,6 +321,17 @@ test('Temporary Boost restores speed after release and focus loss and follows pr
   assert.equal(harness.video.playbackRate, 4);
   harness.storageListeners[0]({ temporaryBoostKey: { newValue: 'Y' } }, 'sync');
   assert.equal(harness.video.playbackRate, 2);
+});
+
+test('content toasts use the active UI locale for playback rates', async () => {
+  const harness = createContentHarness('Win32', 'de_DE');
+  await new Promise(resolve => setImmediate(resolve));
+
+  harness.keydown(dispatchedEvent('ControlLeft', { ctrlKey: true }));
+  harness.keydown(dispatchedEvent('ShiftLeft', { ctrlKey: true, shiftKey: true }));
+  harness.keydown(dispatchedEvent('Equal', { ctrlKey: true, shiftKey: true }));
+
+  assert.equal(harness.toast.textContent, '1,05x');
 });
 
 test('macOS content handling preserves Command + Option one-shots and order-independent boost', async () => {

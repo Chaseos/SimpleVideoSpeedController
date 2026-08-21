@@ -52,7 +52,7 @@
     "description": "Text encouraging users to leave a review"
   },
   "liveStreamSynced": {
-    "message": "Đã đồng bộ với luồng trực tiếp — 1x",
+    "message": "Đã bắt kịp luồng trực tiếp — 1x",
     "description": "Toast message shown when a fast-forwarded live stream catches up to the live edge"
   },
   "supportMyWork": {
@@ -64,15 +64,19 @@
     "description": "Compact visible Ko-fi support label"
   },
   "temporaryBoostTitle": {
-    "message": "Tăng tốc tạm thời",
+    "message": "Tốc độ tạm thời",
     "description": "Title for the temporary playback speed shortcut"
   },
   "temporaryBoostSpeed": {
-    "message": "Tốc độ tăng",
+    "message": "Tốc độ tạm thời",
     "description": "Label for the temporary boost speed input"
   },
   "temporaryBoostKey": {
-    "message": "Phím tăng tốc (A–Z)",
+    "message": "Phím tốc độ tạm thời (A–Z)",
     "description": "Label for the temporary boost action key input"
+  },
+  "temporaryBoostKeyPrompt": {
+    "message": "Nhấn một chữ cái bất kỳ từ A–Z để đặt phím tốc độ tạm thời",
+    "description": "Toast shown after selecting the temporary boost key field"
   }
 }

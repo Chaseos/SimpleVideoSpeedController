@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "__MSG_appName__",
-  "version": "1.14",
+  "version": "1.15",
   "default_locale": "en",
   "permissions": [
     "storage",
@@ -22,6 +22,7 @@
         "<all_urls>"
       ],
       "js": [
+        "localization.js",
         "shortcuts.js",
         "content.js"
       ],

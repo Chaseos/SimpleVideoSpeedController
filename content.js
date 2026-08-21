@@ -40,6 +40,7 @@ const monitoredVideos = new WeakSet();
 const clearedBoostSessionIds = new Set();
 const pressedBoostKeys = new Set();
 const shortcutConfig = VideoSpeedShortcuts.getShortcutConfig(navigator);
+const uiLocale = chrome.i18n.getMessage('@@ui_locale') || document.documentElement?.lang || 'en';
 
 function normalizeBoostSpeed(value) {
   const speed = Number(value);
@@ -60,7 +61,9 @@ function getTargetSpeed() {
  */
 function showToast(message) {
   const isNumber = typeof message === 'number';
-  toast.textContent = isNumber ? `${message}x` : message;
+  toast.textContent = isNumber
+    ? VideoSpeedLocalization.formatPlaybackRate(message, uiLocale)
+    : message;
   toast.style.opacity = '1';
   
   clearTimeout(toastTimeout);

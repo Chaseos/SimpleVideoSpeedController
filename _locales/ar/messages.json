@@ -4,7 +4,7 @@
     "description": "The name of the extension"
   },
   "appDescription": {
-    "message": "اضبط سرعة الفيديو على أي موقع ويب.",
+    "message": "اضبط سرعة تشغيل الفيديو على أي موقع إلكتروني.",
     "description": "The description of the extension"
   },
   "speedPlaceholder": {
@@ -20,19 +20,19 @@
     "description": "Title for the shortcuts section"
   },
   "shortcutSpeedTune": {
-    "message": "السرعة ±0.05x",
+    "message": "تعديل السرعة بمقدار ±0.05x",
     "description": "Shortcut explanation to tune speed by 0.05"
   },
   "shortcutReset": {
-    "message": "إعادة الضبط إلى 1x",
+    "message": "إعادة السرعة إلى 1x",
     "description": "Shortcut explanation to reset speed to 1x"
   },
   "shortcutToggleMax": {
-    "message": "تبديل سرعة 16x",
+    "message": "تشغيل سرعة 16x أو إيقافها",
     "description": "Shortcut explanation to toggle 16x speed"
   },
   "shortcutSetSpeed": {
-    "message": "تعيين السرعة إلى <kbd>1-9</kbd>x",
+    "message": "ضبط السرعة على <kbd>1-9</kbd>x",
     "description": "Shortcut explanation to set exact speed (1-9)"
   },
   "shortcutAddExtra": {
@@ -40,39 +40,43 @@
     "description": "Shortcut explanation to add 0.5x"
   },
   "pinSuggestionText": {
-    "message": "أعِد تحميل علامات التبويب وثبّت هذه الإضافة لسهولة الوصول إليها!",
+    "message": "أعِد تحميل علامات التبويب، ثم ثبّت الإضافة في شريط الأدوات للوصول إليها بسهولة!",
     "description": "Text suggesting to pin the extension"
   },
   "gotItBtn": {
-    "message": "فهمت!",
+    "message": "حسنًا!",
     "description": "Button to dismiss the pin suggestion"
   },
   "reviewPromptText": {
-    "message": "هل وجدتها مفيدة؟ اترك مراجعة",
+    "message": "هل أعجبتك الإضافة؟ اكتب مراجعة",
     "description": "Text encouraging users to leave a review"
   },
   "liveStreamSynced": {
-    "message": "تمت المزامنة مع البث المباشر — 1x",
+    "message": "تمت مزامنة التشغيل مع البث المباشر — 1x",
     "description": "Toast message shown when a fast-forwarded live stream catches up to the live edge"
   },
   "supportMyWork": {
-    "message": "ادعم عملي",
+    "message": "ادعم تطوير الإضافة",
     "description": "Ko-fi support link title and accessible label"
   },
   "supportMyWorkCta": {
-    "message": "ادعم عملي",
+    "message": "دعم التطوير",
     "description": "Compact visible Ko-fi support label"
   },
   "temporaryBoostTitle": {
-    "message": "تسريع مؤقت",
+    "message": "سرعة مؤقتة",
     "description": "Title for the temporary playback speed shortcut"
   },
   "temporaryBoostSpeed": {
-    "message": "سرعة التسريع",
+    "message": "سرعة مؤقتة",
     "description": "Label for the temporary boost speed input"
   },
   "temporaryBoostKey": {
-    "message": "مفتاح التسريع (A–Z)",
+    "message": "مفتاح السرعة المؤقتة (A–Z)",
     "description": "Label for the temporary boost action key input"
+  },
+  "temporaryBoostKeyPrompt": {
+    "message": "اضغط على أي حرف (A–Z) لتعيين مفتاح السرعة المؤقتة",
+    "description": "Toast shown after selecting the temporary boost key field"
   }
 }

@@ -1,6 +1,6 @@
 {
   "appName": {
-    "message": "簡易影片速度控制器",
+    "message": "簡易影片倍速控制器",
     "description": "The name of the extension"
   },
   "appDescription": {
@@ -20,23 +20,23 @@
     "description": "Title for the shortcuts section"
   },
   "shortcutSpeedTune": {
-    "message": "速度 ±0.05x",
+    "message": "調整 ±0.05 倍速",
     "description": "Shortcut explanation to tune speed by 0.05"
   },
   "shortcutReset": {
-    "message": "重設為 1x",
+    "message": "重設為 1 倍速",
     "description": "Shortcut explanation to reset speed to 1x"
   },
   "shortcutToggleMax": {
-    "message": "切換16x速度",
+    "message": "切換 16 倍速",
     "description": "Shortcut explanation to toggle 16x speed"
   },
   "shortcutSetSpeed": {
-    "message": "將速度設為 <kbd>1-9</kbd>x",
+    "message": "設為 <kbd>1-9</kbd> 倍速",
     "description": "Shortcut explanation to set exact speed (1-9)"
   },
   "shortcutAddExtra": {
-    "message": "增加 +0.5x",
+    "message": "增加 +0.5 倍速",
     "description": "Shortcut explanation to add 0.5x"
   },
   "pinSuggestionText": {
@@ -52,7 +52,7 @@
     "description": "Text encouraging users to leave a review"
   },
   "liveStreamSynced": {
-    "message": "已與直播同步 — 1x",
+    "message": "已同步至直播進度 — 1 倍速",
     "description": "Toast message shown when a fast-forwarded live stream catches up to the live edge"
   },
   "supportMyWork": {
@@ -60,19 +60,23 @@
     "description": "Ko-fi support link title and accessible label"
   },
   "supportMyWorkCta": {
-    "message": "支持我的工作",
+    "message": "支持開發",
     "description": "Compact visible Ko-fi support label"
   },
   "temporaryBoostTitle": {
-    "message": "暫時加速",
+    "message": "暫時倍速",
     "description": "Title for the temporary playback speed shortcut"
   },
   "temporaryBoostSpeed": {
-    "message": "加速速度",
+    "message": "暫時倍速",
     "description": "Label for the temporary boost speed input"
   },
   "temporaryBoostKey": {
-    "message": "加速鍵 (A–Z)",
+    "message": "暫時倍速鍵 (A–Z)",
     "description": "Label for the temporary boost action key input"
+  },
+  "temporaryBoostKeyPrompt": {
+    "message": "按下 A–Z 中的任一字母以設定暫時倍速鍵",
+    "description": "Toast shown after selecting the temporary boost key field"
   }
 }

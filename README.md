@@ -59,17 +59,18 @@ Windows and Linux use `Ctrl + Shift` because `Ctrl + Alt` is exposed as AltGr on
 
 ## Languages
 
-The extension interface is available in these 21 locales:
+The extension interface is available in 21 languages across these 22 locales:
 
 | Language | Locale | Language | Locale | Language | Locale |
 | --- | --- | --- | --- | --- | --- |
 | Arabic | `ar` | Indonesian | `id` | Portuguese (Brazil) | `pt_BR` |
 | Chinese (Simplified) | `zh_CN` | Italian | `it` | Portuguese (Portugal) | `pt_PT` |
-| Chinese (Traditional) | `zh_TW` | Japanese | `ja` | Spanish | `es` |
+| Chinese (Traditional) | `zh_TW` | Japanese | `ja` | Spanish (Spain) | `es` |
 | Dutch | `nl` | Korean | `ko` | Thai | `th` |
 | English | `en` | Malay | `ms` | Turkish | `tr` |
 | French | `fr` | Polish | `pl` | Ukrainian | `uk` |
 | German | `de` | Hindi | `hi` | Vietnamese | `vi` |
+| Spanish (Latin America and Caribbean) | `es_419` |  |  |  |  |
 
 ## Build and test
 

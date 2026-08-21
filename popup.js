@@ -1,10 +1,10 @@
 // Global state to track current speed and domain
 const KOFI_URL = 'https://ko-fi.com/chaseos';
 const REVIEW_URLS = {
-  chrome: 'https://chromewebstore.google.com/detail/simple-video-speed-contro/kcjfpmjkbkhgojilpihplkedadndnked/reviews?hl=en',
+  chrome: 'https://chromewebstore.google.com/detail/simple-video-speed-contro/kcjfpmjkbkhgojilpihplkedadndnked/reviews',
   edge: 'https://microsoftedge.microsoft.com/addons/detail/simple-video-speed-contro/mnmagmdfgdjhbfkdnonnhkfnbnjpehja',
-  firefox: 'https://addons.mozilla.org/en-US/firefox/addon/simple-video-speed-controller/reviews/',
-  opera: 'https://addons.opera.com/en/extensions/details/simple-video-speed-controller/',
+  firefox: 'https://addons.mozilla.org/firefox/addon/simple-video-speed-controller/reviews/',
+  opera: 'https://addons.opera.com/extensions/details/simple-video-speed-controller/',
   whale: 'https://store.whale.naver.com/detail/fkcbnblnjclbfnkkhnmoaelklgfiigbc'
 };
 let currentSpeed = 1;
@@ -26,7 +26,15 @@ function normalizeBoostKey(value) {
 }
 
 function formatSpeed(speed) {
-  return speed.toFixed(2).replace(/\.00$/, '').replace(/(\.\d)0$/, '$1');
+  return VideoSpeedLocalization.formatNumberForInput(speed);
+}
+
+function getUiLocale() {
+  return getI18nMessage('@@ui_locale') || document.documentElement.lang || 'en';
+}
+
+function formatPlaybackRate(speed) {
+  return VideoSpeedLocalization.formatPlaybackRate(speed, getUiLocale());
 }
 
 /**
@@ -182,6 +190,10 @@ function localizeHtmlPage() {
       element.setAttribute('aria-label', message);
     }
   });
+
+  document.querySelectorAll('.speed-button').forEach(button => {
+    button.textContent = formatPlaybackRate(Number(button.dataset.speed));
+  });
 }
 
 /**
@@ -292,7 +304,7 @@ function updateTemporaryBoostUI() {
     speedInput.value = formatSpeed(boostSpeed);
   }
   if (keyInput) keyInput.value = boostKey;
-  if (summarySpeed) summarySpeed.textContent = `${formatSpeed(boostSpeed)}x`;
+  if (summarySpeed) summarySpeed.textContent = formatPlaybackRate(boostSpeed);
   if (summaryKey) summaryKey.textContent = boostKey;
 }
 

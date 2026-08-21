@@ -212,7 +212,7 @@
 
     .shortcuts-toggle {
       width: auto;
-      margin-left: auto;
+      margin-inline-start: auto;
       background: none;
       border: none;
       color: #444;
@@ -257,22 +257,27 @@
       color: #bbb;
     }
 
+    .shortcut-row > span:first-child {
+      min-width: 0;
+      overflow-wrap: anywhere;
+    }
+
     .shortcut-row.nested {
-      padding-left: 18px;
+      padding-inline-start: 18px;
       position: relative;
     }
 
     .shortcut-row.nested::before {
       content: '↳';
       position: absolute;
-      left: 4px;
+      inset-inline-start: 4px;
       color: #777;
     }
 
     .shortcut-row.nested .up-arrow {
       color: #777;
       font-size: 14px;
-      margin-right: 4px;
+      margin-inline-end: 4px;
       display: inline-flex;
       align-items: center;
       transform: scaleX(-1);
@@ -284,8 +289,12 @@
 
     .keys {
       display: flex;
+      direction: ltr;
+      flex: 0 0 auto;
       gap: 3px;
       align-items: center;
+      margin-inline-start: 8px;
+      unicode-bidi: isolate;
     }
 
     kbd {
@@ -300,6 +309,7 @@
       padding: 2px 5px;
       line-height: 1.2;
       text-align: center;
+      unicode-bidi: isolate;
     }
 
     /* Force all action keys (the right-most keys) to perfectly align */
@@ -351,6 +361,8 @@
       font-size: 11px;
       gap: 3px;
       margin-inline-start: 6px;
+      direction: ltr;
+      unicode-bidi: isolate;
     }
 
     .boost-summary-value kbd {
@@ -632,6 +644,7 @@
     <a href="#" id="reviewLink" style="display:none" target="_blank"></a>
   </div>
 
+  <script src="localization.js"></script>
   <script src="shortcuts.js"></script>
   <script src="popup.js"></script>
 </body>

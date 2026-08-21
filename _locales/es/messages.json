@@ -1,10 +1,10 @@
 {
   "appName": {
-    "message": "Controlador de Velocidad de Video Simple",
+    "message": "Controlador sencillo de velocidad de vídeo",
     "description": "The name of the extension"
   },
   "appDescription": {
-    "message": "Ajuste la velocidad del video en cualquier sitio web.",
+    "message": "Ajusta la velocidad de los vídeos en cualquier sitio web.",
     "description": "The description of the extension"
   },
   "speedPlaceholder": {
@@ -12,7 +12,7 @@
     "description": "Placeholder text for the custom speed input"
   },
   "setButton": {
-    "message": "Ajustar",
+    "message": "Aplicar",
     "description": "Top button to submit custom speed"
   },
   "shortcutsTitle": {
@@ -20,7 +20,7 @@
     "description": "Title for the shortcuts section"
   },
   "shortcutSpeedTune": {
-    "message": "Velocidad ±0.05x",
+    "message": "Velocidad ±0,05x",
     "description": "Shortcut explanation to tune speed by 0.05"
   },
   "shortcutReset": {
@@ -28,7 +28,7 @@
     "description": "Shortcut explanation to reset speed to 1x"
   },
   "shortcutToggleMax": {
-    "message": "Alternar velocidad 16x",
+    "message": "Activar/desactivar 16x",
     "description": "Shortcut explanation to toggle 16x speed"
   },
   "shortcutSetSpeed": {
@@ -36,23 +36,23 @@
     "description": "Shortcut explanation to set exact speed (1-9)"
   },
   "shortcutAddExtra": {
-    "message": "Sumar +0.5x",
+    "message": "Añadir +0,5x",
     "description": "Shortcut explanation to add 0.5x"
   },
   "pinSuggestionText": {
-    "message": "¡Recargue sus pestañas y fije esta extensión para facilitar el acceso!",
+    "message": "Recarga las pestañas y fija esta extensión a la barra de herramientas para acceder fácilmente.",
     "description": "Text suggesting to pin the extension"
   },
   "gotItBtn": {
-    "message": "¡Entendido!",
+    "message": "Entendido",
     "description": "Button to dismiss the pin suggestion"
   },
   "reviewPromptText": {
-    "message": "¿Le resulta útil? Deje una reseña",
+    "message": "¿Te ha resultado útil? Deja una reseña",
     "description": "Text encouraging users to leave a review"
   },
   "liveStreamSynced": {
-    "message": "Transmisión en vivo sincronizada — 1x",
+    "message": "Reproducción sincronizada con el directo — 1x",
     "description": "Toast message shown when a fast-forwarded live stream catches up to the live edge"
   },
   "supportMyWork": {
@@ -60,19 +60,23 @@
     "description": "Ko-fi support link title and accessible label"
   },
   "supportMyWorkCta": {
-    "message": "Apoya mi trabajo",
+    "message": "Apóyame",
     "description": "Compact visible Ko-fi support label"
   },
   "temporaryBoostTitle": {
-    "message": "Aumento temporal",
+    "message": "Velocidad temporal",
     "description": "Title for the temporary playback speed shortcut"
   },
   "temporaryBoostSpeed": {
-    "message": "Velocidad de aumento",
+    "message": "Velocidad temporal",
     "description": "Label for the temporary boost speed input"
   },
   "temporaryBoostKey": {
-    "message": "Tecla de aumento (A–Z)",
+    "message": "Tecla de velocidad temporal (A–Z)",
     "description": "Label for the temporary boost action key input"
+  },
+  "temporaryBoostKeyPrompt": {
+    "message": "Pulsa una letra (A–Z) para asignar la tecla de velocidad temporal",
+    "description": "Toast shown after selecting the temporary boost key field"
   }
 }

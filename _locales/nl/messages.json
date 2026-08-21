@@ -40,7 +40,7 @@
     "description": "Shortcut explanation to add 0.5x"
   },
   "pinSuggestionText": {
-    "message": "Laad uw tabbladen opnieuw en zet deze extensie vast voor eenvoudige toegang!",
+    "message": "Laad je tabbladen opnieuw en zet deze extensie vast voor snelle toegang!",
     "description": "Text suggesting to pin the extension"
   },
   "gotItBtn": {
@@ -64,19 +64,19 @@
     "description": "Compact visible Ko-fi support label"
   },
   "temporaryBoostTitle": {
-    "message": "Tijdelijke boost",
+    "message": "Tijdelijke snelheid",
     "description": "Title for the temporary playback speed shortcut"
   },
   "temporaryBoostSpeed": {
-    "message": "Boostsnelheid",
+    "message": "Tijdelijke snelheid",
     "description": "Label for the temporary boost speed input"
   },
   "temporaryBoostKey": {
-    "message": "Boosttoets (A–Z)",
+    "message": "Toets voor tijdelijke snelheid (A–Z)",
     "description": "Label for the temporary boost action key input"
   },
   "temporaryBoostKeyPrompt": {
-    "message": "Druk op een letter A–Z om de boosttoets in te stellen",
+    "message": "Druk op een letter A–Z om de toets voor tijdelijke snelheid in te stellen",
     "description": "Toast shown after selecting the temporary boost key field"
   }
 }

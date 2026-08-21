@@ -4,7 +4,7 @@
     "description": "The name of the extension"
   },
   "appDescription": {
-    "message": "Passen Sie die Videogeschwindigkeit auf jeder Website an.",
+    "message": "Passe die Videogeschwindigkeit auf jeder Website an.",
     "description": "The description of the extension"
   },
   "speedPlaceholder": {
@@ -12,7 +12,7 @@
     "description": "Placeholder text for the custom speed input"
   },
   "setButton": {
-    "message": "Setzen",
+    "message": "Übernehmen",
     "description": "Top button to submit custom speed"
   },
   "shortcutsTitle": {
@@ -28,7 +28,7 @@
     "description": "Shortcut explanation to reset speed to 1x"
   },
   "shortcutToggleMax": {
-    "message": "16x-Geschwindigkeit umschalten",
+    "message": "16x-Geschwindigkeit ein-/ausschalten",
     "description": "Shortcut explanation to toggle 16x speed"
   },
   "shortcutSetSpeed": {
@@ -40,7 +40,7 @@
     "description": "Shortcut explanation to add 0.5x"
   },
   "pinSuggestionText": {
-    "message": "Laden Sie Ihre Tabs neu und heften Sie diese Erweiterung an, um leicht darauf zugreifen zu können!",
+    "message": "Lade deine Tabs neu und pinne diese Erweiterung für schnellen Zugriff an!",
     "description": "Text suggesting to pin the extension"
   },
   "gotItBtn": {
@@ -48,7 +48,7 @@
     "description": "Button to dismiss the pin suggestion"
   },
   "reviewPromptText": {
-    "message": "Nützlich? Hinterlassen Sie eine Bewertung",
+    "message": "Hilfreich? Wir freuen uns über eine Bewertung",
     "description": "Text encouraging users to leave a review"
   },
   "liveStreamSynced": {
@@ -64,15 +64,19 @@
     "description": "Compact visible Ko-fi support label"
   },
   "temporaryBoostTitle": {
-    "message": "Temporärer Boost",
+    "message": "Temporäre Geschwindigkeit",
     "description": "Title for the temporary playback speed shortcut"
   },
   "temporaryBoostSpeed": {
-    "message": "Boost-Tempo",
+    "message": "Temporäre Geschwindigkeit",
     "description": "Label for the temporary boost speed input"
   },
   "temporaryBoostKey": {
-    "message": "Boost-Taste (A–Z)",
+    "message": "Taste für temporäre Geschwindigkeit (A–Z)",
     "description": "Label for the temporary boost action key input"
+  },
+  "temporaryBoostKeyPrompt": {
+    "message": "Drücke einen Buchstaben (A–Z), um die Taste für die temporäre Geschwindigkeit festzulegen",
+    "description": "Toast shown after selecting the temporary boost key field"
   }
 }
