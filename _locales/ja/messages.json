@@ -20,7 +20,7 @@
     "description": "Title for the shortcuts section"
   },
   "shortcutSpeedTune": {
-    "message": "速度 ±0.05倍",
+    "message": "再生速度を±0.05倍調整",
     "description": "Shortcut explanation to tune speed by 0.05"
   },
   "shortcutReset": {

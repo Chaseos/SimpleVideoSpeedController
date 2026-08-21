@@ -1,10 +1,10 @@
 {
   "appName": {
-    "message": "간편한 동영상 재생 속도 조절기",
+    "message": "심플 동영상 재생 속도 컨트롤러",
     "description": "The name of the extension"
   },
   "appDescription": {
-    "message": "모든 웹사이트에서 동영상 재생 속도를 조절하세요.",
+    "message": "모든 웹사이트에서 동영상 재생 속도를 컨트롤 하세요.",
     "description": "The description of the extension"
   },
   "speedPlaceholder": {

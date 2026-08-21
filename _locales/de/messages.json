@@ -20,7 +20,7 @@
     "description": "Title for the shortcuts section"
   },
   "shortcutSpeedTune": {
-    "message": "±0,05x Geschwindigkeit",
+    "message": "Geschwindigkeit um ±0,05x ändern",
     "description": "Shortcut explanation to tune speed by 0.05"
   },
   "shortcutReset": {
@@ -32,7 +32,7 @@
     "description": "Shortcut explanation to toggle 16x speed"
   },
   "shortcutSetSpeed": {
-    "message": "Auf <kbd>1-9</kbd>x Geschwindigkeit setzen",
+    "message": "Geschwindigkeit auf <kbd>1-9</kbd>x setzen",
     "description": "Shortcut explanation to set exact speed (1-9)"
   },
   "shortcutAddExtra": {
@@ -64,7 +64,7 @@
     "description": "Compact visible Ko-fi support label"
   },
   "temporaryBoostTitle": {
-    "message": "Temporäre Geschwindigkeit",
+    "message": "Temporäres Tempo",
     "description": "Title for the temporary playback speed shortcut"
   },
   "temporaryBoostSpeed": {

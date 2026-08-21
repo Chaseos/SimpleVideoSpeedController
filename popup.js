@@ -148,12 +148,16 @@ function getI18nMessage(messageName) {
 function localizeHtmlPage() {
   const uiLocale = getI18nMessage('@@ui_locale');
   const textDirection = getI18nMessage('@@bidi_dir');
+  const appName = getI18nMessage('appName');
 
   if (uiLocale) {
     document.documentElement.lang = uiLocale.replace('_', '-');
   }
   if (textDirection === 'ltr' || textDirection === 'rtl') {
     document.documentElement.dir = textDirection;
+  }
+  if (appName) {
+    document.title = appName;
   }
 
   // Localize text content
@@ -227,7 +231,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
     if (tabs[0]?.url) {
       currentDomain = new URL(tabs[0].url).hostname.replace('www.', '');
-      document.title = `Speed for ${currentDomain}`;
     }
   } catch (error) {
     console.error('Error getting current domain:', error);
