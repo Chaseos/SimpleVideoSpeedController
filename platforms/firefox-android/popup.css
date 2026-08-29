@@ -1,0 +1,35 @@
+@media (hover: none) and (pointer: coarse) {
+  html {
+    min-width: 280px;
+  }
+
+  body {
+    box-sizing: border-box;
+    margin-inline: auto;
+    max-width: 360px;
+    min-width: 280px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    width: 100%;
+  }
+
+  .shortcuts-header {
+    min-height: 44px;
+  }
+
+  .kofi-link {
+    height: 44px;
+    width: 44px;
+  }
+
+  .kofi-link:hover,
+  .kofi-link:focus-visible {
+    transform: none;
+    width: 116px;
+  }
+
+  .shortcuts-toggle {
+    min-height: 44px;
+    padding-inline: 8px;
+  }
+}

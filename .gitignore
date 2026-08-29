@@ -18,6 +18,8 @@ build/
 .env.development.local
 .env.test.local
 .env.production.local
+.env.*
+!.env.example
 
 # IDE - VSCode
 .vscode/*
@@ -35,6 +37,14 @@ build/
 # System Files
 .DS_Store
 Thumbs.db
+
+# Xcode personal state and signing material
+**/xcuserdata/
+*.xcuserstate
+*.p8
+*.p12
+*.mobileprovision
+*.provisionprofile
 
 # Chrome Extension specific
 *.pem

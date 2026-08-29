@@ -37,6 +37,23 @@ function formatPlaybackRate(speed) {
   return VideoSpeedLocalization.formatPlaybackRate(speed, getUiLocale());
 }
 
+function updateSpeedInputDisplay(input) {
+  if (!input) return;
+  const display = input.parentElement?.querySelector('.speed-input-display');
+  if (!display) return;
+
+  const rawValue = input.value.trim();
+  if (!rawValue) {
+    display.textContent = '';
+    return;
+  }
+
+  const speed = Number(rawValue);
+  display.textContent = Number.isFinite(speed) && speed > 0
+    ? formatPlaybackRate(speed)
+    : '';
+}
+
 /**
  * Check if this is the first time opening the popup
  */
@@ -198,6 +215,10 @@ function localizeHtmlPage() {
   document.querySelectorAll('.speed-button').forEach(button => {
     button.textContent = formatPlaybackRate(Number(button.dataset.speed));
   });
+
+  document.querySelectorAll('.speed-input-field input').forEach(input => {
+    updateSpeedInputDisplay(input);
+  });
 }
 
 /**
@@ -300,13 +321,16 @@ async function loadTemporaryBoostPreferences() {
 function updateTemporaryBoostUI() {
   const speedInput = document.getElementById('boostSpeed');
   const keyInput = document.getElementById('boostKey');
+  const editorKey = document.getElementById('boostEditorKeyDisplay');
   const summarySpeed = document.getElementById('boostSummarySpeed');
   const summaryKey = document.getElementById('boostSummaryKey');
 
   if (speedInput && document.activeElement !== speedInput) {
     speedInput.value = formatSpeed(boostSpeed);
   }
+  updateSpeedInputDisplay(speedInput);
   if (keyInput) keyInput.value = boostKey;
+  if (editorKey) editorKey.textContent = boostKey;
   if (summarySpeed) summarySpeed.textContent = formatPlaybackRate(boostSpeed);
   if (summaryKey) summaryKey.textContent = boostKey;
 }
@@ -372,10 +396,10 @@ function setupTemporaryBoostControls() {
   summary?.addEventListener('click', () => {
     const isOpen = editor.classList.toggle('open');
     summary.setAttribute('aria-expanded', String(isOpen));
-    if (isOpen) speedInput?.focus();
   });
 
   speedInput?.addEventListener('input', () => {
+    updateSpeedInputDisplay(speedInput);
     saveBoostSpeed(speedInput.value);
   });
   speedInput?.addEventListener('change', () => {
@@ -389,6 +413,7 @@ function setupTemporaryBoostControls() {
 
   speedInput?.addEventListener('blur', () => {
     speedInput.value = formatSpeed(boostSpeed);
+    updateSpeedInputDisplay(speedInput);
   });
 
   const adjustBoostSpeed = delta => {
@@ -449,6 +474,10 @@ function setupEventListeners() {
   const setCustomSpeedBtn = document.getElementById('setCustomSpeed');
   
   if (setCustomSpeedBtn && customSpeedInput) {
+    customSpeedInput.addEventListener('input', () => {
+      updateSpeedInputDisplay(customSpeedInput);
+    });
+
     // Handle Set button click
     setCustomSpeedBtn.addEventListener('click', () => {
       const speed = parseFloat(customSpeedInput.value);
@@ -497,6 +526,7 @@ function updateUI(speed) {
   const customSpeedInput = document.getElementById('customSpeed');
   if (customSpeedInput) {
     customSpeedInput.value = formatSpeed(speed);
+    updateSpeedInputDisplay(customSpeedInput);
   }
 }
 

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="../Style.css">
+    <script src="../Script.js" defer></script>
+</head>
+<body>
+    <main class="app-card">
+        <img class="app-icon" src="../Icon.png" width="112" height="112" alt="">
+        <h1>Simple Video Speed Controller</h1>
+
+        <p class="platform-ios">Enable the extension in Settings, then allow it on the websites where you watch video.</p>
+        <p class="platform-mac state-unknown">Enable the extension in Safari Settings, then allow it on the websites where you watch video.</p>
+        <p class="platform-mac state-on"><span class="status-dot enabled"></span>The Safari extension is enabled.</p>
+        <p class="platform-mac state-off"><span class="status-dot"></span>The Safari extension is currently disabled.</p>
+
+        <button class="open-preferences" type="button">
+            <span class="platform-ios">Open Settings</span>
+            <span class="platform-mac">Open Safari Extension Settings</span>
+        </button>
+        <p id="action-message" role="status" aria-live="polite"></p>
+    </main>
+</body>
+</html>

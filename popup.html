@@ -38,7 +38,9 @@
     }
     
     .speed-button.selected {
-      background: #ff9800;
+      background: #e87500;
+      border: 1px solid #a94600;
+      box-shadow: inset 0 0 0 1px #ffb66d;
     }
     
     #customSpeed {
@@ -535,7 +537,10 @@
     <button class="speed-button" data-speed="3">3x</button>
   </div>
   <div class="speed-row">
-    <input type="number" id="customSpeed" data-i18n-placeholder="speedPlaceholder" placeholder="Speed" step="0.1" min="0.1" max="16" value="1">
+    <label class="speed-input-field" for="customSpeed">
+      <input type="number" id="customSpeed" step="0.1" min="0.1" max="16" value="1">
+      <span class="speed-input-display" aria-hidden="true">1x</span>
+    </label>
     <button id="setCustomSpeed" data-i18n="setButton">Set</button>
     <div class="arrow-controls">
       <button class="arrow-button" id="speedUp">+</button>
@@ -595,7 +600,7 @@
             <span id="boostSummarySpeed">3x</span> ·
             <kbd class="primary-modifier-key">Cmd</kbd>
             <kbd class="secondary-modifier-key">Opt</kbd>
-            <kbd id="boostSummaryKey">X</kbd>
+            <kbd class="action-key" id="boostSummaryKey">X</kbd>
             <span aria-hidden="true">›</span>
           </span>
         </button>
@@ -604,15 +609,19 @@
             <button class="arrow-button" id="boostSpeedUp" type="button">+</button>
             <button class="arrow-button" id="boostSpeedDown" type="button">−</button>
           </div>
-          <label class="boost-field" for="boostSpeed">
+          <label class="boost-field speed-input-field" for="boostSpeed">
             <input class="boost-input" id="boostSpeed" type="number" min="0.1" max="16" step="0.05" value="3"
               aria-label="Boost speed"
               data-i18n-aria-label="temporaryBoostSpeed">
+            <span class="speed-input-display" aria-hidden="true">3x</span>
           </label>
-          <label class="boost-field" for="boostKey">
+          <label class="boost-field boost-key-field" for="boostKey">
             <input class="boost-input" id="boostKey" type="text" value="X" maxlength="1" readonly
               aria-label="Boost key (A–Z)"
               data-i18n-aria-label="temporaryBoostKey">
+            <span class="boost-key-display" aria-hidden="true">
+              <kbd class="action-key" id="boostEditorKeyDisplay">X</kbd>
+            </span>
           </label>
         </div>
       </div>

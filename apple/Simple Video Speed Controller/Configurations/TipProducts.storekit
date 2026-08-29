@@ -1,0 +1,68 @@
+{
+  "identifier" : "81E1E011-AB4E-4C78-A82C-A87D6E8558D1",
+  "nonRenewingSubscriptions" : [
+
+  ],
+  "products" : [
+    {
+      "displayPrice" : "0.99",
+      "familyShareable" : false,
+      "internalID" : "22824A3A-07F4-4596-9A40-032722EE9F5B",
+      "localizations" : [
+        {
+          "description" : "A small optional tip to support development.",
+          "displayName" : "Small Tip",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "app.chaseos.SimpleVideoSpeedController.tip.small",
+      "referenceName" : "Small Tip",
+      "type" : "Consumable"
+    },
+    {
+      "displayPrice" : "2.99",
+      "familyShareable" : false,
+      "internalID" : "AC82BED7-A6FD-459C-860A-170594211B48",
+      "localizations" : [
+        {
+          "description" : "An optional tip to support continued development.",
+          "displayName" : "Standard Tip",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "app.chaseos.SimpleVideoSpeedController.tip.standard",
+      "referenceName" : "Standard Tip",
+      "type" : "Consumable"
+    },
+    {
+      "displayPrice" : "4.99",
+      "familyShareable" : false,
+      "internalID" : "89A614C4-096C-4FC0-A582-0875AC689E9F",
+      "localizations" : [
+        {
+          "description" : "A generous optional tip to support continued development.",
+          "displayName" : "Generous Tip",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "app.chaseos.SimpleVideoSpeedController.tip.generous",
+      "referenceName" : "Generous Tip",
+      "type" : "Consumable"
+    }
+  ],
+  "settings" : {
+    "_failTransactionsEnabled" : false,
+    "_locale" : "en_US",
+    "_storefront" : "USA",
+    "_storeKitErrors" : [
+
+    ]
+  },
+  "subscriptionGroups" : [
+
+  ],
+  "version" : {
+    "major" : 3,
+    "minor" : 0
+  }
+}

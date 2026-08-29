@@ -74,19 +74,25 @@ The extension interface is available in 21 languages across these 22 locales:
 
 ## Build and test
 
-Requirements: a current Node.js release and the `zip` command-line utility.
+Requirements: a current Node.js release and the `zip` command-line utility. Building the Apple app also requires a current Xcode installation.
 
 ```sh
 npm test
 npm run build
+npm run build:apple
 ```
 
 The build produces browser-specific unpacked extensions and ZIP archives:
 
 - `dist/chromium` and `dist/simple-video-speed-controller-chromium.zip` for Chrome, Edge, Opera, and Whale
-- `dist/firefox` and `dist/simple-video-speed-controller-firefox.zip` for Firefox
+- `dist/firefox` and `dist/simple-video-speed-controller-firefox.zip` for Firefox desktop and Android
+- `dist/safari` and `dist/simple-video-speed-controller-safari.zip` as the web-extension resources embedded in the Apple app
 
-The Chromium package uses a Manifest V3 background service worker; the Firefox package uses a background script.
+The Chromium package is a byte-for-byte copy of the existing extension runtime. Firefox Android and Safari changes are applied only while producing their target packages, with platform styles kept under `platforms/`; they do not alter the Chrome popup or scripts. The Safari package excludes browser-store review prompts, Ko-fi links, pinning guidance, and related engagement resources, while adding a compact user-initiated link to the app's App Store review page.
+
+`npm run build:apple` rebuilds all web targets, synchronizes the Safari resources, regenerates Apple icon assets from the existing extension artwork, and compiles unsigned macOS and iOS Simulator builds. Signed App Store archives are created explicitly in Xcode after selecting an Apple development team.
+
+See [APPLE_RELEASE.md](APPLE_RELEASE.md) for the Apple, StoreKit, App Store Connect, TestFlight, and Firefox Android release checklist.
 
 ## Privacy
 

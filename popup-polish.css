@@ -58,7 +58,7 @@ input {
 }
 
 .speed-button {
-  background: linear-gradient(180deg, #3f6fc4 0%, #345ca7 100%);
+  background: #3a67b6;
   border-color: rgba(146, 178, 232, 0.34);
   border-radius: 9px;
   box-shadow:
@@ -75,26 +75,61 @@ input {
   unicode-bidi: isolate;
 }
 
+.speed-input-field {
+  display: block;
+  min-width: 0;
+  position: relative;
+}
+
+.speed-input-field .speed-input-display {
+  color: var(--text);
+  display: grid;
+  font-size: 15px;
+  font-weight: 600;
+  inset: 0;
+  opacity: 1;
+  place-items: center;
+  pointer-events: none;
+  position: absolute;
+  transition: opacity 120ms ease;
+  white-space: nowrap;
+}
+
+.speed-input-field:not(:focus-within) > #customSpeed,
+.speed-input-field:not(:focus-within) > #boostSpeed {
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+
+.speed-input-field:focus-within .speed-input-display {
+  opacity: 0;
+}
+
+.speed-input-field:focus-within > #customSpeed,
+.speed-input-field:focus-within > #boostSpeed {
+  color: var(--text);
+  -webkit-text-fill-color: var(--text);
+}
+
+.speed-input-field:not(:focus-within) > #customSpeed::placeholder,
+.speed-input-field:not(:focus-within) > #boostSpeed::placeholder {
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+
 .speed-button:hover {
-  background: linear-gradient(180deg, #4374c8 0%, #3863b3 100%);
+  background: #416fc0;
   border-color: rgba(169, 196, 241, 0.48);
   color: #fff;
   transform: translateY(-1px);
 }
 
 .speed-button.selected {
-  background: radial-gradient(
-    ellipse at center,
-    #c04a00 0%,
-    #d45f00 27%,
-    #eb7900 62%,
-    #ff9800 100%
-  );
-  border-color: rgba(255, 157, 85, 0.82);
+  background: #e87500;
+  border-color: #a94600;
   box-shadow:
-    0 1px 0 rgba(255, 225, 190, 0.46) inset,
-    0 0 0 1px rgba(255, 107, 26, 0.12),
-    0 6px 17px rgba(255, 79, 0, 0.42);
+    inset 0 0 0 1px #ffb66d,
+    0 5px 14px rgba(216, 91, 0, 0.34);
   color: #fff;
   text-shadow: 0 1px 1px rgba(76, 18, 0, 0.55);
 }
@@ -105,6 +140,10 @@ input {
 .got-it-btn:active {
   box-shadow: none;
   transform: translateY(1px);
+}
+
+.speed-button.selected:active {
+  box-shadow: inset 0 0 0 1px #ffb66d;
 }
 
 .speed-button:focus-visible,
@@ -153,7 +192,7 @@ input {
 
 #setCustomSpeed,
 .got-it-btn {
-  background: linear-gradient(180deg, #2b8645 0%, #207239 100%);
+  background: #267a3e;
   border-color: rgba(119, 191, 136, 0.44);
   border-radius: 9px;
   box-shadow:
@@ -164,7 +203,7 @@ input {
 
 #setCustomSpeed:hover,
 .got-it-btn:hover {
-  background: linear-gradient(180deg, #2b8645 0%, #247a3e 100%);
+  background: #2b8645;
   transform: translateY(-1px);
 }
 
@@ -173,7 +212,7 @@ input {
 }
 
 .arrow-button {
-  background: linear-gradient(180deg, rgba(43, 134, 69, 0.5), rgba(32, 114, 57, 0.46));
+  background: #267a3e;
   border-color: rgba(119, 191, 136, 0.28);
   border-radius: 6px;
   color: #e1ffe8;
@@ -182,7 +221,7 @@ input {
 }
 
 .arrow-button:hover {
-  background: linear-gradient(180deg, rgba(43, 134, 69, 0.65), rgba(36, 122, 62, 0.6));
+  background: #2b8645;
   border-color: rgba(139, 209, 155, 0.43);
   color: #fff;
   transform: none;
@@ -291,7 +330,34 @@ kbd {
 }
 
 #boostKey {
-  color: #c9dcff;
+  caret-color: transparent;
+  color: transparent;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 700;
+  height: 44px;
+  -webkit-text-fill-color: transparent;
+  width: 100%;
+}
+
+.boost-key-field {
+  align-items: stretch;
+  position: relative;
+}
+
+.boost-key-display {
+  display: grid;
+  inset: 0;
+  place-items: center;
+  pointer-events: none;
+  position: absolute;
+}
+
+.boost-key-display kbd {
+  font-size: 13px;
+  min-width: 32px;
+  padding: 4px 8px;
+  text-align: center;
 }
 
 .popup-toast {

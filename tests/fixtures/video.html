@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Video speed controller test</title>
+  <style>
+    body { margin: 0; padding: 24px; font: 18px system-ui; color: #fff; background: #111; }
+    video { display: block; width: 100%; max-width: 720px; margin-top: 20px; }
+  </style>
+</head>
+<body>
+  <h1>Video speed controller test</h1>
+  <p id="rate">Playback rate: 1</p>
+  <video controls loop playsinline>
+    <source src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4" type="video/mp4">
+  </video>
+  <script>
+    const video = document.querySelector("video");
+    const rate = document.querySelector("#rate");
+    const updateRate = () => { rate.textContent = `Playback rate: ${video.playbackRate}`; };
+    video.addEventListener("ratechange", updateRate);
+    updateRate();
+  </script>
+</body>
+</html>
