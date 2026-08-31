@@ -72,6 +72,12 @@ body {
   color: #ffc857;
 }
 
+@supports (-webkit-touch-callout: none) {
+  .safari-action-link {
+    opacity: 1;
+  }
+}
+
 .safari-support-link {
   color: #ff5a5f;
 }
@@ -158,4 +164,16 @@ kbd {
 .arrow-button:hover,
 .arrow-button:active {
   transform: none;
+}
+/* This notice describes an actual loaded native-HLS video, never a site guess. */
+.safari-playback-notice {
+  margin: 10px 0;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.speed-button:disabled,
+.arrow-button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
 }

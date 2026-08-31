@@ -4,7 +4,7 @@
     --border: rgba(90, 106, 126, 0.18);
     --text: #17202c;
     --muted: #647184;
-    --accent: #3f6fc4;
+    --accent: #315fae;
 }
 
 * {
@@ -23,6 +23,7 @@ body {
         #eef2f7;
     color: var(--text);
     display: flex;
+    font: 17px/1.45 system-ui, sans-serif;
     font: -apple-system-body;
     justify-content: center;
     margin: 0;
@@ -50,6 +51,7 @@ body {
 }
 
 h1 {
+    font: 700 22px/1.25 system-ui, sans-serif;
     font: -apple-system-title2;
     font-weight: 700;
     margin: 2px 0 0;
@@ -88,7 +90,8 @@ button {
     padding: 10px 16px;
 }
 
-button:focus-visible {
+button:focus-visible,
+summary:focus-visible {
     outline: 3px solid rgba(63, 111, 196, 0.42);
     outline-offset: 3px;
 }
@@ -96,6 +99,131 @@ button:focus-visible {
 #action-message {
     font-size: 0.85em;
     min-height: 1.3em;
+}
+
+#action-message:empty {
+    display: none;
+}
+
+body.platform-ios {
+    padding: 24px 16px 120px;
+}
+
+body.platform-mac {
+    padding: 16px 20px 88px;
+}
+
+.platform-mac .app-card {
+    padding: 20px;
+    gap: 10px;
+}
+
+.platform-mac .app-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 14px;
+}
+
+.platform-ios .app-card {
+    max-width: 560px;
+    padding: 28px;
+    gap: 18px;
+}
+
+.platform-ios .app-icon {
+    width: 72px;
+    height: 72px;
+    border-radius: 18px;
+}
+
+.introduction {
+    max-width: 400px;
+}
+
+.setup-section,
+.usage-section,
+.app-information {
+    width: 100%;
+    text-align: start;
+}
+
+h2 {
+    font: 650 17px/1.4 system-ui, sans-serif;
+    font: -apple-system-headline;
+    font-weight: 650;
+    margin: 0 0 8px;
+}
+
+.setup-section p,
+.usage-section p,
+.information-content p {
+    max-width: none;
+}
+
+.settings-note,
+.scope-note,
+.usage-hint {
+    font-size: .9em;
+}
+
+.setup-section .settings-note {
+    margin-top: 8px;
+}
+
+.platform-ios .open-preferences {
+    width: 100%;
+}
+
+.usage-section {
+    border-top: 1px solid var(--border);
+    padding-top: 20px;
+}
+
+ol,
+ul {
+    margin: 0 0 14px;
+    padding-inline-start: 24px;
+    color: var(--muted);
+    line-height: 1.5;
+}
+
+li + li {
+    margin-top: 10px;
+}
+
+strong {
+    color: var(--text);
+    font-weight: 600;
+}
+
+.app-information {
+    border-top: 1px solid var(--border);
+}
+
+details + details {
+    border-top: 1px solid var(--border);
+}
+
+summary {
+    cursor: pointer;
+    min-height: 44px;
+    padding: 12px 4px;
+    font-weight: 600;
+}
+
+.information-content {
+    padding: 0 4px 16px;
+}
+
+.information-content p + p,
+.information-content ul {
+    margin-top: 12px;
+}
+
+@media (max-width: 380px) {
+    .platform-ios .app-card {
+        padding: 22px;
+    }
 }
 
 body:not(.platform-mac, .platform-ios) :is(.platform-mac, .platform-ios),

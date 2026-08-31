@@ -39,6 +39,8 @@ build/
 Thumbs.db
 
 # Xcode personal state and signing material
+apple/.build/
+apple/.swiftpm/
 **/xcuserdata/
 *.xcuserstate
 *.p8

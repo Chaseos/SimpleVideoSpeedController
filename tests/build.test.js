@@ -30,10 +30,13 @@ const safariRuntimeEntries = [
   'icon.png',
   'localization.js',
   'manifest.json',
+  'playback-policy.js',
   'popup-polish.css',
   'popup.html',
   'popup.js',
-  'shortcuts.js'
+  'shortcuts.js',
+  'support.html',
+  'support.js'
 ];
 
 function readManifest(target) {
@@ -287,6 +290,47 @@ test('Safari localizes the keyboard shortcuts label only on iOS', () => {
   }
 });
 
+test('Safari routes iPad support through a bundled page while keeping iPhone and Mac app links', () => {
+  const popupScript = fs.readFileSync(path.join(distRoot, 'safari', 'popup.js'), 'utf8');
+  const appURL = 'simplevideospeedcontroller://support';
+  const pageURL = 'safari-web-extension://example/support.html';
+  for (const [userAgent, platform, maxTouchPoints, isIPad] of [
+    ['Mozilla/5.0 (iPad; CPU OS 26_0 like Mac OS X)', 'iPad', 5, true],
+    ['Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15)', 'MacIntel', 5, true],
+    ['Mozilla/5.0 (iPhone; CPU iPhone OS 26_0 like Mac OS X)', 'iPhone', 5, false],
+    ['Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15)', 'MacIntel', 0, false]
+  ]) {
+    const link = { href: appURL };
+    const context = vm.createContext({
+      navigator: { userAgent, platform, maxTouchPoints },
+      chrome: {
+        storage: { onChanged: { addListener() {} } },
+        runtime: { getURL(file) { assert.equal(file, 'support.html'); return pageURL; } }
+      },
+      document: {
+        addEventListener() {},
+        querySelector(selector) { assert.equal(selector, '.safari-support-link'); return link; }
+      },
+      window: { addEventListener() {} }
+    });
+    vm.runInContext(popupScript, context);
+    vm.runInContext('setupSafariSupportHandoff()', context);
+    assert.equal(link.href, isIPad ? pageURL : appURL);
+  }
+  const page = fs.readFileSync(path.join(distRoot, 'safari', 'support.html'), 'utf8');
+  assert.ok(page.includes(`href="${appURL}"`));
+  assert.doesNotMatch(page, /target=|http-equiv="refresh"|__APPLE_SUPPORT_URL__/);
+  assert.match(page, /src="support\.js"/);
+  const project = fs.readFileSync(path.join(projectRoot, 'apple/Simple Video Speed Controller/Simple Video Speed Controller.xcodeproj/project.pbxproj'), 'utf8');
+  for (const file of ['support.html', 'support.js']) {
+    assert.equal(project.split(`${file} in Resources`).length - 1, 4);
+  }
+  for (const locale of fs.readdirSync(path.join(distRoot, 'safari', '_locales'))) {
+    const messages = JSON.parse(fs.readFileSync(path.join(distRoot, 'safari', '_locales', locale, 'messages.json'), 'utf8'));
+    assert.ok(messages.openVideoSpeed?.message, `${locale} needs the app-opening label`);
+  }
+});
+
 test('Safari adapts iOS sheets while preserving fixed macOS popover sizing', () => {
   const popup = fs.readFileSync(path.join(distRoot, 'safari', 'popup.html'), 'utf8');
   const safariStyles = fs.readFileSync(path.join(distRoot, 'safari', 'popup-polish.css'), 'utf8');
@@ -420,7 +464,7 @@ test('Safari can recover when its content-script message is not delivered', () =
 
   assert.match(safariPopupScript, /chrome\.scripting\.executeScript/);
   assert.match(safariPopupScript, /clearSafariInitialInputFocus/);
-  assert.match(safariPopupScript, /files: \['localization\.js', 'shortcuts\.js', 'content\.js'\]/);
+  assert.match(safariPopupScript, /files: \['playback-policy\.js', 'localization\.js', 'shortcuts\.js', 'content\.js'\]/);
   assert.match(safariContentScript, /__svscSafariContentInitialized/);
   assert.doesNotMatch(
     fs.readFileSync(path.join(projectRoot, 'popup.js'), 'utf8'),

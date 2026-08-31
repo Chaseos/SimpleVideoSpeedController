@@ -60,6 +60,14 @@ function getTargetSpeed() {
  * Shows toast notification with current speed
  */
 function showToast(message) {
+  if (typeof message === 'number' && globalThis.SafariPlaybackPolicy &&
+      getAllVideos().some(video => {
+        const limit = SafariPlaybackPolicy('limit', video);
+        return limit !== null && message > limit;
+      })) {
+    message = chrome.i18n.getMessage('nativeHlsSpeedLimited') ||
+      'Safari limits this video to 2× for smooth playback.';
+  }
   const isNumber = typeof message === 'number';
   toast.textContent = isNumber
     ? VideoSpeedLocalization.formatPlaybackRate(message, uiLocale)
@@ -100,7 +108,10 @@ let isAtLiveEdge = false;
  * If we are watching a YouTube live stream and at the live edge, we force 1x speed
  * to prevent the buffering/catch-up loop. Otherwise, we use the user's selected speed.
  */
-function getEffectiveSpeed(targetSpeed) {
+function getEffectiveSpeed(targetSpeed, video) {
+  if (globalThis.SafariPlaybackPolicy) {
+    targetSpeed = Math.min(targetSpeed, SafariPlaybackPolicy('limit', video) ?? Infinity);
+  }
   let currentlyAtLiveEdge = false;
   if (window.location.hostname.includes('youtube.com')) {
     const liveBadge = document.querySelector('.ytp-live-badge');
@@ -129,8 +140,8 @@ function getEffectiveSpeed(targetSpeed) {
  */
 function forceUpdateVideoSpeeds(speed = getTargetSpeed()) {
   const videos = getAllVideos();
-  const effectiveSpeed = getEffectiveSpeed(speed);
   videos.forEach((video) => {
+    const effectiveSpeed = getEffectiveSpeed(speed, video);
     if (video && video.playbackRate !== effectiveSpeed) {
       video.playbackRate = effectiveSpeed;
     }
@@ -204,7 +215,7 @@ function monitorVideoElements() {
     }
     
     // Set initial speed
-    const effectiveSpeed = getEffectiveSpeed(getTargetSpeed());
+    const effectiveSpeed = getEffectiveSpeed(getTargetSpeed(), video);
     if (video.playbackRate !== effectiveSpeed) {
       video.playbackRate = effectiveSpeed;
     }
@@ -213,22 +224,22 @@ function monitorVideoElements() {
 
 // Event handlers for video elements
 function handleRateChange(event) {
-  const effectiveSpeed = getEffectiveSpeed(getTargetSpeed());
+  const effectiveSpeed = getEffectiveSpeed(getTargetSpeed(), event.target);
   if (event.target.playbackRate !== effectiveSpeed) {
     event.target.playbackRate = effectiveSpeed;
   }
 }
 
 function handlePlay() {
-  this.playbackRate = getEffectiveSpeed(getTargetSpeed());
+  this.playbackRate = getEffectiveSpeed(getTargetSpeed(), this);
 }
 
 function handleLoadedMetadata() {
-  this.playbackRate = getEffectiveSpeed(getTargetSpeed());
+  this.playbackRate = getEffectiveSpeed(getTargetSpeed(), this);
 }
 
 function handleTimeUpdate(event) {
-  const effectiveSpeed = getEffectiveSpeed(getTargetSpeed());
+  const effectiveSpeed = getEffectiveSpeed(getTargetSpeed(), event.target);
   if (event.target.playbackRate !== effectiveSpeed) {
     event.target.playbackRate = effectiveSpeed;
   }
@@ -386,7 +397,8 @@ document.addEventListener('keydown', (event) => {
 
   const result = VideoSpeedShortcuts.resolveOneShot(
     event,
-    currentSpeed,
+    globalThis.SafariPlaybackPolicy
+      ? SafariPlaybackPolicy('controlSpeed', currentSpeed) : currentSpeed,
     preMaxSpeed,
     shortcutConfig
   );

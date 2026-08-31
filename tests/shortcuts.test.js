@@ -198,7 +198,7 @@ test('macOS Temporary Boost remains compatible with Option modifier reporting', 
   ), true);
 });
 
-function createContentHarness(platform = 'Win32', uiLocale = '', savedSpeed = 1) {
+function createContentHarness(platform = 'Win32', uiLocale = '', savedSpeed = 1, options = {}) {
   const documentListeners = new Map();
   const windowListeners = new Map();
   const storageListeners = [];
@@ -208,9 +208,10 @@ function createContentHarness(platform = 'Win32', uiLocale = '', savedSpeed = 1)
     listeners: new Map(),
     addEventListener(type, listener) { this.listeners.set(type, listener); }
   });
-  const video = makeVideo();
+  const video = Object.assign(makeVideo(), options.video);
   const videos = [video];
   const timers = new Map();
+  const intervals = [];
   let timerID = 0;
   let mutationCallback;
   let messageCallback;
@@ -273,7 +274,8 @@ function createContentHarness(platform = 'Win32', uiLocale = '', savedSpeed = 1)
       constructor(callback) { mutationCallback = callback; }
       observe() {}
     },
-    setInterval: () => 0,
+    URL,
+    setInterval: callback => intervals.push(callback),
     setTimeout(callback, delay) {
       timers.set(++timerID, { callback, delay });
       return timerID;
@@ -284,7 +286,10 @@ function createContentHarness(platform = 'Win32', uiLocale = '', savedSpeed = 1)
   const projectRoot = path.resolve(__dirname, '..');
   vm.runInContext(fs.readFileSync(path.join(projectRoot, 'localization.js'), 'utf8'), context);
   vm.runInContext(fs.readFileSync(path.join(projectRoot, 'shortcuts.js'), 'utf8'), context);
-  vm.runInContext(fs.readFileSync(path.join(projectRoot, 'content.js'), 'utf8'), context);
+  if (options.safari) {
+    vm.runInContext(fs.readFileSync(path.join(projectRoot, 'dist/safari/playback-policy.js'), 'utf8'), context);
+  }
+  vm.runInContext(fs.readFileSync(path.join(projectRoot, options.safari ? 'dist/safari/content.js' : 'content.js'), 'utf8'), context);
 
   return {
     video,
@@ -297,8 +302,9 @@ function createContentHarness(platform = 'Win32', uiLocale = '', savedSpeed = 1)
         }
       }
     },
-    insertVideo() {
-      const added = makeVideo();
+    tick: () => intervals.forEach(callback => callback()),
+    insertVideo(properties = {}) {
+      const added = Object.assign(makeVideo(), properties);
       videos.push(added);
       mutationCallback([{ type: 'childList', addedNodes: [added] }]);
       return added;
@@ -444,5 +450,53 @@ test('an unrelated site storage update does not undo the current tab speed', asy
     oldValue: { 'example.com': 1.5 },
     newValue: { 'example.com': 3 }
   } }, 'sync');
+  assert.equal(harness.video.playbackRate, 3);
+});
+
+
+const nativeHlsVideo = () => ({
+  currentSrc: 'https://media.example/episode.m3u8?token=example',
+  readyState: 4,
+  querySelectorAll: () => []
+});
+
+test('Safari caps native HLS per video for stored, popup, boost, and player reset speeds', async () => {
+  const harness = createContentHarness('MacIntel', 'en', 3, { safari: true, video: nativeHlsVideo() });
+  await new Promise(resolve => setImmediate(resolve));
+  assert.equal(harness.video.playbackRate, 2);
+  const mse = harness.insertVideo({ ...nativeHlsVideo(), currentSrc: 'blob:https://example.com/mse' });
+  harness.flushTimers(100);
+  assert.equal(mse.playbackRate, 3);
+  harness.message({ action: 'setSpeed', speed: 4 });
+  assert.deepEqual(harness.videos.map(video => video.playbackRate), [2, 4]);
+  assert.match(harness.toast.textContent, /2×/);
+  harness.message({ action: 'applyTemporaryBoost', sessionId: 'hls-test', speed: 8 });
+  assert.deepEqual(harness.videos.map(video => video.playbackRate), [2, 8]);
+  harness.video.playbackRate = 6;
+  harness.video.listeners.get('ratechange')({ target: harness.video });
+  assert.equal(harness.video.playbackRate, 2);
+  harness.message({ action: 'clearTemporaryBoost', sessionId: 'hls-test' });
+  assert.deepEqual(harness.videos.map(video => video.playbackRate), [2, 4]);
+  harness.video.playbackRate = 5;
+  harness.tick();
+  assert.equal(harness.video.playbackRate, 2);
+});
+
+test('Safari reevaluates native and MSE source transitions without losing requested speed', async () => {
+  const harness = createContentHarness('MacIntel', 'en', 3, { safari: true, video: nativeHlsVideo() });
+  await new Promise(resolve => setImmediate(resolve));
+  harness.video.currentSrc = 'blob:https://example.com/new-source';
+  harness.video.listeners.get('loadedmetadata').call(harness.video);
+  assert.equal(harness.video.playbackRate, 3);
+  harness.video.currentSrc = nativeHlsVideo().currentSrc;
+  harness.video.listeners.get('loadedmetadata').call(harness.video);
+  assert.equal(harness.video.playbackRate, 2);
+  harness.keydown(dispatchedEvent('Minus', { metaKey: true, altKey: true }));
+  assert.equal(harness.video.playbackRate, 1.95, 'decrement starts at effective 2×');
+});
+
+test('non-Safari content does not cap a direct HLS source', async () => {
+  const harness = createContentHarness('MacIntel', 'en', 3, { video: nativeHlsVideo() });
+  await new Promise(resolve => setImmediate(resolve));
   assert.equal(harness.video.playbackRate, 3);
 });

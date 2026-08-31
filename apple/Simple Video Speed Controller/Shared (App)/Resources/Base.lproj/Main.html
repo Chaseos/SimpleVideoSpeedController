@@ -3,7 +3,8 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'">
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Simple Video Speed Controller</title>
     <link rel="stylesheet" href="../Style.css">
     <script src="../Script.js" defer></script>
 </head>
@@ -12,7 +13,12 @@
         <img class="app-icon" src="../Icon.png" width="112" height="112" alt="">
         <h1>Simple Video Speed Controller</h1>
 
-        <p class="platform-ios">Enable the extension in Settings, then allow it on the websites where you watch video.</p>
+        <p class="platform-ios introduction">Control video playback speed on websites in Safari.</p>
+        <section class="platform-ios setup-section" aria-labelledby="setup-title">
+            <h2 id="setup-title">Set up once</h2>
+            <p>In Settings, find <strong>Safari &gt; Extensions</strong>. Turn on Simple Video Speed Controller and allow access to the websites where you watch video.</p>
+            <p class="settings-note">On newer versions of iOS and iPadOS, Safari is under Apps.</p>
+        </section>
         <p class="platform-mac state-unknown">Enable the extension in Safari Settings, then allow it on the websites where you watch video.</p>
         <p class="platform-mac state-on"><span class="status-dot enabled"></span>The Safari extension is enabled.</p>
         <p class="platform-mac state-off"><span class="status-dot"></span>The Safari extension is currently disabled.</p>
@@ -22,6 +28,38 @@
             <span class="platform-mac">Open Safari Extension Settings</span>
         </button>
         <p id="action-message" role="status" aria-live="polite"></p>
+        <section class="platform-ios usage-section" aria-labelledby="usage-title">
+            <h2 id="usage-title">Use it in Safari</h2>
+            <ol>
+                <li>Open a website in Safari and start a video.</li>
+                <li>Beside Safari’s address bar, tap the <strong>page menu on iPhone</strong> or the <strong>Extensions button on iPad</strong>, then select <strong>Simple Video Speed Controller</strong>.</li>
+                <li>Choose a speed, or enter your own.</li>
+            </ol>
+            <p class="scope-note">Works with website videos in Safari, not videos inside other apps.</p>
+        </section>
+        <p class="platform-mac usage-hint">To change a video's speed, open the extension in Safari’s toolbar while the video is playing.</p>
+        <div class="platform-ios app-information">
+            <details>
+                <summary>Help</summary>
+                <div class="information-content">
+                    <p>If the controls are missing or a speed change does not apply:</p>
+                    <ul>
+                        <li>Check that the extension is enabled and allowed on the current website.</li>
+                        <li>Reload the video tab after enabling or updating the extension.</li>
+                        <li>Start the video before opening the controls.</li>
+                    </ul>
+                    <p>Some video players limit speed control. Safari limits certain videos to 2× for smooth playback.</p>
+                </div>
+            </details>
+            <details>
+                <summary>Privacy</summary>
+                <div class="information-content">
+                    <p>Website access lets the extension find videos and change their playback speed. Your browsing history and video content are not sent to the developer.</p>
+                    <p>Speed preferences and settings are stored through Safari’s extension storage. Your browser may sync them if browser sync is enabled.</p>
+                    <p>There are no developer-operated accounts, analytics, or servers. Optional tips are handled by Apple; the developer does not receive your payment details.</p>
+                </div>
+            </details>
+        </div>
     </main>
 </body>
 </html>

@@ -88,150 +88,6 @@ final class ActionStripModel: ObservableObject {
     }
 }
 
-@MainActor
-final class TipStore: ObservableObject {
-    @Published private(set) var products: [Product] = []
-    @Published private(set) var isLoading = false
-    @Published private(set) var purchasingProductID: String?
-    @Published var statusMessage: String?
-
-#if os(macOS)
-    static let shared = TipStore()
-    var purchaseWindow: (() -> NSWindow?)?
-    private var unfinishedTransactionsTask: Task<Void, Never>?
-    private var handledTransactionIDs = Set<UInt64>()
-#endif
-
-    private var hasLoaded = false
-    private var transactionUpdatesTask: Task<Void, Never>?
-
-    init() {
-        transactionUpdatesTask = Task { [weak self] in
-            for await result in StoreKit.Transaction.updates {
-#if os(macOS)
-                await self?.handleMacTransaction(result)
-#else
-                switch result {
-                case .verified(let transaction):
-                    guard AppleConfiguration.tipProductIDs.contains(transaction.productID) else {
-                        continue
-                    }
-                    await transaction.finish()
-                    self?.statusMessage = "Thank you for supporting my work!"
-                case .unverified(let transaction, _):
-                    guard AppleConfiguration.tipProductIDs.contains(transaction.productID) else {
-                        continue
-                    }
-                    self?.statusMessage = "The purchase could not be verified. You were not credited for this tip."
-                }
-#endif
-            }
-        }
-    }
-
-    deinit {
-        transactionUpdatesTask?.cancel()
-#if os(macOS)
-        unfinishedTransactionsTask?.cancel()
-#endif
-    }
-
-#if os(macOS)
-    func reconcileUnfinishedTransactions() {
-        guard unfinishedTransactionsTask == nil else { return }
-        unfinishedTransactionsTask = Task { [weak self] in
-            for await result in StoreKit.Transaction.unfinished {
-                await self?.handleMacTransaction(result)
-            }
-            self?.unfinishedTransactionsTask = nil
-        }
-    }
-
-    private func handleMacTransaction(_ result: VerificationResult<StoreKit.Transaction>) async {
-        switch result {
-        case .verified(let transaction):
-            guard AppleConfiguration.tipProductIDs.contains(transaction.productID),
-                  handledTransactionIDs.insert(transaction.id).inserted else { return }
-            await transaction.finish()
-            statusMessage = "Thank you for supporting my work!"
-        case .unverified(let transaction, _):
-            guard AppleConfiguration.tipProductIDs.contains(transaction.productID) else { return }
-            statusMessage = "The purchase could not be verified. You were not credited for this tip."
-        }
-    }
-#endif
-
-    func loadProducts(force: Bool = false) async {
-        guard force || !hasLoaded else { return }
-        hasLoaded = true
-        isLoading = true
-        statusMessage = nil
-
-        do {
-            let loadedProducts = try await Product.products(for: AppleConfiguration.tipProductIDs)
-            products = loadedProducts.sorted {
-                productOrder($0.id) < productOrder($1.id)
-            }
-            if products.isEmpty {
-                statusMessage = "Tips are temporarily unavailable. Please try again later."
-            }
-        } catch {
-            statusMessage = "Tips could not be loaded. Please check your connection and try again."
-        }
-
-        isLoading = false
-    }
-
-    func purchase(_ product: Product) async {
-        purchasingProductID = product.id
-        statusMessage = nil
-        defer { purchasingProductID = nil }
-
-        do {
-#if os(macOS)
-            guard let window = purchaseWindow?(), window.isVisible else {
-                statusMessage = "Please reopen support options and try again."
-                return
-            }
-            let result: Product.PurchaseResult
-            if #available(macOS 15.2, *) {
-                result = try await product.purchase(confirmIn: window)
-            } else {
-                result = try await product.purchase()
-            }
-#else
-            let result = try await product.purchase()
-#endif
-            switch result {
-            case .success(let verificationResult):
-#if os(macOS)
-                await handleMacTransaction(verificationResult)
-#else
-                guard case .verified(let transaction) = verificationResult else {
-                    statusMessage = "The purchase could not be verified. You were not credited for this tip."
-                    return
-                }
-
-                await transaction.finish()
-                statusMessage = "Thank you for supporting my work!"
-#endif
-            case .pending:
-                statusMessage = "This purchase is pending approval."
-            case .userCancelled:
-                statusMessage = nil
-            @unknown default:
-                statusMessage = "The App Store returned an unknown purchase result. Please try again."
-            }
-        } catch {
-            statusMessage = "The purchase could not be completed. Please try again."
-        }
-    }
-
-    private func productOrder(_ productID: String) -> Int {
-        AppleConfiguration.tipProductIDs.firstIndex(of: productID) ?? .max
-    }
-}
-
 private enum SupportAction: Hashable {
     case rate
     case support
@@ -329,7 +185,6 @@ private struct SupportActionStrip: View {
                 lineWidth: focusedAction == action ? 2 : 1
             )
         }
-        .opacity(expanded ? 1 : 0.42)
         .focused($focusedAction, equals: action)
         .accessibilityLabel(action.title)
         .help(action.title)
@@ -367,118 +222,136 @@ private struct TipSheet: View {
     let dismissAction: () -> Void
 
     var body: some View {
-        NavigationStack {
-            ScrollView {
-                VStack(alignment: .leading, spacing: 18) {
-                    VStack(alignment: .leading, spacing: 6) {
+        Group {
 #if os(macOS)
-                        HStack {
-                            Text("Support my work")
-                                .font(.title2.bold())
-                            Spacer()
-                            Button("Done", action: dismissAction)
-                                .disabled(store.purchasingProductID != nil)
-                        }
-#else
-                        Text("Support my work")
-                            .font(.title2.bold())
-#endif
-                        Text("Tips are optional and help support continued development. They do not unlock features or content.")
-                            .foregroundStyle(.secondary)
-                            .fixedSize(horizontal: false, vertical: true)
-                    }
-
-                    if store.isLoading {
-                        HStack {
-                            Spacer()
-                            ProgressView("Loading tip options…")
-                            Spacer()
-                        }
-                        .frame(minHeight: 120)
-                    } else if store.products.isEmpty {
-                        VStack(spacing: 12) {
-                            Image(systemName: "heart.slash")
-                                .font(.system(size: 34))
-                                .foregroundStyle(.secondary)
-                            Text("Tips unavailable")
-                                .font(.headline)
-                            Text(store.statusMessage ?? "The App Store did not return any tip options.")
-                                .font(.callout)
-                                .foregroundStyle(.secondary)
-                                .multilineTextAlignment(.center)
-                            Button("Try Again") {
-                                Task { await store.loadProducts(force: true) }
-                            }
-                        }
-                        .frame(maxWidth: .infinity, minHeight: 150)
-                    } else {
-                        VStack(spacing: 10) {
-                            ForEach(store.products, id: \.id) { product in
-                                Button {
-                                    Task { await store.purchase(product) }
-                                } label: {
-                                    let layout = dynamicTypeSize.isAccessibilitySize
-                                        ? AnyLayout(VStackLayout(alignment: .leading, spacing: 8))
-                                        : AnyLayout(HStackLayout(spacing: 12))
-                                    layout {
-                                        Image(systemName: "heart.fill")
-                                            .foregroundStyle(Color(red: 1.0, green: 0.353, blue: 0.373))
-                                        VStack(alignment: .leading, spacing: 2) {
-                                            Text(product.displayName)
-                                                .fontWeight(.semibold)
-                                            Text(product.description)
-                                                .font(.caption)
-                                                .foregroundStyle(.secondary)
-                                                .fixedSize(horizontal: false, vertical: true)
-                                                .multilineTextAlignment(.leading)
-                                        }
-                                        .frame(maxWidth: .infinity, alignment: .leading)
-                                        if store.purchasingProductID == product.id {
-                                            ProgressView()
-                                        } else {
-                                            Text(product.displayPrice)
-                                                .fontWeight(.semibold)
-                                                .fixedSize()
-                                        }
-                                    }
-                                    .padding(.horizontal, 14)
-                                    .padding(.vertical, 10)
-                                    .frame(maxWidth: .infinity, minHeight: 64, alignment: .leading)
-                                    .background(.secondary.opacity(0.14), in: RoundedRectangle(cornerRadius: 8))
-                                    .contentShape(Rectangle())
-                                }
-                                .buttonStyle(.plain)
-                                .disabled(store.purchasingProductID != nil)
-                            }
-                        }
-                    }
-
-                    if let statusMessage = store.statusMessage, !store.products.isEmpty {
-                        Text(statusMessage)
-                            .font(.footnote)
-                            .foregroundStyle(.secondary)
-                            .frame(maxWidth: .infinity, alignment: .center)
-                            .multilineTextAlignment(.center)
-                    }
-
+            VStack(spacing: 0) {
+                HStack {
+                    Text("Support my work")
+                        .font(.title2.bold())
+                        .accessibilityAddTraits(.isHeader)
+                    Spacer()
+                    Button("Done", action: dismissAction)
+                        .keyboardShortcut(.cancelAction)
+                        .disabled(store.purchasingProductID != nil)
                 }
                 .padding(24)
-                .frame(maxWidth: .infinity, alignment: .leading)
+                Divider()
+                sheetContent
             }
-#if os(macOS)
-            .frame(minWidth: 360, idealWidth: 420, minHeight: 360)
+            .frame(minWidth: 420, idealWidth: 480, minHeight: 340, idealHeight: 460)
+#else
+            NavigationStack {
+                sheetContent
+                    .navigationTitle("Support my work")
+                    .toolbar {
+                        ToolbarItem(placement: .cancellationAction) {
+                            Button("Done", action: dismissAction)
+                        }
+                    }
+            }
 #endif
-            .navigationTitle("Support my work")
+        }
+        .task { await store.loadProducts() }
+    }
+
+    private var sheetContent: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 18) {
+                VStack(alignment: .leading, spacing: 6) {
 #if os(iOS)
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("Done", action: dismissAction)
-                }
-            }
+                    Text("Support my work")
+                        .font(.title2.bold())
 #endif
-            .task {
-                await store.loadProducts()
+                    Text("Tips are optional and help support continued development. They do not unlock features or content.")
+                        .foregroundStyle(.secondary)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+
+                if store.isLoading {
+                    HStack {
+                        Spacer()
+                        ProgressView("Loading tip options…")
+                        Spacer()
+                    }
+                    .frame(minHeight: 120)
+                } else if store.products.isEmpty {
+                    VStack(spacing: 12) {
+                        Image(systemName: "heart.slash")
+                            .font(.system(size: 34))
+                            .foregroundStyle(.secondary)
+                        Text("Tips unavailable")
+                            .font(.headline)
+                        Text(store.loadMessage ?? "The App Store did not return any tip options.")
+                            .font(.callout)
+                            .foregroundStyle(.secondary)
+                            .multilineTextAlignment(.center)
+                        Button("Try Again") {
+                            Task { await store.loadProducts() }
+                        }
+                    }
+                    .frame(maxWidth: .infinity, minHeight: 150)
+                } else {
+                    VStack(spacing: 10) {
+                        ForEach(store.products, id: \.id) { product in
+                            Button {
+                                Task { await store.purchase(product.id) }
+                            } label: {
+                                let layout = dynamicTypeSize.isAccessibilitySize
+                                    ? AnyLayout(VStackLayout(alignment: .leading, spacing: 8))
+                                    : AnyLayout(HStackLayout(spacing: 12))
+                                layout {
+                                    Image(systemName: "heart.fill")
+                                        .foregroundStyle(Color(red: 1.0, green: 0.353, blue: 0.373))
+                                    VStack(alignment: .leading, spacing: 2) {
+                                        Text(product.displayName)
+                                            .fontWeight(.semibold)
+                                        Text(product.description)
+                                            .font(.caption)
+                                            .foregroundStyle(.secondary)
+                                            .fixedSize(horizontal: false, vertical: true)
+                                            .multilineTextAlignment(.leading)
+                                    }
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                    if store.purchasingProductID == product.id {
+                                        ProgressView()
+                                    } else {
+                                        Text(product.displayPrice)
+                                            .fontWeight(.semibold)
+                                            .fixedSize()
+                                    }
+                                }
+                                .padding(.horizontal, 14)
+                                .padding(.vertical, 10)
+                                .frame(maxWidth: .infinity, minHeight: 64, alignment: .leading)
+                                .background(.secondary.opacity(0.14), in: RoundedRectangle(cornerRadius: 8))
+                                .contentShape(Rectangle())
+                            }
+                            .buttonStyle(.plain)
+                            .disabled(store.purchasingProductID != nil)
+                        }
+                    }
+                }
+
+                if store.missingProducts && !store.products.isEmpty && !store.isLoading {
+                    Button("Try Again") { Task { await store.loadProducts() } }
+                        .disabled(store.purchasingProductID != nil)
+                }
+                if let deliveryMessage = store.deliveryMessage {
+                    Text(deliveryMessage)
+                        .font(.footnote)
+                        .foregroundStyle(.secondary)
+                }
+                if let statusMessage = store.statusMessage, !store.products.isEmpty {
+                    Text(statusMessage)
+                        .font(.footnote)
+                        .foregroundStyle(.secondary)
+                        .frame(maxWidth: .infinity, alignment: .center)
+                        .multilineTextAlignment(.center)
+                }
+
             }
+            .padding(24)
+            .frame(maxWidth: .infinity, alignment: .leading)
         }
     }
 }
@@ -488,17 +361,13 @@ final class ViewController: PlatformViewController, WKNavigationDelegate, WKScri
     @IBOutlet private var webView: WKWebView!
 
     private let actionStripModel = ActionStripModel()
-#if os(macOS)
     private let tipStore = TipStore.shared
-#else
-    private let tipStore = TipStore()
-#endif
 
 #if os(iOS)
     private var actionStripController: UIHostingController<SupportActionStrip>?
 #elseif os(macOS)
     private var actionStripController: NSHostingController<SupportActionStrip>?
-    private var tipSheetController: NSViewController?
+    private var tipWindow: NSWindow?
 #endif
 
     override func viewDidLoad() {
@@ -622,7 +491,7 @@ final class ViewController: PlatformViewController, WKNavigationDelegate, WKScri
         hostingController.modalPresentationStyle = .formSheet
         present(hostingController, animated: true)
 #elseif os(macOS)
-        guard tipSheetController == nil else { return }
+        guard tipWindow == nil, let parentWindow = view.window else { return }
         let sheet = TipSheet(store: tipStore) { [weak self] in
             self?.dismissTipSheet()
         }
@@ -642,12 +511,24 @@ final class ViewController: PlatformViewController, WKNavigationDelegate, WKScri
             hostingController.view.topAnchor.constraint(equalTo: sheetController.view.topAnchor),
             hostingController.view.bottomAnchor.constraint(equalTo: sheetController.view.bottomAnchor)
         ])
-        sheetController.preferredContentSize = hostingController.view.fittingSize
-        tipSheetController = sheetController
-        tipStore.purchaseWindow = { [weak self] in
-            self?.tipSheetController?.view.window
+        let window = NSWindow(contentViewController: sheetController)
+        window.title = hostingController.title ?? "Support options"
+        hostingController.view.frame.size = NSSize(width: 480, height: 460)
+        hostingController.view.layoutSubtreeIfNeeded()
+        let fittingSize = hostingController.view.fittingSize
+        let maximumHeight = (parentWindow.screen?.visibleFrame.height ?? 800) * 0.8
+        window.setContentSize(NSSize(
+            width: max(480, fittingSize.width),
+            height: min(maximumHeight, max(460, fittingSize.height))
+        ))
+        window.styleMask = [.titled, .resizable]
+        window.minSize = NSSize(width: 440, height: 380)
+        tipWindow = window
+        StoreKitCommerce.shared.purchaseWindow = { [weak window] in window }
+        parentWindow.beginSheet(window) { [weak self] _ in
+            StoreKitCommerce.shared.purchaseWindow = nil
+            self?.tipWindow = nil
         }
-        presentAsSheet(sheetController)
 #endif
     }
 
@@ -657,10 +538,8 @@ final class ViewController: PlatformViewController, WKNavigationDelegate, WKScri
 
 #if os(macOS)
     private func dismissTipSheet() {
-        guard let tipSheetController else { return }
-        dismiss(tipSheetController)
-        self.tipSheetController = nil
-        tipStore.purchaseWindow = nil
+        guard tipStore.purchasingProductID == nil, let tipWindow else { return }
+        tipWindow.sheetParent?.endSheet(tipWindow)
     }
 #endif
 

@@ -95,6 +95,31 @@ const mobileShortcutTitles = {
   zh_TW: '鍵盤快速鍵'
 };
 
+const safariOpenAppTitles = {
+  "ar": "فتح Simple Video Speed Controller",
+  "de": "Simple Video Speed Controller öffnen",
+  "en": "Open Simple Video Speed Controller",
+  "es": "Abrir Simple Video Speed Controller",
+  "es_419": "Abrir Simple Video Speed Controller",
+  "fr": "Ouvrir Simple Video Speed Controller",
+  "hi": "Simple Video Speed Controller खोलें",
+  "id": "Buka Simple Video Speed Controller",
+  "it": "Apri Simple Video Speed Controller",
+  "ja": "Simple Video Speed Controllerを開く",
+  "ko": "Simple Video Speed Controller 열기",
+  "ms": "Buka Simple Video Speed Controller",
+  "nl": "Simple Video Speed Controller openen",
+  "pl": "Otwórz Simple Video Speed Controller",
+  "pt_BR": "Abrir Simple Video Speed Controller",
+  "pt_PT": "Abrir Simple Video Speed Controller",
+  "th": "เปิด Simple Video Speed Controller",
+  "tr": "Simple Video Speed Controller uygulamasını aç",
+  "uk": "Відкрити Simple Video Speed Controller",
+  "vi": "Mở Simple Video Speed Controller",
+  "zh_CN": "打开 Simple Video Speed Controller",
+  "zh_TW": "開啟 Simple Video Speed Controller"
+};
+
 const safariActionTitles = {
   ar: { rate: 'قيّم هذا التطبيق', support: 'خيارات الدعم' },
   de: { rate: 'Diese App bewerten', support: 'Support-Optionen' },
@@ -136,6 +161,9 @@ const sourcePopupScript = await readFile(path.join(projectRoot, 'popup.js'), 'ut
 const sourcePopupStyles = await readFile(path.join(projectRoot, 'popup-polish.css'), 'utf8');
 const sourceBackground = await readFile(path.join(projectRoot, 'background.js'), 'utf8');
 const sourceContent = await readFile(path.join(projectRoot, 'content.js'), 'utf8');
+const safariPlaybackPopup = await readFile(
+  path.join(projectRoot, 'platforms', 'safari', 'playback-popup.js'), 'utf8'
+);
 const safariTargetStyles = await readFile(
   path.join(projectRoot, 'platforms', 'safari', 'popup.css'),
   'utf8'
@@ -206,6 +234,7 @@ function createSafariManifest() {
     manifest.permissions.push('scripting');
   }
   manifest.host_permissions = ['<all_urls>'];
+  manifest.content_scripts[0].js.unshift('playback-policy.js');
   manifest.icons = {
     16: 'icon-16.png',
     48: 'icon-48.png',
@@ -328,6 +357,9 @@ function createSafariBackground() {
 
 function createSafariPopup() {
   let popup = addViewport(sourcePopup);
+  popup = replaceRequired(popup, '    <div class="shortcuts-header">',
+    '    <p id="safariPlaybackNotice" class="safari-playback-notice" role="status" hidden></p>\n    <div class="shortcuts-header">',
+    'Safari playback limit notice');
 
   popup = removeRange(
     popup,
@@ -378,6 +410,9 @@ function createSafariPopup() {
     'Safari popup focus target'
   );
 
+  popup = replaceRequired(popup, '  <script src="localization.js">',
+    '  <script src="playback-policy.js"></script>\n  <script src="localization.js">',
+    'Safari playback policy script');
   return popup;
 }
 
@@ -446,7 +481,7 @@ function createSafariPopupScript() {
   try {
     await chrome.scripting.executeScript({
       target: { tabId, allFrames: true },
-      files: ['localization.js', 'shortcuts.js', 'content.js']
+      files: ['playback-policy.js', 'localization.js', 'shortcuts.js', 'content.js']
     });
 
     const response = await chrome.tabs.sendMessage(tabId, {
@@ -458,25 +493,14 @@ function createSafariPopupScript() {
     console.info('Safari message retry failed; applying the speed directly.', error);
   }
 
-  const results = await chrome.scripting.executeScript({
+  await chrome.scripting.executeScript({
     target: { tabId, allFrames: true },
-    args: [speed],
-    func: requestedSpeed => {
-      function findVideos(root) {
-        const videos = Array.from(root.querySelectorAll('video'));
-        for (const element of root.querySelectorAll('*')) {
-          if (element.shadowRoot) videos.push(...findVideos(element.shadowRoot));
-        }
-        return videos;
-      }
-
-      const videos = findVideos(document);
-      for (const video of videos) video.playbackRate = requestedSpeed;
-      return videos.length;
-    }
+    args: ['apply', speed],
+    func: SafariPlaybackPolicy
   });
 
-  return { success: results.some(result => Number(result.result) > 0) };
+  // Direct application has no content-script owner to persist the preference.
+  return { success: false };
 }`;
 
   script = replaceRequired(
@@ -485,6 +509,17 @@ function createSafariPopupScript() {
     safariMessageFunction,
     'popup content-script messaging function'
   );
+  script = replaceRequired(script, 'function updateUI(speed) {',
+    'function updateUI(speed) {\n  speed = safariDisplayedSpeed(speed);\n  document.getElementById("speedUp").disabled = speed >= safariPopupMaximum;',
+    'Safari effective speed display');
+  script = replaceRequired(script, 'async function handleSpeedChange(speed) {',
+    'async function handleSpeedChange(speed) {\n  speed = safariDisplayedSpeed(speed);',
+    'Safari popup speed limit');
+  script = replaceRequired(script, '(currentSpeed + 0.05)',
+    '(safariDisplayedSpeed(currentSpeed) + 0.05)', 'Safari speed increment');
+  script = replaceRequired(script, '(currentSpeed - 0.05)',
+    '(safariDisplayedSpeed(currentSpeed) - 0.05)', 'Safari speed decrement');
+  script += `\n${safariPlaybackPopup}\n`;
   script += `
 
 function clearSafariInitialInputFocus() {
@@ -500,6 +535,17 @@ function clearSafariInitialInputFocus() {
 
 document.addEventListener('DOMContentLoaded', clearSafariInitialInputFocus);
 window.addEventListener('pageshow', clearSafariInitialInputFocus);
+
+function setupSafariSupportHandoff() {
+  // iPad may identify itself as a Mac when requesting desktop websites.
+  const isIPad = /iPad/.test(navigator.userAgent) ||
+    (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  if (!isIPad) return;
+  const link = document.querySelector('.safari-support-link');
+  if (link) link.href = chrome.runtime.getURL('support.html');
+}
+
+document.addEventListener('DOMContentLoaded', setupSafariSupportHandoff);
 `;
   return script;
 }
@@ -542,12 +588,22 @@ async function copyRuntimeFiles(targetDirectory, runtimeFiles) {
 }
 
 async function prepareSafariLocaleMessages(targetDirectory) {
+  const supportMessages = JSON.parse(await readFile(
+    path.join(projectRoot, 'platforms', 'safari', 'support-messages.json'), 'utf8'
+  ));
+  const playbackMessages = JSON.parse(await readFile(
+    path.join(projectRoot, 'platforms', 'safari', 'playback-messages.json'), 'utf8'
+  ));
   const localesDirectory = path.join(targetDirectory, '_locales');
   const entries = await readdir(localesDirectory, { withFileTypes: true });
   for (const entry of entries) {
     if (!entry.isDirectory()) continue;
     const messagesPath = path.join(localesDirectory, entry.name, 'messages.json');
     const messages = JSON.parse(await readFile(messagesPath, 'utf8'));
+    messages.nativeHlsSpeedLimited = {
+      message: playbackMessages[entry.name] || playbackMessages.en,
+      description: 'Safari native HLS speed cap; other video playback paths are unchanged'
+    };
     for (const key of safariLocaleKeys) delete messages[key];
     if (safariAppNames[entry.name]) {
       messages.appName.message = safariAppNames[entry.name];
@@ -557,6 +613,11 @@ async function prepareSafariLocaleMessages(targetDirectory) {
       message: actionTitles.rate,
       description: 'Accessible label for the Safari App Store rating action'
     };
+    const supportCopy = supportMessages[entry.name] || supportMessages.en;
+    ['supportPageTitle', 'supportPageExplanation', 'supportPageReassurance'].forEach((key, index) => {
+      messages[key] = { message: supportCopy[index] };
+    });
+    messages.openVideoSpeed = { message: safariOpenAppTitles[entry.name] || safariOpenAppTitles.en };
     messages.supportOptions = {
       message: actionTitles.support,
       description: 'Accessible label for the Safari support options action'
@@ -664,7 +725,14 @@ async function buildFirefox() {
 async function buildSafari() {
   const targetDirectory = path.join(distDirectory, 'safari');
   await mkdir(targetDirectory, { recursive: true });
+  const supportPage = await readFile(path.join(projectRoot, 'platforms/safari/support.html'), 'utf8');
+  await writeFile(path.join(targetDirectory, 'support.html'),
+    replaceRequired(supportPage, '__APPLE_SUPPORT_URL__', appleSupportURL, 'support app link'));
+  await copyEntry(path.join(projectRoot, 'platforms/safari/support.js'), path.join(targetDirectory, 'support.js'));
+
   await copyRuntimeFiles(targetDirectory, safariRuntimeFiles);
+  await copyEntry(path.join(projectRoot, 'platforms', 'safari', 'playback-policy.js'),
+    path.join(targetDirectory, 'playback-policy.js'));
   await writeFile(
     path.join(targetDirectory, 'manifest.json'),
     `${JSON.stringify(createSafariManifest(), null, 2)}\n`

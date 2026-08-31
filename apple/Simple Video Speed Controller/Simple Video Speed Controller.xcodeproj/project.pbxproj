@@ -57,6 +57,16 @@
 		C0D3B00430434D0C00498D82 /* icon-48.png in Resources */ = {isa = PBXBuildFile; fileRef = C0D3B01130434D0C00498D82 /* icon-48.png */; };
 		C0D3C00130434D0C00498D82 /* AppStoreID.txt in Resources */ = {isa = PBXBuildFile; fileRef = C0D3C01030434D0C00498D82 /* AppStoreID.txt */; };
 		C0D3C00230434D0C00498D82 /* AppStoreID.txt in Resources */ = {isa = PBXBuildFile; fileRef = C0D3C01030434D0C00498D82 /* AppStoreID.txt */; };
+		C0D3D00130434D0C00498D82 /* playback-policy.js in Resources */ = {isa = PBXBuildFile; fileRef = C0D3D01030434D0C00498D82 /* playback-policy.js */; };
+		C0D3D00230434D0C00498D82 /* playback-policy.js in Resources */ = {isa = PBXBuildFile; fileRef = C0D3D01030434D0C00498D82 /* playback-policy.js */; };
+		C0D3E00130434D0C00498D82 /* TipStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0D3E01030434D0C00498D82 /* TipStore.swift */; };
+		C0D3E00230434D0C00498D82 /* TipStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0D3E01030434D0C00498D82 /* TipStore.swift */; };
+		C0D3E00330434D0C00498D82 /* StoreKitCommerce.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0D3E01130434D0C00498D82 /* StoreKitCommerce.swift */; };
+		C0D3E00430434D0C00498D82 /* StoreKitCommerce.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0D3E01130434D0C00498D82 /* StoreKitCommerce.swift */; };
+		C0D3F01030434D0C00498D82 /* support.html in Resources */ = {isa = PBXBuildFile; fileRef = C0D3F10030434D0C00498D82 /* support.html */; };
+		C0D3F02030434D0C00498D82 /* support.html in Resources */ = {isa = PBXBuildFile; fileRef = C0D3F10030434D0C00498D82 /* support.html */; };
+		C0D3F01130434D0C00498D82 /* support.js in Resources */ = {isa = PBXBuildFile; fileRef = C0D3F10130434D0C00498D82 /* support.js */; };
+		C0D3F02130434D0C00498D82 /* support.js in Resources */ = {isa = PBXBuildFile; fileRef = C0D3F10130434D0C00498D82 /* support.js */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -139,6 +149,11 @@
 		C0D3B01030434D0C00498D82 /* icon-16.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-16.png"; sourceTree = "<group>"; };
 		C0D3B01130434D0C00498D82 /* icon-48.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-48.png"; sourceTree = "<group>"; };
 		C0D3C01030434D0C00498D82 /* AppStoreID.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = AppStoreID.txt; sourceTree = "<group>"; };
+		C0D3D01030434D0C00498D82 /* playback-policy.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = "playback-policy.js"; sourceTree = "<group>"; };
+		C0D3E01030434D0C00498D82 /* TipStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = TipStore.swift; path = ../Core/TipStore.swift; sourceTree = SOURCE_ROOT; };
+		C0D3E01130434D0C00498D82 /* StoreKitCommerce.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreKitCommerce.swift; sourceTree = "<group>"; };
+		C0D3F10030434D0C00498D82 /* support.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = "support.html"; sourceTree = "<group>"; };
+		C0D3F10130434D0C00498D82 /* support.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = "support.js"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -203,6 +218,8 @@
 			isa = PBXGroup;
 			children = (
 				ABA3973A30434D0B00498D82 /* ViewController.swift */,
+				C0D3E01030434D0C00498D82 /* TipStore.swift */,
+				C0D3E01130434D0C00498D82 /* StoreKitCommerce.swift */,
 				ABA3973B30434D0C00498D82 /* Assets.xcassets */,
 				ABA3973430434D0B00498D82 /* Resources */,
 			);
@@ -291,6 +308,9 @@
 				ABA3979430434D0C00498D82 /* manifest.json */,
 				ABA3979530434D0C00498D82 /* _locales */,
 				ABA3979630434D0C00498D82 /* content.js */,
+				C0D3D01030434D0C00498D82 /* playback-policy.js */,
+				C0D3F10130434D0C00498D82 /* support.js */,
+				C0D3F10030434D0C00498D82 /* support.html */,
 				ABA3979730434D0C00498D82 /* localization.js */,
 				ABA3979830434D0C00498D82 /* popup-polish.css */,
 			);
@@ -490,6 +510,9 @@
 				ABA397A430434D0C00498D82 /* popup.js in Resources */,
 				ABA397A830434D0C00498D82 /* manifest.json in Resources */,
 				ABA397A930434D0C00498D82 /* _locales in Resources */,
+				C0D3D00130434D0C00498D82 /* playback-policy.js in Resources */,
+				C0D3F01130434D0C00498D82 /* support.js in Resources */,
+				C0D3F01030434D0C00498D82 /* support.html in Resources */,
 				ABA397AB30434D0C00498D82 /* localization.js in Resources */,
 				ABA397A730434D0C00498D82 /* shortcuts.js in Resources */,
 			);
@@ -509,6 +532,9 @@
 				ABA3979A30434D0C00498D82 /* popup.js in Resources */,
 				ABA3979E30434D0C00498D82 /* manifest.json in Resources */,
 				ABA3979F30434D0C00498D82 /* _locales in Resources */,
+				C0D3D00230434D0C00498D82 /* playback-policy.js in Resources */,
+				C0D3F02130434D0C00498D82 /* support.js in Resources */,
+				C0D3F02030434D0C00498D82 /* support.html in Resources */,
 				ABA397A130434D0C00498D82 /* localization.js in Resources */,
 				ABA3979D30434D0C00498D82 /* shortcuts.js in Resources */,
 			);
@@ -522,6 +548,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				ABA3977830434D0C00498D82 /* ViewController.swift in Sources */,
+				C0D3E00130434D0C00498D82 /* TipStore.swift in Sources */,
+				C0D3E00330434D0C00498D82 /* StoreKitCommerce.swift in Sources */,
 				ABA3974630434D0C00498D82 /* AppDelegate.swift in Sources */,
 				ABA3974830434D0C00498D82 /* SceneDelegate.swift in Sources */,
 			);
@@ -532,6 +560,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				ABA3977930434D0C00498D82 /* ViewController.swift in Sources */,
+				C0D3E00230434D0C00498D82 /* TipStore.swift in Sources */,
+				C0D3E00430434D0C00498D82 /* StoreKitCommerce.swift in Sources */,
 				ABA3975730434D0C00498D82 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

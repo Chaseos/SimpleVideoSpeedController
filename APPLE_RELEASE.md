@@ -2,6 +2,18 @@
 
 This repository contains one universal Apple product with iPhone, iPad, and Mac targets, plus one Safari Web Extension. Chromium and Firefox keep their existing review and Ko-fi controls. The Safari toolbar popup contains the video controls, a compact user-initiated App Store rating link, and a compact “Support options” handoff to the containing app. All StoreKit products, prices, explanations, and purchases remain in the containing Apple app.
 
+## Local Safari registration troubleshooting (2026-08-31)
+
+Paramount speed-control investigation found seven registered local build paths (six enabled entries in Safari). The toolbar popup and the running content script used different `safari-web-extension://` origins. Keep one signed development build registered when testing; multiple Debug, Release, and archive build products with the same bundle ID can leave Safari using mismatched extension instances.
+
+Inspect registrations with `pluginkit -m -A -D -v -i app.chaseos.SimpleVideoSpeedController.Extension`. After identifying and recording the intended build, unregister only stale paths with `pluginkit -r <extension.appex-path>`, then reload affected tabs. This removes registrations, not app files; do not delete builds or reset extension data to diagnose this issue. Recheck registrations after running other local builds.
+
+The repair retained the normal Xcode DerivedData Debug build and reduced registrations to one. Paramount's video accepted `playbackRate = 2` through the existing storage listener. After repair, the popup and content script shared an origin, and a popup-entered 1.5× command reached the top frame and saved successfully. A final elapsed-playback timing check was interrupted by concurrent Safari interaction; no claim of that check passing is made. All 66 existing automated checks passed. No playback-code change was required, and the temporary Safari developer-tools setting was restored.
+
+Follow-up: the user reports smooth Paramount playback through 2×, but isolated frames/seeks and no audio above 2×; YouTube works at higher rates. This matches WebKit's documented native HLS behavior above 2× ([WebKit change explaining the behavior](https://github.com/WebKit/WebKit/commit/d1cf1ce59abb8c7e1a1f64efdeb4f50d8c9f83ce)). The cited change caps Spotify specifically; it does not fix Paramount. Treat the Paramount diagnosis as consistent with the report, not an instrumented reproduction. Reading back a requested `playbackRate` alone does not verify smooth decoding or audible playback. The follow-up Safari safeguard caps positively identified native-HLS videos at 2×; it does not replace the player or restrict services by hostname.
+
+Subsequent inspection of five open Safari tabs confirmed native HLS for the loaded Paramount episode, HLS through MSE for Disney+ (Hulu content), DASH through MSE for HBO Max, and MSE with unclassified playlist formats for Netflix and YouTube. See [the observed streaming comparison](docs/SAFARI_STREAMING_COMPATIBILITY.md) for the implementation and its detection limits. A further inspection of Disney’s Moana also confirmed HLS through MSE and no cap from the new detector. HLS playlist detection alone would incorrectly restrict the working Disney+ player. All 73 automated checks and an unsigned macOS build pass; no end-to-end Paramount audio/decoding test is claimed.
+
 ## Local build
 
 Requirements:
@@ -14,10 +26,11 @@ Run:
 
 ```sh
 npm test
+swift test --package-path apple
 npm run build:apple
 ```
 
-The Apple command creates all three extension packages, regenerates the Apple icons from the existing extension artwork, and compiles unsigned macOS and iOS Simulator apps. Open the Xcode project at:
+The Swift command runs the native transaction-model tests on macOS. The Apple build command creates all three extension packages, regenerates the Apple icons from the existing extension artwork, and compiles unsigned macOS and iOS Simulator apps. Open the Xcode project at:
 
 ```text
 apple/Simple Video Speed Controller/Simple Video Speed Controller.xcodeproj
@@ -90,6 +103,41 @@ To test playback controls: open [PUBLIC TEST PAGE URL], play its HTML5 video, op
 Replace `[PUBLIC TEST PAGE URL]` with a stable public HTML5 video page before submission.
 
 ## Device release gates
+
+### Commit-readiness review — 2026-08-31
+
+- Reviewed the pending runtime, native UI/commerce, packaging, and test changes; no blocking code findings remain. Playback detection is shared across enforcement and fallback execution; the native transaction model is shared by both apps and isolated from StoreKit for executable tests.
+- Fresh verification: 74 JavaScript checks, 8 native Swift tests, unsigned universal Mac Release and iOS device Release builds, and `git diff --check` all pass. The only build warnings are skipped App Intents metadata extraction for targets without that framework.
+- Added Swift build/workspace ignore rules and documented the native test command. Generated builds, archives, logs, and Xcode personal state remain excluded. The separate user-owned `docs/MACOS_SAFARI_HANDOFF_PROMPT.md` is outside this change set and should not be swept into a blanket add.
+- Ready for a source commit/push when requested. No commit or push was performed by this review. Distribution archives, TestFlight validation, and the remaining public-release checklist are separate from source readiness. Logs: `build/release-check-2026-08-31/logs/precommit-*` (ignored).
+
+
+### Companion-app guidance — 2026-08-31
+
+- Action visibility preference: star/heart icons are fully opaque in all native apps (Mac, iPhone, iPad) and in iPhone/iPad Safari popups. Only the Mac Safari popup retains the faded idle treatment. Hover/touch expansion and action behavior are unchanged.
+
+- Instruction correction: removed the cryptic “aA” aside and distinguished the iPhone page menu from the iPad Extensions button beside the address bar. Checked against Apple’s [iPhone guide](https://support.apple.com/en-ie/guide/iphone/iphab0432bf6/26/ios/26) and [iPad guide](https://support.apple.com/en-nz/guide/ipad/ipada7ca2a18/ipados). The Settings path applies to both. This follow-up changes text only.
+
+- iPhone/iPad now explain the Safari-only video controls, setup and website permissions, and how to open the extension from Safari's page menu. Expandable Help and Privacy summaries work offline; existing Settings and native Rate/Support actions are unchanged. Pinch zoom is no longer disabled.
+- Mac retains its compact enabled/disabled status and Settings action, with one toolbar-use hint. Its icon/spacing were reduced to keep the existing window comfortable; the longer mobile guide and disclosures are hidden on Mac.
+- All 74 existing checks, development-signed Mac Debug, and unsigned iOS Simulator Debug builds pass. Local browser previews checked phone (390×844), iPad (768×1024), and the existing Mac window (425×460), plus Help/Privacy expansion. These previews do not validate native Dynamic Type or VoiceOver; the user's device check remains appropriate. No purchase or handoff logic changed.
+
+
+### iPad support-link follow-up — 2026-08-31
+
+- User confirms donations work on Mac and iPhone. On iPad, the Safari popup heart opens an empty tab without an app-opening prompt. The first attempted fix (closing the popup after link activation) failed in the user's retest and has been removed.
+- Current [WebKit popup navigation code](https://raw.githubusercontent.com/WebKit/WebKit/main/Source/WebKit/UIProcess/Extensions/Cocoa/WebExtensionActionCocoa.mm) sends external main-frame/new-window navigation through a new-tab operation. This supports investigating popup routing, but does not prove the exact cause on the user's Safari version.
+- The iPad heart now opens a bundled support page; a real **Open Simple Video Speed Controller** link tap from that regular tab launches the existing app URL. Both legacy iPad and desktop-style iPad identities take this path. Mac/iPhone retain their original direct links. The page has a localized button in all 22 locales and is bundled in both extension targets. No native purchase code, permissions, server, or automatic redirect was added.
+- All 74 JavaScript checks pass, including iPad routing, unchanged Mac/iPhone links, and resource packaging. The user subsequently confirmed that this iPad path opens the app. The page now uses the full app name, explains the optional tip and Apple payment flow, and clarifies that app launch alone does not purchase anything. All 22 locales include the new copy. The English layout was visually checked at iPad and narrow-window sizes, and the updated iOS Simulator build passes. The link behavior is unchanged; an actual iPad donation remains unreported. See [the focused checklist](docs/RELEASE_TEST_CHECKLIST.md).
+
+### Prepared for user testing — 2026-08-31 (not release approval)
+
+- Compared Paramount Quality+ and adopted its explicit AppKit support-window presentation and testable commerce boundary. Both containing apps now own the transaction listener and reconcile unfinished tips on launch/activation. Verified known consumables finish once; purchase and incoming-delivery messages remain separate, and concurrent purchases are guarded.
+- All 73 JavaScript checks and 8 executable native transaction-model tests pass. Development-signed Mac Debug, unsigned iOS Simulator Debug, unsigned universal Mac Release, and unsigned iOS device Release builds pass. Native tests use a fake provider, not the system checkout UI.
+- An earlier interactive local Xcode run still showed the missing Purchase control. Reference-project code alone does not prove this is fixed or isolate its cause. Per user direction, further UI automation is deferred to a short hands-on test/iterate loop. Purchase, approved-pending recovery, and final Safari checks remain unverified for this prepared revision.
+- Smaller-phone largest-text onboarding scrolling reached Open Settings and opened Settings. Other outstanding device/accessibility checks below remain open. Local StoreKit configuration and text-size override were restored; temporary diagnostics were stopped. No commit, archive, upload, or publication occurred in this pass.
+- Start with [the short release test checklist](docs/RELEASE_TEST_CHECKLIST.md). Prior archives/uploaded build 3 predate these changes and must not be used to validate this revision. Logs: `build/release-check-2026-08-31/logs/` (ignored).
+
 
 ### Mac purchase fix/retest — 2026-08-30 (partial)
 
