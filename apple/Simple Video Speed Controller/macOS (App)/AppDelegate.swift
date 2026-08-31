@@ -9,9 +9,14 @@ import Cocoa
 
 @main
 class AppDelegate: NSObject, NSApplicationDelegate {
+    private let tipStore = TipStore.shared
 
     func applicationDidFinishLaunching(_ notification: Notification) {
-        // Override point for customization after application launch.
+        tipStore.reconcileUnfinishedTransactions()
+    }
+
+    func applicationDidBecomeActive(_ notification: Notification) {
+        tipStore.reconcileUnfinishedTransactions()
     }
 
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {

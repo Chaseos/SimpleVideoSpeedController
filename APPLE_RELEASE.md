@@ -91,6 +91,15 @@ Replace `[PUBLIC TEST PAGE URL]` with a stable public HTML5 video page before su
 
 ## Device release gates
 
+### Mac purchase fix/retest — 2026-08-30 (partial)
+
+- Mac-only changes now anchor StoreKit confirmation to the visible support window and wrap the SwiftUI sheet in an AppKit container. The observed NSRemoteView/NSHostingController warning disappeared; Done dismissal passed. iOS behavior is unchanged.
+- Mac transaction handling is app-owned, with launch/activation reconciliation and shared verified-transaction completion. A fresh external transaction finished, and all three tips plus a repeat consumable finished with Xcode dialogs disabled.
+- **Still blocked:** the interactive Xcode purchase dialog has a blank Purchase-button area. A newly approved pending transaction (ID 10) remained unfinished across relaunch, as did older ID 6. These changes do not establish release readiness or prove the problem is exclusively Xcode's.
+- Verification: 66/66 automated checks (17 executable JavaScript behavior checks; 49 source/packaging/data assertions), development-signed Mac Debug and universal Release builds, and an unsigned iOS Simulator Debug compile all pass. No iOS runtime changes or testing were performed in this pass.
+- Local StoreKit settings were restored and this Mac debug run stopped. No commit, push, archive, or upload was performed. Detailed evidence and remaining scenarios: `build/release-check/MAC_PURCHASE_RETEST.md`.
+- Next isolation step: compare a minimal native Mac StoreKit sample under this Xcode installation with a separately authorized Mac sandbox/TestFlight test. Do not substitute dialogs-disabled success for a working checkout UI.
+
 ### Beta archive/upload — 2026-08-30
 
 - Version 1.15 build 3 replaces the previously uploaded build 2. All app/extension build numbers match.

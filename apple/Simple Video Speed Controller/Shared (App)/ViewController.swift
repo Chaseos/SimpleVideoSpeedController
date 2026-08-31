@@ -95,12 +95,22 @@ final class TipStore: ObservableObject {
     @Published private(set) var purchasingProductID: String?
     @Published var statusMessage: String?
 
+#if os(macOS)
+    static let shared = TipStore()
+    var purchaseWindow: (() -> NSWindow?)?
+    private var unfinishedTransactionsTask: Task<Void, Never>?
+    private var handledTransactionIDs = Set<UInt64>()
+#endif
+
     private var hasLoaded = false
     private var transactionUpdatesTask: Task<Void, Never>?
 
     init() {
         transactionUpdatesTask = Task { [weak self] in
             for await result in StoreKit.Transaction.updates {
+#if os(macOS)
+                await self?.handleMacTransaction(result)
+#else
                 switch result {
                 case .verified(let transaction):
                     guard AppleConfiguration.tipProductIDs.contains(transaction.productID) else {
@@ -114,13 +124,42 @@ final class TipStore: ObservableObject {
                     }
                     self?.statusMessage = "The purchase could not be verified. You were not credited for this tip."
                 }
+#endif
             }
         }
     }
 
     deinit {
         transactionUpdatesTask?.cancel()
+#if os(macOS)
+        unfinishedTransactionsTask?.cancel()
+#endif
     }
+
+#if os(macOS)
+    func reconcileUnfinishedTransactions() {
+        guard unfinishedTransactionsTask == nil else { return }
+        unfinishedTransactionsTask = Task { [weak self] in
+            for await result in StoreKit.Transaction.unfinished {
+                await self?.handleMacTransaction(result)
+            }
+            self?.unfinishedTransactionsTask = nil
+        }
+    }
+
+    private func handleMacTransaction(_ result: VerificationResult<StoreKit.Transaction>) async {
+        switch result {
+        case .verified(let transaction):
+            guard AppleConfiguration.tipProductIDs.contains(transaction.productID),
+                  handledTransactionIDs.insert(transaction.id).inserted else { return }
+            await transaction.finish()
+            statusMessage = "Thank you for supporting my work!"
+        case .unverified(let transaction, _):
+            guard AppleConfiguration.tipProductIDs.contains(transaction.productID) else { return }
+            statusMessage = "The purchase could not be verified. You were not credited for this tip."
+        }
+    }
+#endif
 
     func loadProducts(force: Bool = false) async {
         guard force || !hasLoaded else { return }
@@ -149,8 +188,25 @@ final class TipStore: ObservableObject {
         defer { purchasingProductID = nil }
 
         do {
-            switch try await product.purchase() {
+#if os(macOS)
+            guard let window = purchaseWindow?(), window.isVisible else {
+                statusMessage = "Please reopen support options and try again."
+                return
+            }
+            let result: Product.PurchaseResult
+            if #available(macOS 15.2, *) {
+                result = try await product.purchase(confirmIn: window)
+            } else {
+                result = try await product.purchase()
+            }
+#else
+            let result = try await product.purchase()
+#endif
+            switch result {
             case .success(let verificationResult):
+#if os(macOS)
+                await handleMacTransaction(verificationResult)
+#else
                 guard case .verified(let transaction) = verificationResult else {
                     statusMessage = "The purchase could not be verified. You were not credited for this tip."
                     return
@@ -158,6 +214,7 @@ final class TipStore: ObservableObject {
 
                 await transaction.finish()
                 statusMessage = "Thank you for supporting my work!"
+#endif
             case .pending:
                 statusMessage = "This purchase is pending approval."
             case .userCancelled:
@@ -314,8 +371,18 @@ private struct TipSheet: View {
             ScrollView {
                 VStack(alignment: .leading, spacing: 18) {
                     VStack(alignment: .leading, spacing: 6) {
+#if os(macOS)
+                        HStack {
+                            Text("Support my work")
+                                .font(.title2.bold())
+                            Spacer()
+                            Button("Done", action: dismissAction)
+                                .disabled(store.purchasingProductID != nil)
+                        }
+#else
                         Text("Support my work")
                             .font(.title2.bold())
+#endif
                         Text("Tips are optional and help support continued development. They do not unlock features or content.")
                             .foregroundStyle(.secondary)
                             .fixedSize(horizontal: false, vertical: true)
@@ -402,11 +469,13 @@ private struct TipSheet: View {
             .frame(minWidth: 360, idealWidth: 420, minHeight: 360)
 #endif
             .navigationTitle("Support my work")
+#if os(iOS)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Done", action: dismissAction)
                 }
             }
+#endif
             .task {
                 await store.loadProducts()
             }
@@ -419,13 +488,17 @@ final class ViewController: PlatformViewController, WKNavigationDelegate, WKScri
     @IBOutlet private var webView: WKWebView!
 
     private let actionStripModel = ActionStripModel()
+#if os(macOS)
+    private let tipStore = TipStore.shared
+#else
     private let tipStore = TipStore()
+#endif
 
 #if os(iOS)
     private var actionStripController: UIHostingController<SupportActionStrip>?
 #elseif os(macOS)
     private var actionStripController: NSHostingController<SupportActionStrip>?
-    private var tipSheetController: NSHostingController<TipSheet>?
+    private var tipSheetController: NSViewController?
 #endif
 
     override func viewDidLoad() {
@@ -555,8 +628,26 @@ final class ViewController: PlatformViewController, WKNavigationDelegate, WKScri
         }
         let hostingController = NSHostingController(rootView: sheet)
         hostingController.title = "Support Simple Video Speed Controller"
-        tipSheetController = hostingController
-        presentAsSheet(hostingController)
+        // StoreKit inserts an AppKit remote view into the presenting controller.
+        // Keep that container outside the SwiftUI-owned hosting view.
+        let sheetController = NSViewController()
+        sheetController.title = hostingController.title
+        sheetController.view = NSView()
+        sheetController.addChild(hostingController)
+        sheetController.view.addSubview(hostingController.view)
+        hostingController.view.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            hostingController.view.leadingAnchor.constraint(equalTo: sheetController.view.leadingAnchor),
+            hostingController.view.trailingAnchor.constraint(equalTo: sheetController.view.trailingAnchor),
+            hostingController.view.topAnchor.constraint(equalTo: sheetController.view.topAnchor),
+            hostingController.view.bottomAnchor.constraint(equalTo: sheetController.view.bottomAnchor)
+        ])
+        sheetController.preferredContentSize = hostingController.view.fittingSize
+        tipSheetController = sheetController
+        tipStore.purchaseWindow = { [weak self] in
+            self?.tipSheetController?.view.window
+        }
+        presentAsSheet(sheetController)
 #endif
     }
 
@@ -569,6 +660,7 @@ final class ViewController: PlatformViewController, WKNavigationDelegate, WKScri
         guard let tipSheetController else { return }
         dismiss(tipSheetController)
         self.tipSheetController = nil
+        tipStore.purchaseWindow = nil
     }
 #endif
 

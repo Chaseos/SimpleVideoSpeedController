@@ -129,6 +129,30 @@ test('native tips can scroll and stack product content at accessibility text siz
   assert.match(tipSheet, /#if os\(macOS\)\s*\.frame\(minWidth: 360/);
 });
 
+test('Mac purchases use an explicit window and an AppKit sheet container', () => {
+  assert.match(viewController, /#if os\(macOS\)\s*guard let window = purchaseWindow\?\(\), window\.isVisible/);
+  assert.match(viewController, /if #available\(macOS 15\.2, \*\)\s*\{\s*result = try await product\.purchase\(confirmIn: window\)/);
+  assert.match(viewController, /#else\s*let result = try await product\.purchase\(\)\s*#endif/);
+  assert.match(viewController, /sheetController\.view = NSView\(\)/);
+  assert.match(viewController, /sheetController\.addChild\(hostingController\)/);
+  assert.match(viewController, /presentAsSheet\(sheetController\)/);
+  assert.doesNotMatch(viewController, /presentAsSheet\(hostingController\)/);
+  assert.match(viewController, /purchaseWindow = \{ \[weak self\] in\s*self\?\.tipSheetController\?\.view\.window/);
+  assert.match(viewController, /tipStore\.purchaseWindow = nil/);
+});
+
+test('Mac transaction recovery is app-owned without changing iOS store ownership', () => {
+  assert.match(macAppDelegate, /private let tipStore = TipStore\.shared/);
+  assert.match(macAppDelegate, /func applicationDidFinishLaunching[^}]*tipStore\.reconcileUnfinishedTransactions\(\)/);
+  assert.match(macAppDelegate, /func applicationDidBecomeActive[^}]*tipStore\.reconcileUnfinishedTransactions\(\)/);
+  assert.match(viewController, /#if os\(macOS\)\s*private let tipStore = TipStore\.shared\s*#else\s*private let tipStore = TipStore\(\)\s*#endif/);
+  assert.match(viewController, /guard unfinishedTransactionsTask == nil else \{ return \}/);
+  assert.match(viewController, /for await result in StoreKit\.Transaction\.unfinished\s*\{\s*await self\?\.handleMacTransaction\(result\)/);
+  assert.match(viewController, /for await result in StoreKit\.Transaction\.updates\s*\{\s*#if os\(macOS\)\s*await self\?\.handleMacTransaction\(result\)/);
+  assert.match(viewController, /case \.success\(let verificationResult\):\s*#if os\(macOS\)\s*await handleMacTransaction\(verificationResult\)/);
+  assert.match(viewController, /tipProductIDs\.contains\(transaction\.productID\),\s*handledTransactionIDs\.insert\(transaction\.id\)\.inserted else \{ return \}\s*await transaction\.finish\(\)/);
+});
+
 test('both Safari extension targets bundle every icon referenced by the manifest', () => {
   for (const icon of ['icon-16.png', 'icon-48.png', 'icon-128.png']) {
     assert.match(project, new RegExp(`${icon.replace('.', '\\.')} \\*\\/ = \\{isa = PBXFileReference`));
