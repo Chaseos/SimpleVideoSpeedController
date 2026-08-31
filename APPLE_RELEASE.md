@@ -27,10 +27,11 @@ Signed App Store archives are intentionally not automated. The project is config
 
 ## Apple identifiers and versions
 
+- iPhone/iPad Home Screen name: `Video Speed` (11 characters including the space); Mac and Safari extension names remain unchanged.
 - App bundle ID: `app.chaseos.SimpleVideoSpeedController`
 - Extension bundle ID: `app.chaseos.SimpleVideoSpeedController.Extension`
 - Marketing version: `1.15`
-- Build number: `1`
+- Build number: `3`
 - Minimum iOS/iPadOS: 16
 - Minimum macOS: 13
 - App Store Connect SKU: `SVSC-APPLE-001`
@@ -53,7 +54,7 @@ Create these consumable products under Monetization > In-App Purchases using the
 
 Add localizations, availability, review screenshots, and review notes for all three. The app displays the names and prices returned by StoreKit, so localized storefront values do not need to be duplicated in the interface.
 
-For local tests, open Product > Scheme > Edit Scheme > Run > Options in Xcode and select `Configurations/TipProducts.storekit` as the StoreKit configuration. Exercise success, cancellation, pending approval, product-loading failure, retry, unverified transaction, and purchase failure. Then create a Sandbox Apple Account and complete sandbox purchases on both iOS/iPadOS and macOS.
+For local tests, select the shared `StoreKit Testing (iOS)` or `StoreKit Testing (macOS)` scheme and run from Xcode. Both bind `Configurations/TipProducts.storekit` to Debug launches. The normal `Simple Video Speed Controller (iOS)` and `(macOS)` schemes remain unbound to local StoreKit and retain Release archive actions. Confirm that purchase dialogs identify the Xcode environment before proceeding. Exercise success, cancellation, pending approval, product-loading failure, retry, unverified transaction, and purchase failure. Reset simulated errors, Ask to Buy, and interruptions afterward. Then create a Sandbox Apple Account and complete sandbox purchases on both iOS/iPadOS and macOS.
 
 Tips are repeatable consumables, unlock nothing, and create no lasting entitlement. The app therefore has no Restore Purchases action, account, receipt server, or analytics.
 
@@ -89,6 +90,26 @@ To test playback controls: open [PUBLIC TEST PAGE URL], play its HTML5 video, op
 Replace `[PUBLIC TEST PAGE URL]` with a stable public HTML5 video page before submission.
 
 ## Device release gates
+
+### Beta archive/upload — 2026-08-30
+
+- Version 1.15 build 3 replaces the previously uploaded build 2. All app/extension build numbers match.
+- The iPhone/iPad archive was created using Xcode's normal iOS scheme and uploaded through Organizer > Distribute App > App Store Connect. Xcode confirmed upload completion. The archive contains the `Video Speed` Home Screen name.
+- A universal Intel/Apple Silicon Mac archive of version 1.15 build 3 was created using the normal macOS scheme. Its App Store Connect upload awaits separate authorization.
+- No TestFlight processing status was checked, no tester groups were changed, and no App Store release was submitted. The testing gaps below remain applicable.
+
+### Local release-check results — 2026-08-30 (partial, not release approval)
+
+- Automated checks: 64/64 pass, including the short Home Screen name regression. Seventeen execute JavaScript behavior; 47 check packaging, source patterns, metadata, or locale data. No native UI behavior is proven by source-pattern tests.
+- Final iOS Simulator Debug/Release, unsigned iOS device Release compile, and development-signed Mac Debug/Release builds pass on Xcode 26.6. These are not App Store archive validation.
+- iPhone 17 Pro Max / iOS 26.5: containing app and support sheet opened; all three local Xcode tips, repeat consumable, cancel, purchase failure/retry, and pending approval/decline were exercised. Approved transactions were finished. These runtime checks preceded the layout fix below.
+- Resumed with user authorization. iPhone 17e and iPad passed post-fix small-tip purchase, cancellation, and Done dismissal. Large-text tip rows no longer overlap, but actual gesture reachability remains unverified. Removed disabled onboarding scrolling after largest-text clipping; touch retest remains necessary. The 17e text-size override was restored to normal.
+- iPad Safari popup collapse was reproduced and fixed: retain intrinsic minimum width and remove the viewport-height cap. Portrait, landscape, expanded shortcuts, and 2× video control passed. Pro Max still fills Safari's sheet afterward. iPad support is retained; Mac sizing is unchanged.
+- Safari: Pro Max presets, same-origin frames, dynamic video, and player-reset recovery passed. An unchanged frame-site storage entry could undo a popup speed; focused fix has red/green executable coverage, but final live cross-origin retest remains unverified. Mac one-shot keyboard shortcuts passed; custom-speed/persistence needs a controlled single-build retest because several local extension copies are registered.
+- Mac StoreKit: all tips, repeat purchase, failure/retry and product-load failure/recovery passed with Xcode dialogs disabled. Interactive system purchase/cancel remained blocked by a malformed/unresponsive sheet. An approved pending transaction remained unfinished across relaunch; another same-run approval eventually finished. These remain release gates, not blanket StoreKit approval.
+- Remaining: full smaller-phone Safari pass, touch/software keyboard, complete persistence/cross-frame tests, German/Arabic visual layouts, VoiceOver/Reduce Motion, interrupted purchases, Safari-to-app cold/warm handoffs, and external device/sandbox checks. Simulator gestures/coordinates were unreliable even on ordinary Safari pages. StoreKit failure settings and temporary diagnostics were reset/removed.
+- Pro Max 1320×2868 and iPad 2064×2752 native captures match accepted dimensions but contain alpha. Computer-use captures are window-sized JPEG evidence (some early filenames end in .png), not store-ready screenshots. No complete screenshot set is approved.
+- Detailed scenario status, evidence, and reproducible fixture instructions: `build/release-check/REPORT.md` (local, git-ignored), with logs, screenshots, transactions, and isolated builds in the same directory.
 
 Do not treat a successful Mac build as proof that the iPhone and iPad extension works. Before release, test macOS 13 and a current macOS release, plus iPhone and iPad on iOS/iPadOS 16 and a current release.
 

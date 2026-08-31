@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AB87959630438D870014A3EA /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AB87959530438D870014A3EA /* StoreKit.framework */; };
+		AB87959830438D920014A3EA /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AB87959730438D920014A3EA /* StoreKit.framework */; };
 		ABA3974630434D0C00498D82 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABA3974530434D0C00498D82 /* AppDelegate.swift */; };
 		ABA3974830434D0C00498D82 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABA3974730434D0C00498D82 /* SceneDelegate.swift */; };
 		ABA3974B30434D0C00498D82 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = ABA3974930434D0C00498D82 /* LaunchScreen.storyboard */; };
@@ -100,6 +102,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		AB87959530438D870014A3EA /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS26.5.sdk/System/Library/Frameworks/StoreKit.framework; sourceTree = DEVELOPER_DIR; };
+		AB87959730438D920014A3EA /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		ABA3973630434D0B00498D82 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = Base; path = Base.lproj/Main.html; sourceTree = "<group>"; };
 		ABA3973730434D0B00498D82 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
 		ABA3973830434D0B00498D82 /* Style.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; path = Style.css; sourceTree = "<group>"; };
@@ -122,9 +126,6 @@
 		ABA3976A30434D0C00498D82 /* Simple Video Speed Controller Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Simple Video Speed Controller Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		ABA3976F30434D0C00498D82 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		ABA3978F30434D0C00498D82 /* icon-128.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-128.png"; sourceTree = "<group>"; };
-		C0D3B01030434D0C00498D82 /* icon-16.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-16.png"; sourceTree = "<group>"; };
-		C0D3B01130434D0C00498D82 /* icon-48.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-48.png"; sourceTree = "<group>"; };
-		C0D3C01030434D0C00498D82 /* AppStoreID.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = AppStoreID.txt; sourceTree = "<group>"; };
 		ABA3979030434D0C00498D82 /* popup.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = popup.js; sourceTree = "<group>"; };
 		ABA3979130434D0C00498D82 /* background.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = background.js; sourceTree = "<group>"; };
 		ABA3979230434D0C00498D82 /* popup.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = popup.html; sourceTree = "<group>"; };
@@ -135,6 +136,9 @@
 		ABA3979730434D0C00498D82 /* localization.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = localization.js; sourceTree = "<group>"; };
 		ABA3979830434D0C00498D82 /* popup-polish.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; path = "popup-polish.css"; sourceTree = "<group>"; };
 		C0D3A00130434D0C00498D82 /* TipProducts.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = TipProducts.storekit; sourceTree = "<group>"; };
+		C0D3B01030434D0C00498D82 /* icon-16.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-16.png"; sourceTree = "<group>"; };
+		C0D3B01130434D0C00498D82 /* icon-48.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-48.png"; sourceTree = "<group>"; };
+		C0D3C01030434D0C00498D82 /* AppStoreID.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = AppStoreID.txt; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -142,6 +146,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AB87959630438D870014A3EA /* StoreKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -149,6 +154,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AB87959830438D920014A3EA /* StoreKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -169,6 +175,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		AB87959430438D870014A3EA /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				AB87959730438D920014A3EA /* StoreKit.framework */,
+				AB87959530438D870014A3EA /* StoreKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		ABA3972E30434D0B00498D82 = {
 			isa = PBXGroup;
 			children = (
@@ -179,6 +194,7 @@
 				ABA3976430434D0C00498D82 /* iOS (Extension) */,
 				ABA3976E30434D0C00498D82 /* macOS (Extension) */,
 				C0D3A00230434D0C00498D82 /* Configurations */,
+				AB87959430438D870014A3EA /* Frameworks */,
 				ABA3974330434D0C00498D82 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -191,15 +207,6 @@
 				ABA3973430434D0B00498D82 /* Resources */,
 			);
 			path = "Shared (App)";
-			sourceTree = "<group>";
-		};
-		C0D3A00230434D0C00498D82 /* Configurations */ = {
-			isa = PBXGroup;
-			children = (
-				C0D3A00130434D0C00498D82 /* TipProducts.storekit */,
-				C0D3C01030434D0C00498D82 /* AppStoreID.txt */,
-			);
-			path = Configurations;
 			sourceTree = "<group>";
 		};
 		ABA3973430434D0B00498D82 /* Resources */ = {
@@ -288,8 +295,17 @@
 				ABA3979830434D0C00498D82 /* popup-polish.css */,
 			);
 			name = Resources;
-			path = "../../dist/safari";
+			path = ../../dist/safari;
 			sourceTree = SOURCE_ROOT;
+		};
+		C0D3A00230434D0C00498D82 /* Configurations */ = {
+			isa = PBXGroup;
+			children = (
+				C0D3A00130434D0C00498D82 /* TipProducts.storekit */,
+				C0D3C01030434D0C00498D82 /* AppStoreID.txt */,
+			);
+			path = Configurations;
+			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
@@ -705,7 +721,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = QG4CBM3K89;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "iOS (Extension)/Info.plist";
@@ -739,7 +755,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = QG4CBM3K89;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "iOS (Extension)/Info.plist";
@@ -776,11 +792,11 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = QG4CBM3K89;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "iOS (App)/Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = "Simple Video Speed Controller";
+				INFOPLIST_KEY_CFBundleDisplayName = "Video Speed";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -817,11 +833,11 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = QG4CBM3K89;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "iOS (App)/Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = "Simple Video Speed Controller";
+				INFOPLIST_KEY_CFBundleDisplayName = "Video Speed";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -857,7 +873,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = QG4CBM3K89;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -893,7 +909,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = QG4CBM3K89;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -931,7 +947,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = QG4CBM3K89;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -973,7 +989,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = QG4CBM3K89;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;

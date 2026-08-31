@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Frame video fixture</title>
+<style>body { font: 18px system-ui; color: white; background: #222; } video { width: 100%; max-height: 220px; }</style>
+<p id="rate">Frame rate: 1x</p>
+<video controls loop playsinline muted src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4"></video>
+<script>
+  const video = document.querySelector('video');
+  function report() {
+    document.querySelector('#rate').textContent = `Frame rate: ${video.playbackRate}x`;
+    // This fixture sends only its playback rate, never page or user data.
+    parent.postMessage({ type: 'fixture-rate', rate: video.playbackRate }, '*');
+  }
+  video.addEventListener('ratechange', report);
+  video.addEventListener('loadedmetadata', report);
+  report();
+</script>
+</html>

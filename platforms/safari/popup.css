@@ -19,6 +19,27 @@ body {
   overflow-y: auto;
 }
 
+/* Fill iPhone sheets while giving iPad popovers an intrinsic minimum width. */
+@supports (-webkit-touch-callout: none) {
+  html,
+  body {
+    max-width: none;
+    min-width: 282px;
+    width: 100%;
+  }
+
+  html {
+    overflow-y: auto;
+  }
+
+  body {
+    /* A viewport-height cap collapses iPad's content-sized popover. */
+    padding-right: max(16px, env(safe-area-inset-right));
+    padding-bottom: max(8px, env(safe-area-inset-bottom));
+    padding-left: max(16px, env(safe-area-inset-left));
+  }
+}
+
 .safari-action-links {
   display: flex;
   flex: 0 0 auto;

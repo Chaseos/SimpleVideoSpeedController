@@ -35,8 +35,21 @@ test('Apple targets share the expected identifiers, versions, and deployment min
   assert.match(project, /MARKETING_VERSION = 1\.15;/);
   assert.match(project, /IPHONEOS_DEPLOYMENT_TARGET = 16\.0;/);
   assert.match(project, /MACOSX_DEPLOYMENT_TARGET = 13\.0;/);
+  assert.equal((project.match(/CURRENT_PROJECT_VERSION = 3;/g) || []).length, 8);
   assert.equal((project.match(/DEVELOPMENT_TEAM = QG4CBM3K89;/g) || []).length, 8);
   assert.equal((project.match(/com\.apple\.InAppPurchase/g) || []).length, 2);
+  assert.match(
+    macAppInfo,
+    /<key>LSApplicationCategoryType<\/key>\s*<string>public\.app-category\.utilities<\/string>/
+  );
+});
+
+test('iPhone and iPad use a short Home Screen name in both build configurations', () => {
+  const displayNames = [...project.matchAll(
+    /INFOPLIST_FILE = "iOS \(App\)\/Info.plist";\s*INFOPLIST_KEY_CFBundleDisplayName = "([^"]+)";/g
+  )].map(match => match[1]);
+  assert.deepEqual(displayNames, ['Video Speed', 'Video Speed']);
+  assert.ok(displayNames.every(name => name.length <= 13));
 });
 
 test('native Apple UI uses SF Symbols and the deterministic App Store review link', () => {
@@ -82,6 +95,38 @@ test('both containing apps route the Safari support link to the native tip sheet
   assert.match(viewController, /override func viewDidAppear\(\)/);
   assert.match(viewController, /AppleAppLinkRouter\.shared\.viewDidAppear\(\)/);
   assert.match(viewController, /viewController\.presentSupportOptions\(\)/);
+});
+
+test('dedicated StoreKit schemes bind local products only to Debug launches', () => {
+  for (const platform of ['iOS', 'macOS']) {
+    const scheme = fs.readFileSync(path.join(appleRoot,
+      'Simple Video Speed Controller.xcodeproj', 'xcshareddata', 'xcschemes',
+      `StoreKit Testing (${platform}).xcscheme`), 'utf8');
+    assert.match(scheme, /<LaunchAction\s+buildConfiguration\s*=\s*"Debug"/);
+    assert.match(scheme, /<StoreKitConfigurationFileReference\s+identifier\s*=\s*"\.\.\/\.\.\/Configurations\/TipProducts.storekit"/);
+    assert.match(scheme, new RegExp(`BlueprintName\\s*=\\s*"Simple Video Speed Controller \\(${platform}\\)"`));
+    assert.match(scheme, /buildForArchiving\s*=\s*"NO"/);
+    const normalScheme = fs.readFileSync(path.join(appleRoot,
+      'Simple Video Speed Controller.xcodeproj', 'xcshareddata', 'xcschemes',
+      `Simple Video Speed Controller (${platform}).xcscheme`), 'utf8');
+    assert.doesNotMatch(normalScheme, /StoreKitConfigurationFileReference/);
+    assert.match(normalScheme, /<ArchiveAction\s+buildConfiguration\s*=\s*"Release"/);
+    assert.match(normalScheme, /buildForArchiving\s*=\s*"YES"/);
+  }
+  assert.equal(storeKitConfiguration.settings._failTransactionsEnabled, false);
+  assert.deepEqual(storeKitConfiguration.settings._storeKitErrors, []);
+});
+
+test('native tips can scroll and stack product content at accessibility text sizes', () => {
+  assert.doesNotMatch(viewController, /scrollView\.isScrollEnabled\s*=\s*false/,
+    'onboarding must remain scrollable when Dynamic Type exceeds the viewport');
+  const tipSheet = viewController.slice(viewController.indexOf('private struct TipSheet:'),
+    viewController.indexOf('@MainActor\nfinal class ViewController'));
+  assert.match(tipSheet, /NavigationStack\s*\{\s*ScrollView\s*\{/);
+  assert.match(tipSheet, /dynamicTypeSize\.isAccessibilitySize/);
+  assert.match(tipSheet, /AnyLayout\(VStackLayout/);
+  assert.doesNotMatch(tipSheet, /\.lineLimit\(2\)/);
+  assert.match(tipSheet, /#if os\(macOS\)\s*\.frame\(minWidth: 360/);
 });
 
 test('both Safari extension targets bundle every icon referenced by the manifest', () => {

@@ -2,6 +2,7 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
+const vm = require('node:vm');
 const { execFileSync } = require('node:child_process');
 
 const projectRoot = path.resolve(__dirname, '..');
@@ -187,6 +188,11 @@ test('Safari artifact contains only its user-initiated Apple app actions', () =>
     ));
     assert.ok(messages.rateThisApp?.message, `${locale} is missing rateThisApp`);
     assert.ok(messages.supportOptions?.message, `${locale} is missing supportOptions`);
+    assert.ok(
+      typeof messages.appName?.message === 'string' &&
+        Array.from(messages.appName.message).length <= 40,
+      `${locale} Safari appName exceeds Apple's 40-character limit`
+    );
   }
 });
 
@@ -221,7 +227,67 @@ test('Firefox retains browser support and review behavior with Android-only safe
   assert.match(popupScript, /await checkReviewPrompt\(\)/);
 });
 
-test('Safari uses fixed popover sizing without changing the shared stylesheet', () => {
+test('Safari and Firefox share every mobile keyboard shortcuts translation', () => {
+  for (const locale of fs.readdirSync(path.join(distRoot, 'safari', '_locales'))) {
+    const messages = target => JSON.parse(fs.readFileSync(
+      path.join(distRoot, target, '_locales', locale, 'messages.json'),
+      'utf8'
+    ));
+    const safari = messages('safari');
+    assert.ok(safari.keyboardShortcutsTitle?.message, `${locale} is missing its mobile title`);
+    assert.deepEqual(safari.keyboardShortcutsTitle, messages('firefox').keyboardShortcutsTitle);
+    assert.deepEqual(safari.shortcutsTitle, messages('chromium').shortcutsTitle);
+  }
+});
+
+test('Safari localizes the keyboard shortcuts label only on iOS', () => {
+  const popupScript = fs.readFileSync(path.join(distRoot, 'safari', 'popup.js'), 'utf8');
+  for (const locale of ['en', 'de', 'ar']) {
+    const messages = JSON.parse(fs.readFileSync(
+      path.join(distRoot, 'safari', '_locales', locale, 'messages.json'),
+      'utf8'
+    ));
+    for (const ios of [true, false]) {
+      const label = {
+        tagName: 'SPAN',
+        textContent: 'Shortcuts',
+        attributes: { 'data-i18n': 'shortcutsTitle' },
+        getAttribute(name) { return this.attributes[name]; },
+        setAttribute(name, value) { this.attributes[name] = value; }
+      };
+      const context = vm.createContext({
+        CSS: { supports: (property, value) => {
+          assert.equal(property, '-webkit-touch-callout');
+          assert.equal(value, 'none');
+          return ios;
+        } },
+        chrome: {
+          i18n: { getMessage: key => messages[key]?.message || '' },
+          storage: { onChanged: { addListener() {} } }
+        },
+        document: {
+          documentElement: {},
+          addEventListener() {},
+          querySelector: selector => {
+            assert.equal(selector, '#shortcutsToggle [data-i18n]');
+            return label;
+          },
+          querySelectorAll: selector => selector === '[data-i18n]' ? [label] : []
+        },
+        window: { addEventListener() {} }
+      });
+      vm.runInContext(popupScript, context);
+      vm.runInContext('localizeHtmlPage(); localizeHtmlPage();', context);
+      assert.equal(
+        label.textContent,
+        messages[ios ? 'keyboardShortcutsTitle' : 'shortcutsTitle'].message,
+        `${locale} ${ios ? 'iOS' : 'macOS'} label`
+      );
+    }
+  }
+});
+
+test('Safari adapts iOS sheets while preserving fixed macOS popover sizing', () => {
   const popup = fs.readFileSync(path.join(distRoot, 'safari', 'popup.html'), 'utf8');
   const safariStyles = fs.readFileSync(path.join(distRoot, 'safari', 'popup-polish.css'), 'utf8');
   const safariTargetStyles = fs.readFileSync(
@@ -229,11 +295,23 @@ test('Safari uses fixed popover sizing without changing the shared stylesheet', 
     'utf8'
   );
 
-  assert.doesNotMatch(popup, /name="viewport"/);
+  assert.match(popup, /name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/);
   assert.match(popup, /<body tabindex="-1">/);
   assert.match(safariStyles, /min-width: 282px/);
   assert.match(safariTargetStyles, /html,\s*body\s*{[\s\S]*width: 282px/);
   assert.match(safariTargetStyles, /body\s*{[\s\S]*box-sizing: border-box/);
+  const iosStyles = safariTargetStyles.match(
+    /@supports \(-webkit-touch-callout: none\) \{([\s\S]*?)\n\}/
+  )?.[1];
+  assert.ok(iosStyles, 'Safari is missing its iOS-only sizing override');
+  assert.match(iosStyles, /html,\s*body\s*\{\s*max-width: none;\s*min-width: 282px;\s*width: 100%;\s*\}/);
+  assert.match(iosStyles, /html\s*\{\s*overflow-y: auto;/);
+  assert.doesNotMatch(iosStyles, /max-height:/,
+    'iPad popover height must be sized from content, not its initial viewport');
+  for (const edge of ['right', 'bottom', 'left']) {
+    assert.ok(iosStyles.includes(`env(safe-area-inset-${edge})`));
+  }
+  assert.ok(safariStyles.endsWith(safariTargetStyles));
   assert.match(safariTargetStyles, /\.safari-action-link\s*{[\s\S]*height: 24px/);
   assert.match(safariTargetStyles, /\.safari-action-link\s*{[\s\S]*width: 24px/);
   assert.match(safariTargetStyles, /background-image: none/);

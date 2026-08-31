@@ -305,94 +305,102 @@ private struct SupportActionStrip: View {
 }
 
 private struct TipSheet: View {
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @ObservedObject var store: TipStore
     let dismissAction: () -> Void
 
     var body: some View {
         NavigationStack {
-            VStack(alignment: .leading, spacing: 18) {
-                VStack(alignment: .leading, spacing: 6) {
-                    Text("Support my work")
-                        .font(.title2.bold())
-                    Text("Tips are optional and help support continued development. They do not unlock features or content.")
-                        .foregroundStyle(.secondary)
-                        .fixedSize(horizontal: false, vertical: true)
-                }
+            ScrollView {
+                VStack(alignment: .leading, spacing: 18) {
+                    VStack(alignment: .leading, spacing: 6) {
+                        Text("Support my work")
+                            .font(.title2.bold())
+                        Text("Tips are optional and help support continued development. They do not unlock features or content.")
+                            .foregroundStyle(.secondary)
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
 
-                if store.isLoading {
-                    HStack {
-                        Spacer()
-                        ProgressView("Loading tip options…")
-                        Spacer()
-                    }
-                    .frame(minHeight: 120)
-                } else if store.products.isEmpty {
-                    VStack(spacing: 12) {
-                        Image(systemName: "heart.slash")
-                            .font(.system(size: 34))
-                            .foregroundStyle(.secondary)
-                        Text("Tips unavailable")
-                            .font(.headline)
-                        Text(store.statusMessage ?? "The App Store did not return any tip options.")
-                            .font(.callout)
-                            .foregroundStyle(.secondary)
-                            .multilineTextAlignment(.center)
-                        Button("Try Again") {
-                            Task { await store.loadProducts(force: true) }
+                    if store.isLoading {
+                        HStack {
+                            Spacer()
+                            ProgressView("Loading tip options…")
+                            Spacer()
                         }
-                    }
-                    .frame(maxWidth: .infinity, minHeight: 150)
-                } else {
-                    VStack(spacing: 10) {
-                        ForEach(store.products, id: \.id) { product in
-                            Button {
-                                Task { await store.purchase(product) }
-                            } label: {
-                                HStack(spacing: 12) {
-                                    Image(systemName: "heart.fill")
-                                        .foregroundStyle(Color(red: 1.0, green: 0.353, blue: 0.373))
-                                    VStack(alignment: .leading, spacing: 2) {
-                                        Text(product.displayName)
-                                            .fontWeight(.semibold)
-                                        Text(product.description)
-                                            .font(.caption)
-                                            .foregroundStyle(.secondary)
-                                            .lineLimit(2)
-                                            .multilineTextAlignment(.leading)
-                                    }
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-                                    Spacer()
-                                    if store.purchasingProductID == product.id {
-                                        ProgressView()
-                                    } else {
-                                        Text(product.displayPrice)
-                                            .fontWeight(.semibold)
-                                    }
-                                }
-                                .padding(.horizontal, 14)
-                                .padding(.vertical, 10)
-                                .frame(maxWidth: .infinity, minHeight: 64, alignment: .leading)
-                                .background(.secondary.opacity(0.14), in: RoundedRectangle(cornerRadius: 8))
-                                .contentShape(Rectangle())
+                        .frame(minHeight: 120)
+                    } else if store.products.isEmpty {
+                        VStack(spacing: 12) {
+                            Image(systemName: "heart.slash")
+                                .font(.system(size: 34))
+                                .foregroundStyle(.secondary)
+                            Text("Tips unavailable")
+                                .font(.headline)
+                            Text(store.statusMessage ?? "The App Store did not return any tip options.")
+                                .font(.callout)
+                                .foregroundStyle(.secondary)
+                                .multilineTextAlignment(.center)
+                            Button("Try Again") {
+                                Task { await store.loadProducts(force: true) }
                             }
-                            .buttonStyle(.plain)
-                            .disabled(store.purchasingProductID != nil)
+                        }
+                        .frame(maxWidth: .infinity, minHeight: 150)
+                    } else {
+                        VStack(spacing: 10) {
+                            ForEach(store.products, id: \.id) { product in
+                                Button {
+                                    Task { await store.purchase(product) }
+                                } label: {
+                                    let layout = dynamicTypeSize.isAccessibilitySize
+                                        ? AnyLayout(VStackLayout(alignment: .leading, spacing: 8))
+                                        : AnyLayout(HStackLayout(spacing: 12))
+                                    layout {
+                                        Image(systemName: "heart.fill")
+                                            .foregroundStyle(Color(red: 1.0, green: 0.353, blue: 0.373))
+                                        VStack(alignment: .leading, spacing: 2) {
+                                            Text(product.displayName)
+                                                .fontWeight(.semibold)
+                                            Text(product.description)
+                                                .font(.caption)
+                                                .foregroundStyle(.secondary)
+                                                .fixedSize(horizontal: false, vertical: true)
+                                                .multilineTextAlignment(.leading)
+                                        }
+                                        .frame(maxWidth: .infinity, alignment: .leading)
+                                        if store.purchasingProductID == product.id {
+                                            ProgressView()
+                                        } else {
+                                            Text(product.displayPrice)
+                                                .fontWeight(.semibold)
+                                                .fixedSize()
+                                        }
+                                    }
+                                    .padding(.horizontal, 14)
+                                    .padding(.vertical, 10)
+                                    .frame(maxWidth: .infinity, minHeight: 64, alignment: .leading)
+                                    .background(.secondary.opacity(0.14), in: RoundedRectangle(cornerRadius: 8))
+                                    .contentShape(Rectangle())
+                                }
+                                .buttonStyle(.plain)
+                                .disabled(store.purchasingProductID != nil)
+                            }
                         }
                     }
-                }
 
-                if let statusMessage = store.statusMessage, !store.products.isEmpty {
-                    Text(statusMessage)
-                        .font(.footnote)
-                        .foregroundStyle(.secondary)
-                        .frame(maxWidth: .infinity, alignment: .center)
-                        .multilineTextAlignment(.center)
-                }
+                    if let statusMessage = store.statusMessage, !store.products.isEmpty {
+                        Text(statusMessage)
+                            .font(.footnote)
+                            .foregroundStyle(.secondary)
+                            .frame(maxWidth: .infinity, alignment: .center)
+                            .multilineTextAlignment(.center)
+                    }
 
-                Spacer(minLength: 0)
+                }
+                .padding(24)
+                .frame(maxWidth: .infinity, alignment: .leading)
             }
-            .padding(24)
+#if os(macOS)
             .frame(minWidth: 360, idealWidth: 420, minHeight: 360)
+#endif
             .navigationTitle("Support my work")
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
@@ -424,9 +432,6 @@ final class ViewController: PlatformViewController, WKNavigationDelegate, WKScri
         super.viewDidLoad()
 
         webView.navigationDelegate = self
-#if os(iOS)
-        webView.scrollView.isScrollEnabled = false
-#endif
         webView.configuration.userContentController.add(self, name: "controller")
         webView.loadFileURL(
             Bundle.main.url(forResource: "Main", withExtension: "html")!,

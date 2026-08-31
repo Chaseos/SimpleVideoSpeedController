@@ -198,15 +198,22 @@ test('macOS Temporary Boost remains compatible with Option modifier reporting', 
   ), true);
 });
 
-function createContentHarness(platform = 'Win32', uiLocale = '') {
+function createContentHarness(platform = 'Win32', uiLocale = '', savedSpeed = 1) {
   const documentListeners = new Map();
   const windowListeners = new Map();
   const storageListeners = [];
   let toastElement;
-  const video = {
+  const makeVideo = () => ({
     playbackRate: 1,
-    addEventListener() {}
-  };
+    listeners: new Map(),
+    addEventListener(type, listener) { this.listeners.set(type, listener); }
+  });
+  const video = makeVideo();
+  const videos = [video];
+  const timers = new Map();
+  let timerID = 0;
+  let mutationCallback;
+  let messageCallback;
   const makeElement = () => ({
     id: '',
     textContent: '',
@@ -224,7 +231,7 @@ function createContentHarness(platform = 'Win32', uiLocale = '') {
     },
     createElement: makeElement,
     querySelector: () => null,
-    querySelectorAll: selector => selector === 'video' ? [video] : [],
+    querySelectorAll: selector => selector === 'video' ? videos : [],
     addEventListener(type, listener) {
       documentListeners.set(type, listener);
     }
@@ -243,14 +250,14 @@ function createContentHarness(platform = 'Win32', uiLocale = '') {
         getMessage: name => name === '@@ui_locale' ? uiLocale : ''
       },
       runtime: {
-        onMessage: { addListener() {} },
+        onMessage: { addListener(listener) { messageCallback = listener; } },
         sendMessage: () => Promise.resolve({ success: true })
       },
       storage: {
         onChanged: { addListener: listener => storageListeners.push(listener) },
         sync: {
           get: async () => ({
-            domainSpeeds: { 'example.com': 1 },
+            domainSpeeds: { 'example.com': savedSpeed },
             temporaryBoostSpeed: 3,
             temporaryBoostKey: 'X'
           }),
@@ -263,11 +270,15 @@ function createContentHarness(platform = 'Win32', uiLocale = '') {
     window,
     navigator: { platform },
     MutationObserver: class {
+      constructor(callback) { mutationCallback = callback; }
       observe() {}
     },
     setInterval: () => 0,
-    setTimeout: () => 0,
-    clearTimeout() {}
+    setTimeout(callback, delay) {
+      timers.set(++timerID, { callback, delay });
+      return timerID;
+    },
+    clearTimeout(id) { timers.delete(id); }
   });
 
   const projectRoot = path.resolve(__dirname, '..');
@@ -277,6 +288,22 @@ function createContentHarness(platform = 'Win32', uiLocale = '') {
 
   return {
     video,
+    videos,
+    flushTimers(delay) {
+      for (const [id, timer] of [...timers]) {
+        if (timer.delay === delay) {
+          timers.delete(id);
+          timer.callback();
+        }
+      }
+    },
+    insertVideo() {
+      const added = makeVideo();
+      videos.push(added);
+      mutationCallback([{ type: 'childList', addedNodes: [added] }]);
+      return added;
+    },
+    message: request => messageCallback(request, {}, () => {}),
     toast: toastElement,
     storageListeners,
     keydown: event => documentListeners.get('keydown')(event),
@@ -370,4 +397,52 @@ test('non-macOS content handling ignores the former Windows + Alt chord', async 
   harness.keydown(dispatchedEvent('MetaLeft', { metaKey: true }));
   harness.keydown(dispatchedEvent('AltLeft', { metaKey: true, altKey: true }));
   assert.equal(harness.video.playbackRate, 1);
+});
+
+test('content applies stored and popup speeds to multiple and dynamically inserted videos', async () => {
+  const harness = createContentHarness('MacIntel', 'en', 1.75);
+  await new Promise(resolve => setImmediate(resolve));
+  assert.equal(harness.video.playbackRate, 1.75);
+  const added = harness.insertVideo();
+  harness.flushTimers(100);
+  assert.equal(added.playbackRate, 1.75);
+  for (const speed of [0.1, 1, 2.35, 16]) {
+    harness.message({ action: 'setSpeed', speed });
+    assert.deepEqual(harness.videos.map(video => video.playbackRate), [speed, speed]);
+  }
+});
+
+test('speed lock recovers when a player changes playbackRate or starts playback again', async () => {
+  const harness = createContentHarness('MacIntel');
+  await new Promise(resolve => setImmediate(resolve));
+  harness.message({ action: 'setSpeed', speed: 2 });
+  harness.video.playbackRate = 1;
+  harness.video.listeners.get('ratechange')({ target: harness.video });
+  assert.equal(harness.video.playbackRate, 2);
+  harness.video.playbackRate = 1;
+  harness.video.listeners.get('play').call(harness.video);
+  assert.equal(harness.video.playbackRate, 2);
+  harness.message({ action: 'applyTemporaryBoost', sessionId: 'fixture', speed: 4 });
+  const added = harness.insertVideo();
+  harness.flushTimers(100);
+  assert.equal(added.playbackRate, 4);
+  harness.message({ action: 'clearTemporaryBoost', sessionId: 'fixture' });
+  assert.deepEqual(harness.videos.map(video => video.playbackRate), [2, 2]);
+});
+
+test('an unrelated site storage update does not undo the current tab speed', async () => {
+  const harness = createContentHarness('MacIntel', 'en', 1.5);
+  await new Promise(resolve => setImmediate(resolve));
+  harness.message({ action: 'setSpeed', speed: 2.5 });
+  harness.storageListeners[0]({ domainSpeeds: {
+    oldValue: { 'example.com': 1.5, 'other.example': 2 },
+    newValue: { 'example.com': 1.5, 'other.example': 2.5 }
+  } }, 'sync');
+  assert.equal(harness.video.playbackRate, 2.5);
+
+  harness.storageListeners[0]({ domainSpeeds: {
+    oldValue: { 'example.com': 1.5 },
+    newValue: { 'example.com': 3 }
+  } }, 'sync');
+  assert.equal(harness.video.playbackRate, 3);
 });

@@ -6,21 +6,77 @@
   <title>Video speed controller test</title>
   <style>
     body { margin: 0; padding: 24px; font: 18px system-ui; color: #fff; background: #111; }
-    video { display: block; width: 100%; max-width: 720px; margin-top: 20px; }
+    video, iframe { display: block; width: 100%; max-width: 720px; margin-top: 12px; }
+    video { max-height: 200px; }
+    iframe { height: 330px; border: 1px solid #777; }
+    button, a { font: inherit; min-height: 44px; color: inherit; }
+    button { color: #111; margin: 4px; }
+    section { margin-block: 24px; }
+    #summary { position: sticky; top: 0; background: #111; padding: 8px; z-index: 1; }
   </style>
 </head>
 <body>
   <h1>Video speed controller test</h1>
-  <p id="rate">Playback rate: 1</p>
-  <video controls loop playsinline>
+  <p>Local release fixture. No purchases or external player scripts.</p>
+  <p><a href="video.html?navigation=1">Navigate on this site</a> · <a id="other-site">Other local site</a> · <a href="simplevideospeedcontroller://support">Open app support</a></p>
+  <div id="summary" aria-live="polite"><p id="rate">Playback rate: 1</p><output id="rates"></output></div>
+  <section><h2>Primary video</h2><video id="primary" controls loop playsinline muted>
     <source src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4" type="video/mp4">
-  </video>
+  </video></section>
+  <section><h2>Second video</h2><video id="secondary" controls loop playsinline muted src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4"></video></section>
+  <button id="insert">Insert dynamic video</button>
+  <button id="reset-rate">Player resets primary to 1x</button>
+  <label><input id="keep-resetting" type="checkbox"> Reset primary every second (speed-lock stress)</label>
+  <div id="dynamic"></div>
+  <section><h2>Same-origin frame</h2><iframe id="same-frame" title="Same-origin video"></iframe></section>
+  <section><h2>Cross-origin frame</h2><iframe id="cross-frame" title="Cross-origin video"></iframe></section>
+  <details><summary>Recent rate events</summary><pre id="events"></pre></details>
   <script>
-    const video = document.querySelector("video");
-    const rate = document.querySelector("#rate");
-    const updateRate = () => { rate.textContent = `Playback rate: ${video.playbackRate}`; };
-    video.addEventListener("ratechange", updateRate);
-    updateRate();
+    const primary = document.querySelector('#primary');
+    const frameRates = {};
+    const history = [];
+    const otherSite = new URL(location.href);
+    otherSite.hostname = location.hostname === 'localhost' ? '127.0.0.1' : 'localhost';
+    document.querySelector('#other-site').href = otherSite.href;
+    document.querySelector('#same-frame').src = 'video-frame.html?name=same';
+    const crossFrame = new URL('video-frame.html?name=cross', otherSite);
+    document.querySelector('#cross-frame').src = crossFrame.href;
+    function render() {
+      document.querySelector('#rate').textContent = `Playback rate: ${primary.playbackRate}`;
+      document.querySelector('#rates').textContent = [
+        ...Array.from(document.querySelectorAll('video'), video => `${video.id}: ${video.playbackRate}x`),
+        ...Object.entries(frameRates).map(([name, rate]) => `${name} frame: ${rate}x`)
+      ].join(' | ');
+    }
+    function observe(video) {
+      video.addEventListener('ratechange', () => {
+        history.unshift(`${new Date().toISOString()} ${video.id}: ${video.playbackRate}`);
+        history.length = Math.min(history.length, 30);
+        document.querySelector('#events').textContent = history.join('\n');
+        render();
+      });
+    }
+    document.querySelectorAll('video').forEach(observe);
+    window.addEventListener('message', event => {
+      const name = event.source === document.querySelector('#same-frame').contentWindow ? 'same'
+        : event.source === document.querySelector('#cross-frame').contentWindow ? 'cross' : null;
+      if (!name || ![location.origin, crossFrame.origin].includes(event.origin)
+          || event.data?.type !== 'fixture-rate' || !Number.isFinite(event.data.rate)) return;
+      frameRates[name] = event.data.rate;
+      render();
+    });
+    document.querySelector('#insert').onclick = () => {
+      const video = primary.cloneNode(true);
+      video.id = `dynamic-${document.querySelectorAll('#dynamic video').length + 1}`;
+      observe(video);
+      document.querySelector('#dynamic').append(video);
+      render();
+    };
+    document.querySelector('#reset-rate').onclick = () => { primary.playbackRate = 1; };
+    setInterval(() => {
+      if (document.querySelector('#keep-resetting').checked) primary.playbackRate = 1;
+    }, 1000);
+    render();
   </script>
 </body>
 </html>

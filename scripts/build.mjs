@@ -70,7 +70,7 @@ const safariLocaleKeys = new Set([
   'gotItBtn'
 ]);
 
-const firefoxAndroidShortcutTitles = {
+const mobileShortcutTitles = {
   ar: 'اختصارات لوحة المفاتيح',
   de: 'Tastenkürzel',
   en: 'Keyboard shortcuts',
@@ -118,6 +118,14 @@ const safariActionTitles = {
   vi: { rate: 'Đánh giá ứng dụng này', support: 'Tùy chọn hỗ trợ' },
   zh_CN: { rate: '为此 App 评分', support: '支持选项' },
   zh_TW: { rate: '為此 App 評分', support: '支持選項' }
+};
+
+const safariAppNames = {
+  es: 'Control sencillo de velocidad de vídeo',
+  es_419: 'Control sencillo de velocidad de video',
+  it: 'Controllo semplice velocità video',
+  pt_BR: 'Controle simples de velocidade de vídeo',
+  pt_PT: 'Controlo simples de velocidade de vídeo'
 };
 
 const sourceManifest = JSON.parse(
@@ -319,7 +327,7 @@ function createSafariBackground() {
 }
 
 function createSafariPopup() {
-  let popup = sourcePopup;
+  let popup = addViewport(sourcePopup);
 
   popup = removeRange(
     popup,
@@ -380,6 +388,17 @@ function createSafariPopupScript() {
   }
 
   let script = `// Global state to track current speed and domain\n${sourcePopupScript.slice(stateStart)}`;
+  script = replaceRequired(
+    script,
+    'function localizeHtmlPage() {',
+    `function localizeHtmlPage() {
+  if (CSS.supports('-webkit-touch-callout', 'none')) {
+    document.querySelector('#shortcutsToggle [data-i18n]')
+      ?.setAttribute('data-i18n', 'keyboardShortcutsTitle');
+  }
+`,
+    'Safari iOS keyboard shortcuts label'
+  );
   script = removeRange(
     script,
     '/**\n * Check if this is the first time opening the popup\n */',
@@ -530,6 +549,9 @@ async function prepareSafariLocaleMessages(targetDirectory) {
     const messagesPath = path.join(localesDirectory, entry.name, 'messages.json');
     const messages = JSON.parse(await readFile(messagesPath, 'utf8'));
     for (const key of safariLocaleKeys) delete messages[key];
+    if (safariAppNames[entry.name]) {
+      messages.appName.message = safariAppNames[entry.name];
+    }
     const actionTitles = safariActionTitles[entry.name] || safariActionTitles.en;
     messages.rateThisApp = {
       message: actionTitles.rate,
@@ -543,7 +565,7 @@ async function prepareSafariLocaleMessages(targetDirectory) {
   }
 }
 
-async function addFirefoxAndroidLocaleMessages(targetDirectory) {
+async function addMobileShortcutLocaleMessages(targetDirectory) {
   const localesDirectory = path.join(targetDirectory, '_locales');
   const entries = await readdir(localesDirectory, { withFileTypes: true });
   for (const entry of entries) {
@@ -551,8 +573,8 @@ async function addFirefoxAndroidLocaleMessages(targetDirectory) {
     const messagesPath = path.join(localesDirectory, entry.name, 'messages.json');
     const messages = JSON.parse(await readFile(messagesPath, 'utf8'));
     messages.keyboardShortcutsTitle = {
-      message: firefoxAndroidShortcutTitles[entry.name] || firefoxAndroidShortcutTitles.en,
-      description: 'Firefox Android title for the keyboard shortcuts section'
+      message: mobileShortcutTitles[entry.name] || mobileShortcutTitles.en,
+      description: 'Mobile title for the keyboard shortcuts section'
     };
     await writeFile(messagesPath, `${JSON.stringify(messages, null, 2)}\n`);
   }
@@ -625,7 +647,7 @@ async function buildFirefox() {
     path.join(projectRoot, 'platforms', 'firefox-android', 'popup.css'),
     path.join(targetDirectory, 'firefox-android.css')
   );
-  await addFirefoxAndroidLocaleMessages(targetDirectory);
+  await addMobileShortcutLocaleMessages(targetDirectory);
   await writeFile(
     path.join(targetDirectory, 'manifest.json'),
     `${JSON.stringify(createFirefoxManifest(), null, 2)}\n`
@@ -653,6 +675,7 @@ async function buildSafari() {
   await writeFile(path.join(targetDirectory, 'popup.js'), createSafariPopupScript());
   await writeFile(path.join(targetDirectory, 'popup-polish.css'), createSafariPopupStyles());
   await prepareSafariLocaleMessages(targetDirectory);
+  await addMobileShortcutLocaleMessages(targetDirectory);
   await assertSafariIsExtensionOnly(targetDirectory);
   return targetDirectory;
 }

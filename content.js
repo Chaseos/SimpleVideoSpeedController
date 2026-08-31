@@ -273,6 +273,7 @@ chrome.storage.onChanged.addListener((changes, namespace) => {
     const domain = getDomain();
     const domainSpeeds = changes.domainSpeeds.newValue || {};
     const newSpeed = domainSpeeds[domain];
+    const oldSpeed = changes.domainSpeeds.oldValue?.[domain];
     
     console.log('Storage changed:', {
       domain,
@@ -281,7 +282,9 @@ chrome.storage.onChanged.addListener((changes, namespace) => {
       allDomainSpeeds: domainSpeeds
     });
     
-    if (newSpeed && newSpeed !== currentSpeed) {
+    // A popup broadcast may temporarily set an embedded frame's speed. Saving
+    // the top-level site's value must not restore an unchanged frame-site value.
+    if (newSpeed && newSpeed !== oldSpeed && newSpeed !== currentSpeed) {
       console.log(`Updating speed from storage change: ${newSpeed}`);
       setVideoSpeed(newSpeed, true);
       showToast(newSpeed);
