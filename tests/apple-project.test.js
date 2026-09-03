@@ -34,10 +34,10 @@ test('Apple targets share the expected identifiers, versions, and deployment min
   assert.doesNotMatch(project, /MARKETING_VERSION = 1\.0;/);
   assert.doesNotMatch(project, /IPHONEOS_DEPLOYMENT_TARGET = 15\.0;/);
   assert.doesNotMatch(project, /MACOSX_DEPLOYMENT_TARGET = 10\.14;/);
-  assert.match(project, /MARKETING_VERSION = 1\.15;/);
+  assert.match(project, /MARKETING_VERSION = 1\.16;/);
   assert.match(project, /IPHONEOS_DEPLOYMENT_TARGET = 16\.0;/);
   assert.match(project, /MACOSX_DEPLOYMENT_TARGET = 13\.0;/);
-  assert.equal((project.match(/CURRENT_PROJECT_VERSION = 3;/g) || []).length, 8);
+  assert.equal((project.match(/CURRENT_PROJECT_VERSION = 4;/g) || []).length, 8);
   assert.equal((project.match(/DEVELOPMENT_TEAM = QG4CBM3K89;/g) || []).length, 8);
   assert.equal((project.match(/com\.apple\.InAppPurchase/g) || []).length, 2);
   assert.match(

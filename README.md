@@ -77,10 +77,13 @@ The extension interface is available in 21 languages across these 22 locales:
 Requirements: a current Node.js release and the `zip` command-line utility. Building the Apple app also requires a current Xcode installation.
 
 ```sh
+npm run preview
 npm test
 npm run build
 npm run build:apple
 ```
+
+`npm run preview` serves the real popup UI for macOS and Windows/Linux side by side at `http://127.0.0.1:4173/`. Set `PREVIEW_PORT` to use a different local port.
 
 The build produces browser-specific unpacked extensions and ZIP archives:
 

@@ -43,8 +43,8 @@ Signed App Store archives are intentionally not automated. The project is config
 - iPhone/iPad Home Screen name: `Video Speed` (11 characters including the space); Mac and Safari extension names remain unchanged.
 - App bundle ID: `app.chaseos.SimpleVideoSpeedController`
 - Extension bundle ID: `app.chaseos.SimpleVideoSpeedController.Extension`
-- Marketing version: `1.15`
-- Build number: `3`
+- Marketing version: `1.16`
+- Build number: `4`
 - Minimum iOS/iPadOS: 16
 - Minimum macOS: 13
 - App Store Connect SKU: `SVSC-APPLE-001`
@@ -71,12 +71,12 @@ For local tests, select the shared `StoreKit Testing (iOS)` or `StoreKit Testing
 
 Tips are repeatable consumables, unlock nothing, and create no lasting entitlement. The app therefore has no Restore Purchases action, account, receipt server, or analytics.
 
-The App Store Connect products have been created with the identifiers and US prices above, worldwide availability, English (U.S.) localization, and review notes. They remain in Prepare for Submission until review screenshots are added and they are submitted with version 1.15.
+The App Store Connect products have been created with the identifiers and US prices above, worldwide availability, English (U.S.) localization, and review notes. They remain in Prepare for Submission until review screenshots are added and they are submitted with version 1.16.
 
 ## App Store Connect checklist
 
 1. The app and extension identifiers are registered. Select the Apple development team and confirm automatic signing for every Apple target in Xcode.
-2. The free, public Utilities-category app record exists with SKU `SVSC-APPLE-001`, iOS/iPadOS and macOS version 1.15, and worldwide availability.
+2. The free, public Utilities-category app record exists with SKU `SVSC-APPLE-001`, iOS/iPadOS and macOS version 1.16, and worldwide availability.
 3. Apple ID `6806633069` is set in `AppleConfiguration.appStoreID`.
 4. The three consumable tip products exist. Add one review screenshot to each product after the native tip sheet is running on a device.
 5. Publish stable support and privacy pages. Ready-to-publish page sources are in `docs/support.html` and `docs/privacy.html`; replace their placeholder public URLs in App Store Connect with the final hosted addresses.
