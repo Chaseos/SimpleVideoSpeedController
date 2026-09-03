@@ -211,6 +211,13 @@ function addStylesheet(markup, fileName) {
   );
 }
 
+function createChromiumManifest() {
+  const manifest = structuredClone(sourceManifest);
+  delete manifest.background.scripts;
+  delete manifest.browser_specific_settings;
+  return manifest;
+}
+
 function createFirefoxManifest() {
   const manifest = structuredClone(sourceManifest);
   delete manifest.background.service_worker;
@@ -694,6 +701,10 @@ async function buildChromium() {
   const targetDirectory = path.join(distDirectory, 'chromium');
   await mkdir(targetDirectory, { recursive: true });
   await copyRuntimeFiles(targetDirectory, chromeRuntimeFiles);
+  await writeFile(
+    path.join(targetDirectory, 'manifest.json'),
+    `${JSON.stringify(createChromiumManifest(), null, 2)}\n`
+  );
   return targetDirectory;
 }
 

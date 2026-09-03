@@ -86,7 +86,7 @@ test('build emits only the explicit runtime allowlist for each target', () => {
   assert.deepEqual(topLevelEntries('safari'), safariRuntimeEntries.slice().sort());
 });
 
-test('Chromium artifact is byte-for-byte identical to the original extension runtime', () => {
+test('Chromium artifact preserves the original runtime and specializes its manifest', () => {
   const sourceFiles = chromeRuntimeEntries.flatMap(entry => {
     const sourcePath = path.join(projectRoot, entry);
     return fs.statSync(sourcePath).isDirectory()
@@ -96,7 +96,7 @@ test('Chromium artifact is byte-for-byte identical to the original extension run
   const builtFiles = collectRelativeFiles(path.join(distRoot, 'chromium'));
 
   assert.deepEqual(builtFiles, sourceFiles);
-  for (const relativeFile of sourceFiles) {
+  for (const relativeFile of sourceFiles.filter(file => file !== 'manifest.json')) {
     assert.deepEqual(
       fs.readFileSync(path.join(distRoot, 'chromium', relativeFile)),
       fs.readFileSync(path.join(projectRoot, relativeFile)),
@@ -106,12 +106,13 @@ test('Chromium artifact is byte-for-byte identical to the original extension run
 });
 
 test('only Firefox and Safari receive target-specific manifest changes', () => {
-  const source = JSON.parse(fs.readFileSync(path.join(projectRoot, 'manifest.json'), 'utf8'));
   const chromium = readManifest('chromium');
   const firefox = readManifest('firefox');
   const safari = readManifest('safari');
 
-  assert.deepEqual(chromium, source);
+  assert.equal(chromium.background.service_worker, 'background.js');
+  assert.equal(chromium.background.scripts, undefined);
+  assert.equal(chromium.browser_specific_settings, undefined);
 
   assert.equal(firefox.background.service_worker, undefined);
   assert.deepEqual(firefox.background.scripts, ['background.js']);
