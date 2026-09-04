@@ -95,8 +95,6 @@ The Chromium package is a byte-for-byte copy of the existing extension runtime. 
 
 `npm run build:apple` rebuilds all web targets, synchronizes the Safari resources, regenerates Apple icon assets from the existing extension artwork, and compiles unsigned macOS and iOS Simulator builds. Signed App Store archives are created explicitly in Xcode after selecting an Apple development team.
 
-See [APPLE_RELEASE.md](APPLE_RELEASE.md) for the Apple, StoreKit, App Store Connect, TestFlight, and Firefox Android release checklist.
-
 ## Privacy
 
 Simple Video Speed Controller stores domain-keyed playback preferences and extension settings in your browser's sync storage. Depending on your browser settings, that storage may sync through your browser account. The extension does not send this information to the developer, include analytics, or transmit video content or metadata to external servers.
