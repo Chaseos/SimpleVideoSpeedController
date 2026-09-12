@@ -550,9 +550,14 @@ final class ViewController: PlatformViewController, WKNavigationDelegate, WKScri
 #elseif os(macOS)
         SFSafariApplication.showPreferencesForExtension(
             withIdentifier: AppleConfiguration.extensionBundleIdentifier
-        ) { error in
-            guard error == nil else { return }
-            DispatchQueue.main.async { NSApp.terminate(self) }
+        ) { [weak self] error in
+            guard error != nil else { return }
+
+            DispatchQueue.main.async {
+                self?.showActionMessage(
+                    "Safari Extension Settings couldn't be opened. In Safari, choose Safari > Settings > Extensions."
+                )
+            }
         }
 #endif
     }

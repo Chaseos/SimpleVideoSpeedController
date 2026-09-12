@@ -37,7 +37,7 @@ test('Apple targets share the expected identifiers, versions, and deployment min
   assert.match(project, /MARKETING_VERSION = 1\.16;/);
   assert.match(project, /IPHONEOS_DEPLOYMENT_TARGET = 16\.0;/);
   assert.match(project, /MACOSX_DEPLOYMENT_TARGET = 13\.0;/);
-  assert.equal((project.match(/CURRENT_PROJECT_VERSION = 4;/g) || []).length, 8);
+  assert.equal((project.match(/CURRENT_PROJECT_VERSION = 5;/g) || []).length, 8);
   assert.equal((project.match(/DEVELOPMENT_TEAM = QG4CBM3K89;/g) || []).length, 8);
   assert.equal((project.match(/com\.apple\.InAppPurchase/g) || []).length, 2);
   assert.match(
@@ -67,6 +67,15 @@ test('native Apple UI uses SF Symbols and the deterministic App Store review lin
   assert.equal(appStoreID, '6806633069');
   assert.match(viewController, /url\(forResource: "AppStoreID", withExtension: "txt"\)/);
   assert.match(project, /AppStoreID\.txt in Resources/);
+});
+
+test('Mac Safari settings launcher keeps the app open and explains failures', () => {
+  assert.match(viewController, /SFSafariApplication\.showPreferencesForExtension/);
+  assert.doesNotMatch(viewController, /NSApp\.terminate/);
+  assert.match(
+    viewController,
+    /Safari Extension Settings couldn't be opened\. In Safari, choose Safari > Settings > Extensions\./
+  );
 });
 
 test('StoreKit code and local configuration use the same three consumable products', () => {
