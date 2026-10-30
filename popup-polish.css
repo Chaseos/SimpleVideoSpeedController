@@ -390,6 +390,18 @@ kbd {
   opacity: 1;
 }
 
+/* Mirrors the Chaseos Apps site wordmark; shared with the Safari popup. */
+.site-wordmark {
+  font-family: "Geist", "SF Pro Display", -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", system-ui, sans-serif;
+  font-weight: 800;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+.site-wordmark span {
+  color: #c98a62;
+}
+
 .kofi-link {
   border-color: transparent;
   border-radius: 6px;
@@ -411,6 +423,24 @@ kbd {
 
 .kofi-message {
   font-weight: 650;
+}
+
+.creator-links {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.site-link:hover,
+.site-link:focus-visible {
+  background: rgba(189, 125, 89, 0.12);
+  border-color: rgba(214, 150, 108, 0.55);
+  width: 117px;
+}
+
+.site-link .kofi-message {
+  color: #ecc9ad;
+  font-size: 9px;
 }
 
 .pin-suggestion {

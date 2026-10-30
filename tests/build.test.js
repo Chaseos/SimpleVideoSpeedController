@@ -10,6 +10,7 @@ const distRoot = path.join(projectRoot, 'dist');
 const chromeRuntimeEntries = [
   '_locales',
   'background.js',
+  'chaseos_symbol.png',
   'content.js',
   'icon.png',
   'kofi_symbol.svg',
@@ -23,6 +24,7 @@ const chromeRuntimeEntries = [
 const safariRuntimeEntries = [
   '_locales',
   'background.js',
+  'chaseos_symbol.png',
   'content.js',
   'icon-16.png',
   'icon-48.png',
@@ -183,6 +185,8 @@ test('Safari artifact contains only its user-initiated Apple app actions', () =>
   assert.match(popup, /simplevideospeedcontroller:\/\/support/);
   assert.match(popup, /aria-label="Support options"/);
   assert.match(popup, /data-i18n-aria-label="supportOptions"/);
+  assert.match(popup, /class="safari-action-link safari-site-link" href="https:\/\/chaseos\.app"/);
+  assert.match(popup, /src="chaseos_symbol\.png"/);
   assert.doesNotMatch(popup, /Support my work/);
 
   for (const locale of fs.readdirSync(path.join(distRoot, 'safari', '_locales'))) {

@@ -551,11 +551,19 @@
   <!-- Shortcuts Section -->
   <div class="shortcuts-container">
     <div class="shortcuts-header">
-      <a id="kofi-link" href="https://ko-fi.com/chaseos" target="_blank" rel="noopener noreferrer" class="kofi-link"
-        data-i18n-title="supportMyWork" data-i18n-aria-label="supportMyWork" title="Support my work" aria-label="Support my work">
-        <img src="kofi_symbol.svg" alt="" class="kofi-icon">
-        <span class="kofi-message" data-i18n="supportMyWorkCta">Support my work</span>
-      </a>
+      <div class="creator-links">
+        <a id="kofi-link" href="https://ko-fi.com/chaseos" target="_blank" rel="noopener noreferrer" class="kofi-link"
+          data-i18n-title="supportMyWork" data-i18n-aria-label="supportMyWork" title="Support my work" aria-label="Support my work">
+          <img src="kofi_symbol.svg" alt="" class="kofi-icon">
+          <span class="kofi-message" data-i18n="supportMyWorkCta">Support my work</span>
+        </a>
+        <!-- Shares the Ko-fi link's collapsed icon, expansion, and pop animation. -->
+        <a id="site-link" href="https://chaseos.app" target="_blank" rel="noopener noreferrer" class="kofi-link site-link"
+          title="Chaseos Apps" aria-label="Chaseos Apps">
+          <img src="chaseos_symbol.png" alt="" class="kofi-icon">
+          <span class="kofi-message site-wordmark">Chaseos Apps<span aria-hidden="true">°</span></span>
+        </a>
+      </div>
       <button class="shortcuts-toggle" id="shortcutsToggle">
         <span data-i18n="shortcutsTitle">Shortcuts</span>
         <span class="chevron" id="shortcutsChevron">▼</span>

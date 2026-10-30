@@ -23,6 +23,7 @@ const appleSupportURL = 'simplevideospeedcontroller://support';
 const chromeRuntimeFiles = [
   '_locales',
   'background.js',
+  'chaseos_symbol.png',
   'content.js',
   'icon.png',
   'kofi_symbol.svg',
@@ -37,6 +38,7 @@ const chromeRuntimeFiles = [
 const safariRuntimeFiles = [
   '_locales',
   'background.js',
+  'chaseos_symbol.png',
   'content.js',
   'icon-16.png',
   'icon-48.png',
@@ -381,7 +383,7 @@ function createSafariPopup() {
     'browser-only prompt inline styles'
   );
   popup = popup.replace(
-    /\n      <a id="kofi-link"[\s\S]*?<\/a>/,
+    /\n      <div class="creator-links">[\s\S]*?\n      <\/div>/,
     ''
   );
   popup = replaceRequired(
@@ -400,6 +402,11 @@ function createSafariPopup() {
         title="Support options" aria-label="Support options">
         <span class="safari-action-icon" aria-hidden="true">♥</span>
         <span class="safari-action-label" data-i18n="supportOptions">Support options</span>
+      </a>
+      <a class="safari-action-link safari-site-link" href="https://chaseos.app" target="_blank" rel="noopener noreferrer"
+        title="Chaseos Apps" aria-label="Chaseos Apps">
+        <img class="safari-action-icon" src="chaseos_symbol.png" alt="">
+        <span class="safari-action-label site-wordmark">Chaseos Apps<span aria-hidden="true">°</span></span>
       </a>
       </div>`,
     'Safari rating and support actions'

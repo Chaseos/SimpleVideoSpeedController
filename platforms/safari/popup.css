@@ -88,6 +88,14 @@ body {
   outline: none;
 }
 
+.safari-site-link:hover,
+.safari-site-link:focus-visible {
+  background: rgba(189, 125, 89, 0.12);
+  border-color: rgba(214, 150, 108, 0.55);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.22);
+  width: 119px;
+}
+
 .safari-rate-link:hover,
 .safari-rate-link:focus-visible {
   background: rgba(255, 200, 87, 0.1);
@@ -136,6 +144,17 @@ body {
 
 .safari-support-link .safari-action-label {
   color: #ffb8ba;
+}
+
+.safari-site-link .safari-action-label {
+  color: #ecc9ad;
+  font-size: 9.5px;
+}
+
+img.safari-action-icon {
+  display: block;
+  height: 16px;
+  width: 16px;
 }
 
 .safari-action-link:hover .safari-action-label,
