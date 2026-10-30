@@ -436,6 +436,48 @@ test('speed lock recovers when a player changes playbackRate or starts playback 
   assert.deepEqual(harness.videos.map(video => video.playbackRate), [2, 2]);
 });
 
+test('at 1x the site keeps control of its own playback rate', async () => {
+  const harness = createContentHarness('MacIntel');
+  await new Promise(resolve => setImmediate(resolve));
+  // A live player nudging its rate to catch up, as Twitch does.
+  harness.video.playbackRate = 1.03;
+  harness.video.listeners.get('ratechange')({ target: harness.video });
+  harness.video.listeners.get('timeupdate')({ target: harness.video });
+  harness.video.listeners.get('play').call(harness.video);
+  harness.video.listeners.get('loadedmetadata').call(harness.video);
+  harness.tick();
+  assert.equal(harness.video.playbackRate, 1.03);
+  const added = harness.insertVideo({ playbackRate: 1.5 });
+  harness.flushTimers(100);
+  assert.equal(added.playbackRate, 1.5);
+});
+
+test('switching to 1x applies it once, then leaves later site changes alone', async () => {
+  const harness = createContentHarness('MacIntel', 'en', 2);
+  await new Promise(resolve => setImmediate(resolve));
+  harness.storageListeners[0]({ domainSpeeds: {
+    oldValue: { 'example.com': 2 },
+    newValue: { 'example.com': 1 }
+  } }, 'sync');
+  assert.equal(harness.video.playbackRate, 1);
+  harness.video.playbackRate = 1.5;
+  harness.video.listeners.get('ratechange')({ target: harness.video });
+  harness.tick();
+  assert.equal(harness.video.playbackRate, 1.5);
+
+  // Choosing 1x again is an explicit reset of the site's own speed.
+  harness.message({ action: 'setSpeed', speed: 1 });
+  assert.equal(harness.video.playbackRate, 1);
+
+  harness.message({ action: 'applyTemporaryBoost', sessionId: 'fixture', speed: 3 });
+  assert.equal(harness.video.playbackRate, 3);
+  harness.message({ action: 'clearTemporaryBoost', sessionId: 'fixture' });
+  assert.equal(harness.video.playbackRate, 1);
+  harness.video.playbackRate = 1.03;
+  harness.video.listeners.get('timeupdate')({ target: harness.video });
+  assert.equal(harness.video.playbackRate, 1.03);
+});
+
 test('an unrelated site storage update does not undo the current tab speed', async () => {
   const harness = createContentHarness('MacIntel', 'en', 1.5);
   await new Promise(resolve => setImmediate(resolve));

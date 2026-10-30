@@ -136,16 +136,24 @@ function getEffectiveSpeed(targetSpeed, video) {
 }
 
 /**
- * Force update all video speeds
+ * Applies the target speed to a video. At 1x the site keeps control of its own
+ * playback rate (its speed menu, or live catch-up such as Twitch's), so 1x is
+ * only applied when the speed is explicitly changed.
  */
-function forceUpdateVideoSpeeds(speed = getTargetSpeed()) {
-  const videos = getAllVideos();
-  videos.forEach((video) => {
-    const effectiveSpeed = getEffectiveSpeed(speed, video);
-    if (video && video.playbackRate !== effectiveSpeed) {
-      video.playbackRate = effectiveSpeed;
-    }
-  });
+function applyVideoSpeed(video, explicitChange = false) {
+  const targetSpeed = getTargetSpeed();
+  const effectiveSpeed = getEffectiveSpeed(targetSpeed, video);
+  if (targetSpeed === 1 && !explicitChange) return;
+  if (video.playbackRate !== effectiveSpeed) {
+    video.playbackRate = effectiveSpeed;
+  }
+}
+
+/**
+ * Applies the target speed to all video elements
+ */
+function updateVideoSpeeds(explicitChange = false) {
+  getAllVideos().forEach(video => applyVideoSpeed(video, explicitChange));
 }
 
 /**
@@ -155,7 +163,7 @@ async function setVideoSpeed(speed, skipStorage = false) {
   try {
     console.log(`Setting video speed to ${speed} (skipStorage: ${skipStorage})`);
     currentSpeed = speed;
-    forceUpdateVideoSpeeds();
+    updateVideoSpeeds(true);
 
     // Save speed setting if not skipped
     if (!skipStorage) {
@@ -194,7 +202,9 @@ async function applySavedSpeed() {
     boostSpeedPreference = normalizeBoostSpeed(data.temporaryBoostSpeed);
     boostKeyPreference = normalizeBoostKey(data.temporaryBoostKey);
     console.log(`Loading saved speed for ${domain}: ${savedSpeed}`);
-    await setVideoSpeed(savedSpeed, true);
+    // Not an explicit change: a saved 1x leaves the site's own rate alone.
+    currentSpeed = savedSpeed;
+    updateVideoSpeeds();
   } catch (error) {
     console.error('Error loading saved speed:', error);
   }
@@ -215,34 +225,25 @@ function monitorVideoElements() {
     }
     
     // Set initial speed
-    const effectiveSpeed = getEffectiveSpeed(getTargetSpeed(), video);
-    if (video.playbackRate !== effectiveSpeed) {
-      video.playbackRate = effectiveSpeed;
-    }
+    applyVideoSpeed(video);
   });
 }
 
 // Event handlers for video elements
 function handleRateChange(event) {
-  const effectiveSpeed = getEffectiveSpeed(getTargetSpeed(), event.target);
-  if (event.target.playbackRate !== effectiveSpeed) {
-    event.target.playbackRate = effectiveSpeed;
-  }
+  applyVideoSpeed(event.target);
 }
 
 function handlePlay() {
-  this.playbackRate = getEffectiveSpeed(getTargetSpeed(), this);
+  applyVideoSpeed(this);
 }
 
 function handleLoadedMetadata() {
-  this.playbackRate = getEffectiveSpeed(getTargetSpeed(), this);
+  applyVideoSpeed(this);
 }
 
 function handleTimeUpdate(event) {
-  const effectiveSpeed = getEffectiveSpeed(getTargetSpeed(), event.target);
-  if (event.target.playbackRate !== effectiveSpeed) {
-    event.target.playbackRate = effectiveSpeed;
-  }
+  applyVideoSpeed(event.target);
 }
 
 // Watch for dynamically added videos
@@ -270,7 +271,7 @@ chrome.storage.onChanged.addListener((changes, namespace) => {
     boostSpeedPreference = normalizeBoostSpeed(changes.temporaryBoostSpeed.newValue);
     if (temporaryBoostSessionId !== null) {
       temporaryBoostSpeed = boostSpeedPreference;
-      forceUpdateVideoSpeeds();
+      updateVideoSpeeds(true);
     }
   }
 
@@ -355,7 +356,7 @@ function applyTemporaryBoost(sessionId, speed) {
   const isNewSession = temporaryBoostSessionId !== sessionId;
   temporaryBoostSessionId = sessionId;
   temporaryBoostSpeed = normalizeBoostSpeed(speed);
-  forceUpdateVideoSpeeds();
+  updateVideoSpeeds(true);
   if (isNewSession) {
     showToast(temporaryBoostSpeed);
   }
@@ -373,7 +374,7 @@ function clearTemporaryBoost(sessionId) {
   temporaryBoostSessionId = null;
   temporaryBoostSpeed = null;
   if (initiatedBoostSessionId === sessionId) initiatedBoostSessionId = null;
-  forceUpdateVideoSpeeds();
+  updateVideoSpeeds(true);
   showToast(currentSpeed);
 }
 
@@ -459,5 +460,5 @@ monitorVideoElements();
 
 // Periodic check as fallback
 setInterval(() => {
-  forceUpdateVideoSpeeds();
+  updateVideoSpeeds();
 }, 2000);

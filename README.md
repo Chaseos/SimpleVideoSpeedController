@@ -26,7 +26,7 @@ After installing or updating the extension, reload any already-open video tabs. 
 - **Per-site speed memory:** Saves and reapplies a separate playback speed for each domain using browser sync storage.
 - **Precise speed control:** Choose a 0.5x–3x preset, enter a custom speed from 0.1x–16x, or fine-tune in 0.05x steps.
 - **Temporary Boost:** Choose a boost speed and letter key, then hold the platform shortcut to use that speed temporarily. Releasing the shortcut restores the previous speed, including for videos across frames in the active tab.
-- **Speed lock:** Reapplies the selected speed when a player starts, loads new media, or tries to change its own playback rate.
+- **Speed lock:** Reapplies the selected speed when a player starts, loads new media, or tries to change its own playback rate. At 1x, the site's own player keeps control, so its speed menu and live catch-up keep working.
 - **YouTube live-edge handling:** Returns playback to 1x at the live edge to avoid repeated buffering and catch-up loops.
 - **On-video feedback:** Shows the current speed in a short toast, including in fullscreen mode.
 - **Localized interface:** Available in 21 languages.
