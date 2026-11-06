@@ -7,6 +7,14 @@
     "message": "Laraskan kelajuan video di mana-mana laman web.",
     "description": "The description of the extension"
   },
+  "extensionStoreName": {
+    "message": "Pengawal Kelajuan Video: 16x & Pintasan",
+    "description": "Store listing name. Chrome, Edge and Firefox show it. Edge allows 45 characters."
+  },
+  "extensionStoreDescription": {
+    "message": "Laraskan kelajuan video di YouTube, Netflix, kursus, dll. Kelajuan disimpan ikut laman web. Tahan kekunci untuk kelajuan sementara.",
+    "description": "Store listing summary, 132 characters at most"
+  },
   "speedPlaceholder": {
     "message": "Kelajuan",
     "description": "Placeholder text for the custom speed input"

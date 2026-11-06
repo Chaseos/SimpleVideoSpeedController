@@ -7,6 +7,14 @@
     "message": "调整任何网站上的视频播放速度。",
     "description": "The description of the extension"
   },
+  "extensionStoreName": {
+    "message": "简易视频倍速控制器：16 倍速和快捷键",
+    "description": "Store listing name. Chrome, Edge and Firefox show it. Edge allows 45 characters."
+  },
+  "extensionStoreDescription": {
+    "message": "调快或调慢 YouTube、Netflix、在线课程等网站上的视频。为每个网站单独记住播放速度。按住快捷键即可临时使用其他倍速。",
+    "description": "Store listing summary, 132 characters at most"
+  },
   "speedPlaceholder": {
     "message": "速度",
     "description": "Placeholder text for the custom speed input"

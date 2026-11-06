@@ -7,6 +7,14 @@
     "message": "Herhangi bir web sitesindeki video hızını ayarlayın.",
     "description": "The description of the extension"
   },
+  "extensionStoreName": {
+    "message": "Video Hız Denetleyicisi: 16x ve Kısayollar",
+    "description": "Store listing name. Chrome, Edge and Firefox show it. Edge allows 45 characters."
+  },
+  "extensionStoreDescription": {
+    "message": "YouTube, Netflix ve kurslarda video hızlandırın, yavaşlatın. Hız her site için ayrı saklanır. Geçici hız için bir tuşu basılı tutun.",
+    "description": "Store listing summary, 132 characters at most"
+  },
   "speedPlaceholder": {
     "message": "Hız",
     "description": "Placeholder text for the custom speed input"

@@ -7,6 +7,14 @@
     "message": "Passe die Videogeschwindigkeit auf jeder Website an.",
     "description": "The description of the extension"
   },
+  "extensionStoreName": {
+    "message": "Video-Geschwindigkeitsregler: 16x & Hotkeys",
+    "description": "Store listing name. Chrome, Edge and Firefox show it. Edge allows 45 characters."
+  },
+  "extensionStoreDescription": {
+    "message": "Videos beschleunigen oder bremsen: YouTube, Netflix, Kurse & mehr. Tempo pro Website gespeichert. Taste halten: temporäres Tempo.",
+    "description": "Store listing summary, 132 characters at most"
+  },
   "speedPlaceholder": {
     "message": "Geschwindigkeit",
     "description": "Placeholder text for the custom speed input"

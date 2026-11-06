@@ -126,6 +126,11 @@ test('only Firefox and Safari receive target-specific manifest changes', () => {
     128: 'icon-128.png'
   });
 
+  assert.equal(chromium.name, '__MSG_extensionStoreName__');
+  assert.equal(firefox.name, '__MSG_extensionStoreName__');
+  assert.equal(safari.name, '__MSG_appName__');
+  assert.equal(safari.description, '__MSG_appDescription__');
+
   assert.equal(safari.background.service_worker, 'background.js');
   assert.equal(safari.background.scripts, undefined);
   assert.equal(safari.browser_specific_settings, undefined);

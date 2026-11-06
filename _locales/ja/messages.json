@@ -7,6 +7,14 @@
     "message": "あらゆるウェブサイトで動画の再生速度を調整します。",
     "description": "The description of the extension"
   },
+  "extensionStoreName": {
+    "message": "シンプルな動画再生速度コントローラー：16倍速とショートカット",
+    "description": "Store listing name. Chrome, Edge and Firefox show it. Edge allows 45 characters."
+  },
+  "extensionStoreDescription": {
+    "message": "YouTube、Netflix、オンライン講座などの動画を倍速・スロー再生。サイトごとに速度を記憶します。キーを押している間だけ別の速度で再生できます。",
+    "description": "Store listing summary, 132 characters at most"
+  },
   "speedPlaceholder": {
     "message": "速度",
     "description": "Placeholder text for the custom speed input"

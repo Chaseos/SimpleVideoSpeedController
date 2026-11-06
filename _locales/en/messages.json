@@ -7,6 +7,14 @@
     "message": "Adjust the video speed on any website.",
     "description": "The description of the extension"
   },
+  "extensionStoreName": {
+    "message": "Simple Video Speed Controller: 16x & Hotkeys",
+    "description": "Store listing name. Chrome, Edge and Firefox show it. Edge allows 45 characters."
+  },
+  "extensionStoreDescription": {
+    "message": "Speed up or slow down video on YouTube, Netflix, courses and more. Each site keeps its own speed. Hold a key for a temporary boost.",
+    "description": "Store listing summary, 132 characters at most"
+  },
   "speedPlaceholder": {
     "message": "Speed",
     "description": "Placeholder text for the custom speed input"

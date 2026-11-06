@@ -7,6 +7,14 @@
     "message": "Điều chỉnh tốc độ video trên mọi trang web.",
     "description": "The description of the extension"
   },
+  "extensionStoreName": {
+    "message": "Bộ điều khiển tốc độ video: 16x và phím tắt",
+    "description": "Store listing name. Chrome, Edge and Firefox show it. Edge allows 45 characters."
+  },
+  "extensionStoreDescription": {
+    "message": "Tăng giảm tốc độ video trên YouTube, Netflix, khóa học... Tự động lưu tốc độ theo trang web. Nhấn giữ phím để dùng tốc độ tạm thời.",
+    "description": "Store listing summary, 132 characters at most"
+  },
   "speedPlaceholder": {
     "message": "Tốc độ",
     "description": "Placeholder text for the custom speed input"

@@ -65,6 +65,8 @@ const safariForbiddenContent = [
 ];
 
 const safariLocaleKeys = new Set([
+  'extensionStoreName',
+  'extensionStoreDescription',
   'reviewPromptText',
   'supportMyWork',
   'supportMyWorkCta',
@@ -237,6 +239,9 @@ function createFirefoxManifest() {
 
 function createSafariManifest() {
   const manifest = structuredClone(sourceManifest);
+  // Apple caps names at 40 characters, and the store summary mentions key presses.
+  manifest.name = '__MSG_appName__';
+  manifest.description = '__MSG_appDescription__';
   delete manifest.background.scripts;
   delete manifest.browser_specific_settings;
   if (!manifest.permissions.includes('scripting')) {

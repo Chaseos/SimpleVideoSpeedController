@@ -7,6 +7,14 @@
     "message": "اضبط سرعة تشغيل الفيديو على أي موقع إلكتروني.",
     "description": "The description of the extension"
   },
+  "extensionStoreName": {
+    "message": "أداة بسيطة لضبط سرعة الفيديو: 16x واختصارات",
+    "description": "Store listing name. Chrome, Edge and Firefox show it. Edge allows 45 characters."
+  },
+  "extensionStoreDescription": {
+    "message": "سرّع الفيديو أو أبطئه على YouTube وNetflix والدورات التعليمية وغيرها. تُحفظ سرعة كل موقع. اضغط مع الاستمرار على مفتاح لسرعة مؤقتة.",
+    "description": "Store listing summary, 132 characters at most"
+  },
   "speedPlaceholder": {
     "message": "السرعة",
     "description": "Placeholder text for the custom speed input"

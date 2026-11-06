@@ -7,6 +7,14 @@
     "message": "Регулюйте швидкість відео на будь-якому вебсайті.",
     "description": "The description of the extension"
   },
+  "extensionStoreName": {
+    "message": "Контроль швидкості відео: 16x, гарячі клавіші",
+    "description": "Store listing name. Chrome, Edge and Firefox show it. Edge allows 45 characters."
+  },
+  "extensionStoreDescription": {
+    "message": "Змінюйте швидкість відео: YouTube, Netflix, курси. Зберігає швидкість для кожного сайту. Утримуйте клавішу для тимчасової швидкості.",
+    "description": "Store listing summary, 132 characters at most"
+  },
   "speedPlaceholder": {
     "message": "Швидкість",
     "description": "Placeholder text for the custom speed input"

@@ -7,6 +7,14 @@
     "message": "ปรับความเร็ววิดีโอบนเว็บไซต์ใดก็ได้",
     "description": "The description of the extension"
   },
+  "extensionStoreName": {
+    "message": "ตัวควบคุมความเร็ววิดีโอ: 16x และแป้นพิมพ์ลัด",
+    "description": "Store listing name. Chrome, Edge and Firefox show it. Edge allows 45 characters."
+  },
+  "extensionStoreDescription": {
+    "message": "เร่งหรือลดความเร็ววิดีโอบน YouTube, Netflix, คอร์สออนไลน์ และอื่น ๆ จำความเร็วแยกตามเว็บไซต์ กดปุ่มค้างไว้เพื่อใช้ความเร็วชั่วคราว",
+    "description": "Store listing summary, 132 characters at most"
+  },
   "speedPlaceholder": {
     "message": "ความเร็ว",
     "description": "Placeholder text for the custom speed input"

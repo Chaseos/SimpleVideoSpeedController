@@ -7,6 +7,14 @@
     "message": "Ajuste a velocidade dos vídeos em qualquer site.",
     "description": "The description of the extension"
   },
+  "extensionStoreName": {
+    "message": "Controle de velocidade de vídeo: 16x, atalhos",
+    "description": "Store listing name. Chrome, Edge and Firefox show it. Edge allows 45 characters."
+  },
+  "extensionStoreDescription": {
+    "message": "Acelere ou desacelere vídeos no YouTube, na Netflix, em cursos e mais. Velocidade salva por site. Acelere enquanto segura uma tecla.",
+    "description": "Store listing summary, 132 characters at most"
+  },
   "speedPlaceholder": {
     "message": "Velocidade",
     "description": "Placeholder text for the custom speed input"

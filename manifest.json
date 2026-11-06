@@ -1,13 +1,13 @@
 {
   "manifest_version": 3,
-  "name": "__MSG_appName__",
+  "name": "__MSG_extensionStoreName__",
   "version": "1.17",
   "default_locale": "en",
   "permissions": [
     "storage",
     "activeTab"
   ],
-  "description": "__MSG_appDescription__",
+  "description": "__MSG_extensionStoreDescription__",
   "icons": {
     "16": "icon.png",
     "48": "icon.png",

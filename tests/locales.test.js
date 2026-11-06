@@ -33,6 +33,15 @@ test('speed controls keep language-neutral plus and minus symbols', () => {
   assert.match(popupMarkup, /id="boostSpeedDown"[^>]*>−<\/button>/);
 });
 
+for (const locale of ['en', ...locales]) {
+  test(`${locale} store copy fits the store limits`, () => {
+    const messages = JSON.parse(fs.readFileSync(path.join(localesRoot, locale, 'messages.json'), 'utf8'));
+
+    assert.ok(messages.extensionStoreName.message.length <= 45, 'Edge allows 45 characters');
+    assert.ok(messages.extensionStoreDescription.message.length <= 132, 'Chrome allows 132 characters');
+  });
+}
+
 for (const locale of locales) {
   test(`${locale} locale contains every English message`, () => {
     const messagesPath = path.join(localesRoot, locale, 'messages.json');

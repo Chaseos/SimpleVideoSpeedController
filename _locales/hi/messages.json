@@ -7,6 +7,14 @@
     "message": "किसी भी वेबसाइट पर वीडियो की स्पीड बदलें।",
     "description": "The description of the extension"
   },
+  "extensionStoreName": {
+    "message": "आसान वीडियो स्पीड कंट्रोलर: 16x और शॉर्टकट",
+    "description": "Store listing name. Chrome, Edge and Firefox show it. Edge allows 45 characters."
+  },
+  "extensionStoreDescription": {
+    "message": "YouTube, Netflix, कोर्स आदि पर वीडियो तेज़ या धीमा करें। हर साइट की स्पीड याद रहती है। कुछ देर तेज़ चलाने के लिए शॉर्टकट दबाए रखें।",
+    "description": "Store listing summary, 132 characters at most"
+  },
   "speedPlaceholder": {
     "message": "स्पीड",
     "description": "Placeholder text for the custom speed input"

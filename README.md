@@ -2,7 +2,7 @@
 
 <img width="100" alt="Simple Video Speed Controller icon" src="https://github.com/user-attachments/assets/17514be3-7964-4000-982c-143bbcfaa1c0">
 
-A lightweight, open-source browser extension for controlling HTML5 video playback from **0.1x to 16x**. Set a speed from the popup, use keyboard shortcuts without leaving the video, or hold a customizable shortcut for a temporary speed boost. Your preferred speed is remembered separately for each website.
+A free, lightweight, open-source browser extension for controlling HTML5 video speed from **0.1x to 16x** on YouTube, Netflix, online courses, and other sites. Set a speed from the popup, use keyboard shortcuts without leaving the video, or hold a customizable shortcut for a temporary speed boost. Your preferred speed is remembered separately for each website.
 
 ## Install
 
@@ -90,6 +90,8 @@ The build produces browser-specific unpacked extensions and ZIP archives:
 - `dist/chromium` and `dist/simple-video-speed-controller-chromium.zip` for Chrome, Edge, Opera, and Whale
 - `dist/firefox` and `dist/simple-video-speed-controller-firefox.zip` for Firefox desktop and Android
 - `dist/safari` and `dist/simple-video-speed-controller-safari.zip` as the web-extension resources embedded in the Apple app
+
+Store listings use the `extensionStoreName` and `extensionStoreDescription` locale keys, limited to 45 and 132 characters. The Safari package keeps the shorter `appName` and `appDescription`.
 
 The Chromium package is a byte-for-byte copy of the existing extension runtime. Firefox Android and Safari changes are applied only while producing their target packages, with platform styles kept under `platforms/`; they do not alter the Chrome popup or scripts. The Safari package excludes browser-store review prompts, Ko-fi links, pinning guidance, and related engagement resources, while adding a compact user-initiated link to the app's App Store review page.
 

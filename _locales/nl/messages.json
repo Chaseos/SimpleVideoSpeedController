@@ -7,6 +7,14 @@
     "message": "Pas de videosnelheid aan op elke website.",
     "description": "The description of the extension"
   },
+  "extensionStoreName": {
+    "message": "Videosnelheidsregelaar: 16x & sneltoetsen",
+    "description": "Store listing name. Chrome, Edge and Firefox show it. Edge allows 45 characters."
+  },
+  "extensionStoreDescription": {
+    "message": "Versnel of vertraag video op YouTube, Netflix en cursussites. Onthoudt snelheid per site. Houd een toets vast: tijdelijke snelheid.",
+    "description": "Store listing summary, 132 characters at most"
+  },
   "speedPlaceholder": {
     "message": "Snelheid",
     "description": "Placeholder text for the custom speed input"
