@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "__MSG_extensionStoreName__",
-  "version": "1.17",
+  "version": "1.18",
   "default_locale": "en",
   "permissions": [
     "storage",
