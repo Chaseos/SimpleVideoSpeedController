@@ -402,19 +402,21 @@ function setupTemporaryBoostControls() {
     updateSpeedInputDisplay(speedInput);
     saveBoostSpeed(speedInput.value);
   });
-  speedInput?.addEventListener('change', () => {
+
+  const commitBoostSpeedInput = () => {
     if (!saveBoostSpeed(speedInput.value, true)) {
       boostSpeed = normalizeBoostSpeed(speedInput.value);
       saveBoostSpeed(boostSpeed, true);
     }
     updateTemporaryBoostUI();
     speedInput.value = formatSpeed(boostSpeed);
-  });
-
-  speedInput?.addEventListener('blur', () => {
-    speedInput.value = formatSpeed(boostSpeed);
     updateSpeedInputDisplay(speedInput);
-  });
+  };
+
+  speedInput?.addEventListener('change', commitBoostSpeedInput);
+  // iOS Safari's keyboard accessory checkmark dismisses the field without
+  // sending an Enter key. Commit the visible value before formatting on blur.
+  speedInput?.addEventListener('blur', commitBoostSpeedInput);
 
   const adjustBoostSpeed = delta => {
     const nextSpeed = Math.min(
@@ -478,23 +480,24 @@ function setupEventListeners() {
       updateSpeedInputDisplay(customSpeedInput);
     });
 
-    // Handle Set button click
-    setCustomSpeedBtn.addEventListener('click', () => {
+    const commitCustomSpeedInput = () => {
       const speed = parseFloat(customSpeedInput.value);
-      if (speed && speed > 0) {
-        handleSpeedChange(speed);
-      }
-    });
+      if (!speed || speed <= 0) return false;
 
-    // Handle Enter key in custom speed input
-    customSpeedInput.addEventListener('keypress', (e) => {
+      handleSpeedChange(speed);
+      return true;
+    };
+
+    // Handle Set button click
+    setCustomSpeedBtn.addEventListener('click', commitCustomSpeedInput);
+
+    // Handle both hardware/software Enter and iOS Safari's accessory Done button.
+    customSpeedInput.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') {
-        const speed = parseFloat(customSpeedInput.value);
-        if (speed && speed > 0) {
-          handleSpeedChange(speed);
-        }
+        commitCustomSpeedInput();
       }
     });
+    customSpeedInput.addEventListener('blur', commitCustomSpeedInput);
   }
 }
 
