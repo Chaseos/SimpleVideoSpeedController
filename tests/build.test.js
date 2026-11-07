@@ -21,6 +21,12 @@ const chromeRuntimeEntries = [
   'popup.js',
   'shortcuts.js'
 ];
+const edgeIconEntries = [
+  'edge-icon-16.png',
+  'edge-icon-32.png',
+  'edge-icon-48.png',
+  'edge-icon-128.png'
+];
 const safariRuntimeEntries = [
   '_locales',
   'background.js',
@@ -76,6 +82,10 @@ function readTextTree(directory) {
 test('build emits only the explicit runtime allowlist for each target', () => {
   assert.deepEqual(topLevelEntries('chromium'), chromeRuntimeEntries.slice().sort());
   assert.deepEqual(
+    topLevelEntries('edge'),
+    [...chromeRuntimeEntries, ...edgeIconEntries].sort()
+  );
+  assert.deepEqual(
     topLevelEntries('firefox'),
     [
       ...chromeRuntimeEntries,
@@ -107,6 +117,24 @@ test('Chromium artifact preserves the original runtime and specializes its manif
   }
 });
 
+test('Edge differs from Chromium only by its theme-safe icons', () => {
+  const { icons, ...edge } = readManifest('edge');
+  const { icons: chromiumIcons, ...chromium } = readManifest('chromium');
+
+  assert.deepEqual(edge, chromium);
+  assert.notDeepEqual(icons, chromiumIcons);
+  assert.deepEqual(Object.values(icons).sort(), edgeIconEntries.slice().sort());
+
+  for (const file of collectRelativeFiles(path.join(distRoot, 'chromium'))) {
+    if (file === 'manifest.json') continue;
+    assert.deepEqual(
+      fs.readFileSync(path.join(distRoot, 'edge', file)),
+      fs.readFileSync(path.join(distRoot, 'chromium', file)),
+      `Edge build changed ${file}`
+    );
+  }
+});
+
 test('only Firefox and Safari receive target-specific manifest changes', () => {
   const chromium = readManifest('chromium');
   const firefox = readManifest('firefox');
@@ -115,6 +143,7 @@ test('only Firefox and Safari receive target-specific manifest changes', () => {
   assert.equal(chromium.background.service_worker, 'background.js');
   assert.equal(chromium.background.scripts, undefined);
   assert.equal(chromium.browser_specific_settings, undefined);
+  assert.deepEqual(chromium.icons, { 16: 'icon.png', 48: 'icon.png', 128: 'icon.png' });
 
   assert.equal(firefox.background.service_worker, undefined);
   assert.deepEqual(firefox.background.scripts, ['background.js']);
@@ -483,7 +512,7 @@ test('Safari can recover when its content-script message is not delivered', () =
 });
 
 test('every ZIP matches its unpacked target and excludes development files', () => {
-  for (const target of ['chromium', 'firefox', 'safari']) {
+  for (const target of ['chromium', 'edge', 'firefox', 'safari']) {
     const archive = path.join(distRoot, `simple-video-speed-controller-${target}.zip`);
     const archiveEntries = execFileSync('unzip', ['-Z1', archive], { encoding: 'utf8' });
     assert.match(archiveEntries, /^manifest\.json$/m);

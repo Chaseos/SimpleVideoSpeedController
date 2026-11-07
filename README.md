@@ -87,7 +87,8 @@ npm run build:apple
 
 The build produces browser-specific unpacked extensions and ZIP archives:
 
-- `dist/chromium` and `dist/simple-video-speed-controller-chromium.zip` for Chrome, Edge, Opera, and Whale
+- `dist/chromium` and `dist/simple-video-speed-controller-chromium.zip` for Chrome, Opera, and Whale
+- `dist/edge` and `dist/simple-video-speed-controller-edge.zip` for Microsoft Edge, identical to the Chromium package except for its gray icons, which stay visible on light and dark themes
 - `dist/firefox` and `dist/simple-video-speed-controller-firefox.zip` for Firefox desktop and Android
 - `dist/safari` and `dist/simple-video-speed-controller-safari.zip` as the web-extension resources embedded in the Apple app
 

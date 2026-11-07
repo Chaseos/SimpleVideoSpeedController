@@ -35,6 +35,13 @@ const chromeRuntimeFiles = [
   'shortcuts.js'
 ];
 
+const edgeIconFiles = [
+  'edge-icon-16.png',
+  'edge-icon-32.png',
+  'edge-icon-48.png',
+  'edge-icon-128.png'
+];
+
 const safariRuntimeFiles = [
   '_locales',
   'background.js',
@@ -219,6 +226,17 @@ function createChromiumManifest() {
   const manifest = structuredClone(sourceManifest);
   delete manifest.background.scripts;
   delete manifest.browser_specific_settings;
+  return manifest;
+}
+
+function createEdgeManifest() {
+  const manifest = createChromiumManifest();
+  manifest.icons = {
+    16: 'edge-icon-16.png',
+    32: 'edge-icon-32.png',
+    48: 'edge-icon-48.png',
+    128: 'edge-icon-128.png'
+  };
   return manifest;
 }
 
@@ -720,6 +738,17 @@ async function buildChromium() {
   return targetDirectory;
 }
 
+async function buildEdge() {
+  const targetDirectory = path.join(distDirectory, 'edge');
+  await mkdir(targetDirectory, { recursive: true });
+  await copyRuntimeFiles(targetDirectory, [...chromeRuntimeFiles, ...edgeIconFiles]);
+  await writeFile(
+    path.join(targetDirectory, 'manifest.json'),
+    `${JSON.stringify(createEdgeManifest(), null, 2)}\n`
+  );
+  return targetDirectory;
+}
+
 async function buildFirefox() {
   const targetDirectory = path.join(distDirectory, 'firefox');
   await mkdir(targetDirectory, { recursive: true });
@@ -776,6 +805,7 @@ await mkdir(distDirectory, { recursive: true });
 
 for (const [targetName, buildTarget] of [
   ['chromium', buildChromium],
+  ['edge', buildEdge],
   ['firefox', buildFirefox],
   ['safari', buildSafari]
 ]) {

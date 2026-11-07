@@ -1,6 +1,15 @@
 // Coordinate transient boost sessions across every frame in a tab.
 const activeBoostSessions = new Map();
 
+/**
+ * Short toolbar label for a speed; browsers truncate badges past about 4 characters.
+ */
+function formatSpeedBadge(speed) {
+  if (!Number.isFinite(speed) || speed === 1) return '';
+  const label = String(Math.round(speed * (speed >= 10 ? 10 : 100)) / (speed >= 10 ? 10 : 100));
+  return label.length < 4 ? `${label}x` : label;
+}
+
 async function sendToAllFrames(tabId, message) {
   try {
     await chrome.tabs.sendMessage(tabId, message);
@@ -22,6 +31,13 @@ async function endBoostForTab(tabId, sessionId) {
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   const tabId = sender.tab?.id;
+  if (tabId && request.action === 'updateSpeedBadge') {
+    // Tab-scoped, so the browser clears it on navigation and other tabs keep their own.
+    chrome.action?.setBadgeText?.({ tabId, text: formatSpeedBadge(request.speed) })
+      ?.catch(() => {}); // The tab may have closed before the update landed.
+    return false;
+  }
+
   if (!tabId || !request.sessionId) return false;
 
   if (request.action === 'temporaryBoostStart') {

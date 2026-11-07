@@ -36,6 +36,7 @@ let boostSpeedPreference = 3;
 let boostKeyPreference = 'X';
 let toastTimeout;
 let storageDebounceTimer;
+let reportedBadgeSpeed = null;
 const monitoredVideos = new WeakSet();
 const clearedBoostSessionIds = new Set();
 const pressedBoostKeys = new Set();
@@ -154,6 +155,22 @@ function applyVideoSpeed(video, explicitChange = false) {
  */
 function updateVideoSpeeds(explicitChange = false) {
   getAllVideos().forEach(video => applyVideoSpeed(video, explicitChange));
+  reportSpeedBadge();
+}
+
+/**
+ * Tells the background script which speed the toolbar badge should show. Only
+ * the top frame reports, so an embedded frame's speed can't replace the site's.
+ */
+function reportSpeedBadge() {
+  const speed = getTargetSpeed();
+  if (window !== window.top || speed === reportedBadgeSpeed) return;
+
+  reportedBadgeSpeed = speed;
+  chrome.runtime.sendMessage({ action: 'updateSpeedBadge', speed }).catch(error => {
+    reportedBadgeSpeed = null;
+    console.error('Error updating speed badge:', error);
+  });
 }
 
 /**
@@ -432,6 +449,13 @@ function resetBoostChord() {
 
 window.addEventListener('blur', resetBoostChord);
 window.addEventListener('pagehide', resetBoostChord);
+window.addEventListener('pageshow', event => {
+  // Back/forward cache restores skip the content script, but the badge was cleared.
+  if (event.persisted) {
+    reportedBadgeSpeed = null;
+    reportSpeedBadge();
+  }
+});
 document.addEventListener('visibilitychange', () => {
   if (document.hidden) resetBoostChord();
 });
